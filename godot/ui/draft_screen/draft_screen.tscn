@@ -1,0 +1,366 @@
+[gd_scene format=3 uid="uid://2gwqabwmbetn"]
+
+[ext_resource type="Script" uid="uid://crygua53sj18o" path="res://ui/draft_screen/draft_screen.gd" id="1_ppnjt"]
+[ext_resource type="Texture2D" uid="uid://bbf27edlguuxf" path="res://ui/draft_screen/unselected_slot.png" id="2_wkg71"]
+[ext_resource type="Texture2D" uid="uid://bs6y34pgmgphq" path="res://ui/draft_screen/unselected_slot_glow.png" id="3_djfdv"]
+[ext_resource type="Texture2D" uid="uid://cy6emg64wvvx7" path="res://ui/draft_screen/questionmark.png" id="4_xh00t"]
+[ext_resource type="Texture2D" uid="uid://ci1od5wbobc64" path="res://ui/draft_screen/draft_card.png" id="5_e5xr4"]
+[ext_resource type="Texture2D" uid="uid://dnupbrolr1pnx" path="res://data/items/weapons/ranged/gun/gun_card.png" id="6_r6d14"]
+[ext_resource type="Texture2D" uid="uid://3w0buyyssh8l" path="res://ui/draft_screen/draft_card_glow.png" id="7_cnoxa"]
+[ext_resource type="Texture2D" uid="uid://dkv680i7p1wa6" path="res://data/items/weapons/ranged/rifle/rifle_card.png" id="8_ef50i"]
+
+[node name="Draft" type="Control" unique_id=968741191]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ppnjt")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=813988984]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.23921569)
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1697981578]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 256
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 256
+theme_override_constants/margin_bottom = 48
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=576562583]
+layout_mode = 2
+
+[node name="LeftSlotsContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1125128481]
+layout_mode = 2
+theme_override_constants/separation = 25
+alignment = 1
+
+[node name="Slot1" type="TextureRect" parent="MarginContainer/HBoxContainer/LeftSlotsContainer" unique_id=1990061728]
+custom_minimum_size = Vector2(180, 226)
+layout_mode = 2
+texture = ExtResource("2_wkg71")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotGlow" type="TextureRect" parent="MarginContainer/HBoxContainer/LeftSlotsContainer/Slot1" unique_id=77426909]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_djfdv")
+
+[node name="Slot2" type="TextureRect" parent="MarginContainer/HBoxContainer/LeftSlotsContainer" unique_id=1296343478]
+custom_minimum_size = Vector2(180, 226)
+layout_mode = 2
+texture = ExtResource("2_wkg71")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotGlow" type="TextureRect" parent="MarginContainer/HBoxContainer/LeftSlotsContainer/Slot2" unique_id=1590746654]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_djfdv")
+
+[node name="Slot3" type="TextureRect" parent="MarginContainer/HBoxContainer/LeftSlotsContainer" unique_id=1414871589]
+custom_minimum_size = Vector2(180, 226)
+layout_mode = 2
+texture = ExtResource("2_wkg71")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Questionmark" type="TextureRect" parent="MarginContainer/HBoxContainer/LeftSlotsContainer/Slot3" unique_id=1146676438]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -76.5
+offset_right = 40.0
+offset_bottom = 76.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_xh00t")
+
+[node name="SlotGlow" type="TextureRect" parent="MarginContainer/HBoxContainer/LeftSlotsContainer/Slot3" unique_id=98932189]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_djfdv")
+
+[node name="Slot4" type="TextureRect" parent="MarginContainer/HBoxContainer/LeftSlotsContainer" unique_id=891132582]
+custom_minimum_size = Vector2(180, 226)
+layout_mode = 2
+texture = ExtResource("2_wkg71")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Questionmark" type="TextureRect" parent="MarginContainer/HBoxContainer/LeftSlotsContainer/Slot4" unique_id=1672413227]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -76.5
+offset_right = 40.0
+offset_bottom = 76.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_xh00t")
+
+[node name="SlotGlow" type="TextureRect" parent="MarginContainer/HBoxContainer/LeftSlotsContainer/Slot4" unique_id=570636572]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_djfdv")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1366889806]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_constants/separation = 130
+alignment = 1
+
+[node name="CardA" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer" unique_id=623679944]
+custom_minimum_size = Vector2(390, 485)
+layout_mode = 2
+flat = true
+
+[node name="CardTexture" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer/CardA" unique_id=164304632]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_e5xr4")
+expand_mode = 1
+
+[node name="ItemTexture" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer/CardA" unique_id=393100200]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_r6d14")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="GlowTexture" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer/CardA" unique_id=1618396636]
+show_behind_parent = true
+custom_minimum_size = Vector2(544, 656)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_cnoxa")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CardB" type="Button" parent="MarginContainer/HBoxContainer/HBoxContainer" unique_id=2103792158]
+custom_minimum_size = Vector2(390, 485)
+layout_mode = 2
+flat = true
+
+[node name="CardTexture" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer/CardB" unique_id=1801680533]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("5_e5xr4")
+expand_mode = 1
+
+[node name="ItemTexture" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer/CardB" unique_id=1164357816]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("8_ef50i")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="GlowTexture" type="TextureRect" parent="MarginContainer/HBoxContainer/HBoxContainer/CardB" unique_id=1588767889]
+show_behind_parent = true
+custom_minimum_size = Vector2(544, 656)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("7_cnoxa")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="RightSlotsContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1584257052]
+layout_mode = 2
+theme_override_constants/separation = 25
+alignment = 1
+
+[node name="Slot1" type="TextureRect" parent="MarginContainer/HBoxContainer/RightSlotsContainer" unique_id=2023405730]
+custom_minimum_size = Vector2(180, 226)
+layout_mode = 2
+texture = ExtResource("2_wkg71")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotGlow" type="TextureRect" parent="MarginContainer/HBoxContainer/RightSlotsContainer/Slot1" unique_id=1830765201]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_djfdv")
+
+[node name="Slot2" type="TextureRect" parent="MarginContainer/HBoxContainer/RightSlotsContainer" unique_id=734460509]
+custom_minimum_size = Vector2(180, 226)
+layout_mode = 2
+texture = ExtResource("2_wkg71")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotGlow" type="TextureRect" parent="MarginContainer/HBoxContainer/RightSlotsContainer/Slot2" unique_id=675059395]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_djfdv")
+
+[node name="Slot3" type="TextureRect" parent="MarginContainer/HBoxContainer/RightSlotsContainer" unique_id=1048310184]
+custom_minimum_size = Vector2(180, 226)
+layout_mode = 2
+texture = ExtResource("2_wkg71")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotGlow" type="TextureRect" parent="MarginContainer/HBoxContainer/RightSlotsContainer/Slot3" unique_id=1156040048]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_djfdv")
+
+[node name="Questionmark" type="TextureRect" parent="MarginContainer/HBoxContainer/RightSlotsContainer/Slot3" unique_id=682123076]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -76.5
+offset_right = 40.0
+offset_bottom = 76.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_xh00t")
+
+[node name="Slot4" type="TextureRect" parent="MarginContainer/HBoxContainer/RightSlotsContainer" unique_id=1638087243]
+custom_minimum_size = Vector2(180, 226)
+layout_mode = 2
+texture = ExtResource("2_wkg71")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="SlotGlow" type="TextureRect" parent="MarginContainer/HBoxContainer/RightSlotsContainer/Slot4" unique_id=1829402381]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_djfdv")
+
+[node name="Questionmark" type="TextureRect" parent="MarginContainer/HBoxContainer/RightSlotsContainer/Slot4" unique_id=1664392973]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -76.5
+offset_right = 40.0
+offset_bottom = 76.5
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_xh00t")
+
+[node name="TimerProgressBar" type="ProgressBar" parent="." unique_id=185461453]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -448.0
+offset_top = -120.0
+offset_right = 448.0
+offset_bottom = -56.0
+grow_horizontal = 2
+grow_vertical = 0
+value = 20.0
+show_percentage = false

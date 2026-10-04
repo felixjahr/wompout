@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://dmr0fcamx7t56"]
+
+[ext_resource type="Script" uid="uid://dbp0uuh2q1v7g" path="res://ui/overlay/joystick/joystick.gd" id="1_yxsdh"]
+[ext_resource type="Texture2D" uid="uid://ccam1fnhn25lv" path="res://ui/overlay/joystick/joystick_base.png" id="2_yxsdh"]
+[ext_resource type="Texture2D" uid="uid://i16ec6ix3r5t" path="res://ui/overlay/joystick/joystick_tip_melee_pressed.png" id="3_dcocm"]
+[ext_resource type="Texture2D" uid="uid://dpwtdpi702pep" path="res://ui/overlay/joystick/joystick_tip_melee.png" id="3_yxsdh"]
+
+[node name="Joystick" type="Control" unique_id=62368011]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_yxsdh")
+tip_pressed = ExtResource("3_dcocm")
+
+[node name="CanvasGroup" type="CanvasGroup" parent="." unique_id=1740765945]
+self_modulate = Color(1, 1, 1, 0.78431374)
+
+[node name="Base" type="TextureRect" parent="CanvasGroup" unique_id=287405360]
+offset_right = 300.0
+offset_bottom = 300.0
+mouse_force_pass_scroll_events = false
+texture = ExtResource("2_yxsdh")
+
+[node name="Tip" type="TextureRect" parent="CanvasGroup/Base" unique_id=1441699964]
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 300.0
+texture = ExtResource("3_yxsdh")

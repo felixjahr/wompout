@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bflisdmw4rq5q"]
+
+[ext_resource type="Texture2D" uid="uid://c3jtjej7qqmw7" path="res://data/maps/forest/platform/platform.png" id="2_s6qjk"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uxxqq"]
+size = Vector2(424, 103.5)
+
+[node name="Platform" type="StaticBody2D" unique_id=958067421]
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1789858480]
+texture = ExtResource("2_s6qjk")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=256113586]
+shape = SubResource("RectangleShape2D_uxxqq")
+one_way_collision = true

@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://cp2y1n86c6otj"]
+
+[ext_resource type="Script" uid="uid://cugffq3lhkfmw" path="res://data/modes/mode_client.gd" id="1_qohnm"]
+[ext_resource type="Script" uid="uid://dqsxm57ibh1wi" path="res://data/modes/logic_client.gd" id="2_oyusa"]
+
+[node name="Mode" type="Node" unique_id=1463937241]
+script = ExtResource("1_qohnm")
+
+[node name="Logic" type="Node" parent="." unique_id=1351783230]
+script = ExtResource("2_oyusa")
+
+[node name="MapContainer" type="Node2D" parent="Logic" unique_id=305322912]
+
+[node name="ParticipantContainer" type="Node2D" parent="Logic" unique_id=32495405]
+
+[node name="BulletContainer" type="Node2D" parent="Logic" unique_id=748027622]

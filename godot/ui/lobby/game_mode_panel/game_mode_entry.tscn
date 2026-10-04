@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://6r5j3okf8at7"]
+
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="1_m2587"]
+[ext_resource type="Texture2D" uid="uid://dtiilp3un81c" path="res://data/modes/womp/solo_womp_ranked_icon.png" id="2_m2587"]
+[ext_resource type="Script" uid="uid://tuigncmblttl" path="res://ui/lobby/game_mode_panel/game_mode_entry.gd" id="2_s3yvd"]
+[ext_resource type="Texture2D" uid="uid://w4ejf75kxyuy" path="res://data/modes/womp/solo_womp_thumbnail.png" id="3_s3yvd"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_s3yvd"]
+bg_color = Color(0.20784314, 0.24705882, 0.30980393, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[node name="GameModeEntry" unique_id=604162406 instance=ExtResource("1_m2587")]
+custom_minimum_size = Vector2(640, 0)
+offset_right = 640.0
+offset_bottom = 606.0
+mouse_filter = 1
+script = ExtResource("2_s3yvd")
+
+[node name="Panel" type="Panel" parent="." index="0" unique_id=599041376]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_s3yvd")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel" index="0" unique_id=1952827020]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ThumbnailTextureRect" type="TextureRect" parent="Panel/VBoxContainer" index="0" unique_id=1244884501]
+unique_name_in_owner = true
+layout_mode = 2
+texture = ExtResource("3_s3yvd")
+stretch_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/VBoxContainer" index="1" unique_id=662102204]
+layout_mode = 2
+size_flags_vertical = 3
+mouse_filter = 2
+theme_override_constants/margin_left = 96
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 24
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel/VBoxContainer/MarginContainer" index="0" unique_id=1105175048]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 96
+
+[node name="GameModeTextureRect" type="TextureRect" parent="Panel/VBoxContainer/MarginContainer/HBoxContainer" index="0" unique_id=1238108820]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("2_m2587")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/VBoxContainer/MarginContainer/HBoxContainer" index="1" unique_id=490483836]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = -10
+alignment = 1
+
+[node name="GameModeLabel" type="Label" parent="Panel/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="0" unique_id=1545005914]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SUPERWOMP"
+
+[node name="RankedLabel" type="Label" parent="Panel/VBoxContainer/MarginContainer/HBoxContainer/VBoxContainer" index="1" unique_id=1808352028]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.23921569, 0.4392157, 1, 1)
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "RANKED"
+vertical_alignment = 2

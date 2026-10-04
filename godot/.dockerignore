@@ -1,0 +1,7 @@
+.git
+.DS_Store
+*.import
+.gitignore
+.godot/
+.editorconfig
+android/

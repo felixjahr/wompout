@@ -1,0 +1,101 @@
+[gd_scene format=3 uid="uid://bfjt273t0er8"]
+
+[ext_resource type="Script" uid="uid://dmptg2m0cixx5" path="res://data/maps/forest/forest.gd" id="1_fb6i4"]
+[ext_resource type="Texture2D" uid="uid://bfe1fmbg2mu72" path="res://data/maps/forest/forest_background_l1.png" id="1_x5joe"]
+[ext_resource type="Texture2D" uid="uid://47odhunw13ik" path="res://data/maps/forest/forest_background_l2.png" id="2_fytou"]
+[ext_resource type="Texture2D" uid="uid://byovuhqrauwn5" path="res://data/maps/forest/forest_background_l3.png" id="3_id7e5"]
+[ext_resource type="Texture2D" uid="uid://dqxdwfkw2h64e" path="res://data/maps/forest/forest_background_l4.png" id="4_fb6i4"]
+[ext_resource type="Texture2D" uid="uid://y5acrvwd4wop" path="res://data/maps/forest/forest_background_l5.png" id="5_0xq07"]
+[ext_resource type="Texture2D" uid="uid://c80a8lqc2h0ep" path="res://data/maps/forest/forest_platforms.png" id="6_0xq07"]
+[ext_resource type="PackedScene" uid="uid://dcnh410asayul" path="res://data/maps/forest/spikes/spikes.tscn" id="6_fb6i4"]
+[ext_resource type="PackedScene" uid="uid://bflisdmw4rq5q" path="res://data/maps/forest/platform/platform.tscn" id="9_0xq07"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0xq07"]
+size = Vector2(3840, 3064)
+
+[node name="Forest" type="StaticBody2D" unique_id=1358148047]
+script = ExtResource("1_fb6i4")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=875365987]
+
+[node name="Marker2D" type="Marker2D" parent="SpawnPoints" unique_id=652308863]
+position = Vector2(-1338, 337)
+
+[node name="Marker2D2" type="Marker2D" parent="SpawnPoints" unique_id=1258525238]
+position = Vector2(1338, 369)
+
+<<<<<<< HEAD
+[node name="Marker2D3" type="Marker2D" parent="SpawnPoints" unique_id=1544471112]
+position = Vector2(586, 629)
+
+[node name="Marker2D4" type="Marker2D" parent="SpawnPoints" unique_id=800068527]
+position = Vector2(-573, 629)
+
+=======
+>>>>>>> origin/main
+[node name="L1" type="Sprite2D" parent="." unique_id=1179159011]
+texture = ExtResource("1_x5joe")
+
+[node name="ParallaxL2" type="Parallax2D" parent="." unique_id=1348541009]
+scroll_scale = Vector2(0.2, 1)
+
+[node name="Layer2" type="Sprite2D" parent="ParallaxL2" unique_id=901324856]
+position = Vector2(-183, 310)
+texture = ExtResource("2_fytou")
+
+[node name="ParallaxL3" type="Parallax2D" parent="." unique_id=39862951]
+scroll_scale = Vector2(0.3, 1)
+
+[node name="Layer3" type="Sprite2D" parent="ParallaxL3" unique_id=1388724065]
+position = Vector2(-7, -126)
+texture = ExtResource("3_id7e5")
+
+[node name="ParallaxL4" type="Parallax2D" parent="." unique_id=741815766]
+scroll_scale = Vector2(0.4, 1)
+
+[node name="Layer4" type="Sprite2D" parent="ParallaxL4" unique_id=876538861]
+position = Vector2(-125, 1)
+texture = ExtResource("4_fb6i4")
+
+[node name="ParallaxL5" type="Parallax2D" parent="." unique_id=1505475693]
+scroll_scale = Vector2(0.5, 1)
+
+[node name="Layer5" type="Sprite2D" parent="ParallaxL5" unique_id=1296318344]
+position = Vector2(131, 1067)
+texture = ExtResource("5_0xq07")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=945329027]
+position = Vector2(0, 594)
+texture = ExtResource("6_0xq07")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1753621951]
+position = Vector2(0, 594)
+polygon = PackedVector2Array(-382, -487.5, -813, -487.5, -813, -223.5, 813, -223.5, 813, -487.5, 382, -487.5, 382, -313.5, -382, -313.5)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="." unique_id=318068810]
+position = Vector2(0, 594)
+polygon = PackedVector2Array(-2048, -2706, -2048, 558, 2048, 558, 2040, -2706, -2048, -2706, -1920, -2578, 1920, -2578, 1920, 406, 808, 406, 808, 222, 384, 222, 384, 406, -384, 406, -384, 222, -808, 222, -808, 406, -1920, 406, -1920, -2578)
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=763750876]
+zoom = Vector2(0.68, 0.68)
+limit_left = -1920
+limit_top = -508
+limit_right = 1920
+limit_bottom = 1080
+
+[node name="Arena" type="Area2D" parent="." unique_id=604951091]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena" unique_id=1464640515]
+position = Vector2(0, -452)
+shape = SubResource("RectangleShape2D_0xq07")
+
+[node name="Spikes" parent="." unique_id=643328224 instance=ExtResource("6_fb6i4")]
+position = Vector2(0, 248)
+
+[node name="Platform" parent="." unique_id=958067421 instance=ExtResource("9_0xq07")]
+position = Vector2(1344, 576)
+
+[node name="Platform2" parent="." unique_id=579225891 instance=ExtResource("9_0xq07")]
+position = Vector2(-1344, 576)

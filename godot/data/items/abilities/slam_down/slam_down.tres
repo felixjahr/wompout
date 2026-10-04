@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="SlamDown" format=3 uid="uid://c1iar2d0r4xt"]
+
+[ext_resource type="Texture2D" uid="uid://b4tvwwatxfc27" path="res://data/items/abilities/slam_down/slam_down_card.png" id="1_6hj73"]
+[ext_resource type="Script" uid="uid://cdtuft4aheii2" path="res://data/items/abilities/slam_down/slam_down.gd" id="1_fwrht"]
+
+[resource]
+script = ExtResource("1_fwrht")
+speed = 5000
+damage = 20
+knockback = 1000
+recharge_time = 2.0
+card_texture = ExtResource("1_6hj73")
+metadata/_custom_type_script = "uid://cdtuft4aheii2"

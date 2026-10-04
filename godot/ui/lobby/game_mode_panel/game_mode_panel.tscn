@@ -1,0 +1,157 @@
+[gd_scene format=3 uid="uid://8csnlk72lj5e"]
+
+[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_5ecad"]
+[ext_resource type="Script" uid="uid://bj06gr2c7rek0" path="res://ui/lobby/game_mode_panel/game_mode_panel.gd" id="2_as43x"]
+[ext_resource type="PackedScene" uid="uid://6r5j3okf8at7" path="res://ui/lobby/game_mode_panel/game_mode_entry.tscn" id="3_as43x"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/lobby/close_button/close_button.tscn" id="4_c71qv"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1etha"]
+bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
+border_width_top = 8
+border_color = Color(0, 0, 0, 1)
+expand_margin_top = 8.0
+expand_margin_bottom = 128.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pjrra"]
+bg_color = Color(0.11372549, 0.13333334, 0.16862746, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[node name="GameModePanel" type="Panel" unique_id=318218996]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_5ecad")
+theme_override_styles/panel = SubResource("StyleBoxFlat_1etha")
+script = ExtResource("2_as43x")
+side = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1970692147]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1002456754]
+layout_mode = 2
+theme_override_constants/separation = 64
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1946532571]
+layout_mode = 2
+text = "SELECT GAMEMODE"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=2242695]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=994324654]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_right = 64
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" unique_id=126803518]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 64
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer" unique_id=1684859554]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=597786588]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pjrra")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer" unique_id=1950583976]
+layout_mode = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer" unique_id=1006001462]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer/VBoxContainer" unique_id=389678857]
+layout_mode = 2
+text = "RANKED"
+horizontal_alignment = 1
+
+[node name="RankedContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer/VBoxContainer" unique_id=2065459241]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_constants/separation = 32
+
+[node name="GameModeEntry" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer/VBoxContainer/RankedContainer" unique_id=1122889775 instance=ExtResource("3_as43x")]
+layout_mode = 2
+
+[node name="GameModeEntry2" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer/VBoxContainer/RankedContainer" unique_id=919198229 instance=ExtResource("3_as43x")]
+layout_mode = 2
+
+[node name="GameModeEntry3" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer/VBoxContainer/RankedContainer" unique_id=1899234138 instance=ExtResource("3_as43x")]
+layout_mode = 2
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer" unique_id=1010665595]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2" unique_id=1199702860]
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_pjrra")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2" unique_id=287394020]
+layout_mode = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 32
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer" unique_id=1385926024]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer" unique_id=33802692]
+layout_mode = 2
+text = "UNRANKED"
+horizontal_alignment = 1
+
+[node name="UnrankedContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer" unique_id=437450696]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_constants/separation = 32
+
+[node name="GameModeEntry" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer/UnrankedContainer" unique_id=2054124906 instance=ExtResource("3_as43x")]
+layout_mode = 2
+
+[node name="GameModeEntry2" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer/UnrankedContainer" unique_id=915101449 instance=ExtResource("3_as43x")]
+layout_mode = 2
+
+[node name="GameModeEntry3" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer/UnrankedContainer" unique_id=918126653 instance=ExtResource("3_as43x")]
+layout_mode = 2
+
+[node name="CloseButton" parent="." unique_id=604162406 instance=ExtResource("4_c71qv")]
+layout_mode = 1
+
+[connection signal="pressed" from="CloseButton" to="." method="_on_close_button_pressed"]

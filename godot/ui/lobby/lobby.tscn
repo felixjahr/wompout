@@ -1,0 +1,652 @@
+[gd_scene format=3 uid="uid://d1u1vy63g3u1a"]
+
+[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_tgpby"]
+[ext_resource type="Script" uid="uid://bs0qlmuraofwo" path="res://ui/lobby/lobby.gd" id="2_ch43o"]
+[ext_resource type="Texture2D" uid="uid://bg4ljm328t3kh" path="res://ui/lobby/background.png" id="2_dom2f"]
+[ext_resource type="Texture2D" uid="uid://dopkl0qredctd" path="res://ui/lobby/background_field.png" id="3_thpmu"]
+[ext_resource type="Texture2D" uid="uid://tlfdvftpu2ag" path="res://ui/lobby/trophy.png" id="4_qskbg"]
+[ext_resource type="Texture2D" uid="uid://bdsnepagp0cwu" path="res://ui/lobby/shop_icon.png" id="5_gs2u0"]
+[ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/lobby/platform/platform.tscn" id="6_afxux"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="7_6w0v2"]
+[ext_resource type="Texture2D" uid="uid://dxmrnkbaucmlp" path="res://ui/lobby/armory_icon.png" id="8_rxu4d"]
+[ext_resource type="Texture2D" uid="uid://dnsd163tlmiej" path="res://ui/lobby/friends_icon.png" id="9_3b0ks"]
+[ext_resource type="Texture2D" uid="uid://v51uwy5ckexq" path="res://ui/lobby/ranks_icon.png" id="9_rxu4d"]
+[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/lobby/side_button.png" id="17_qnp4y"]
+[ext_resource type="PackedScene" uid="uid://db4f1f5h8xqao" path="res://ui/lobby/armory_screen/armory_screen.tscn" id="20_x2gyi"]
+[ext_resource type="Texture2D" uid="uid://flbrn7g6884s" path="res://ui/lobby/chest.png" id="21_ncut8"]
+[ext_resource type="Texture2D" uid="uid://c702bonrrav1o" path="res://ui/lobby/chest_progress_bar.png" id="22_eslaf"]
+[ext_resource type="PackedScene" uid="uid://blcpf8cku6m65" path="res://ui/lobby/friends_panel/friends_panel.tscn" id="23_1etha"]
+[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/lobby/mode_button_normal.png" id="23_wofsp"]
+[ext_resource type="PackedScene" uid="uid://8csnlk72lj5e" path="res://ui/lobby/game_mode_panel/game_mode_panel.tscn" id="24_lky5g"]
+[ext_resource type="Texture2D" uid="uid://bdgfgtjc7tlp" path="res://data/modes/womp/solo_womp_ranked_icon.png" id="26_s74wb"]
+[ext_resource type="Texture2D" uid="uid://bkcupf0hrdv6a" path="res://ui/lobby/play_button_normal.png" id="27_j7rwa"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gs2u0"]
+texture = ExtResource("3_thpmu")
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+expand_margin_left = 32.0
+region_rect = Rect2(64, 0, 128, 192)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_qskbg"]
+content_margin_left = 16.0
+content_margin_top = 0.0
+content_margin_right = 32.0
+content_margin_bottom = 0.0
+texture = ExtResource("3_thpmu")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_dom2f"]
+texture = ExtResource("17_qnp4y")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_afxux"]
+texture = ExtResource("3_thpmu")
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+region_rect = Rect2(64, 0, 128, 192)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_s74wb"]
+content_margin_right = 0.0
+texture = ExtResource("22_eslaf")
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+region_rect = Rect2(64, 0, 128, 192)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l7lr6"]
+texture = ExtResource("23_wofsp")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3sly6"]
+texture = ExtResource("27_j7rwa")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[node name="Lobby" type="Control" unique_id=1462287131]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_tgpby")
+script = ExtResource("2_ch43o")
+
+[node name="Background" type="TextureRect" parent="." unique_id=2114774930]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_dom2f")
+stretch_mode = 6
+
+[node name="PlatformArea" type="MarginContainer" parent="." unique_id=2082167628]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 576
+theme_override_constants/margin_right = 576
+
+[node name="HBoxContainer" type="HBoxContainer" parent="PlatformArea" unique_id=28762261]
+layout_mode = 2
+
+[node name="Platform" parent="PlatformArea/HBoxContainer" unique_id=192825985 instance=ExtResource("6_afxux")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Platform2" parent="PlatformArea/HBoxContainer" unique_id=1402220953 instance=ExtResource("6_afxux")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Platform3" parent="PlatformArea/HBoxContainer" unique_id=896417452 instance=ExtResource("6_afxux")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Platform4" parent="PlatformArea/HBoxContainer" unique_id=1653210786 instance=ExtResource("6_afxux")]
+unique_name_in_owner = true
+show_behind_parent = true
+layout_mode = 2
+
+[node name="MainPanel" type="VBoxContainer" parent="." unique_id=633513508]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel" unique_id=77748690]
+layout_mode = 2
+theme_override_constants/margin_top = 64
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer" unique_id=337710260]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="NameButton" parent="MainPanel/MarginContainer/HBoxContainer" unique_id=604162406 instance=ExtResource("7_6w0v2")]
+custom_minimum_size = Vector2(512, 0)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MainPanel/MarginContainer/HBoxContainer/NameButton" unique_id=1936065060]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_gs2u0")
+
+[node name="NameLabel" type="Label" parent="MainPanel/MarginContainer/HBoxContainer/NameButton/Panel" unique_id=1630511819]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "PLAYERNAME"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
+
+[node name="TrophiesButton" parent="MainPanel/MarginContainer/HBoxContainer" unique_id=1875832770 instance=ExtResource("7_6w0v2")]
+custom_minimum_size = Vector2(352, 0)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MainPanel/MarginContainer/HBoxContainer/TrophiesButton" unique_id=1062057464]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_qskbg")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer/HBoxContainer/TrophiesButton/Panel" unique_id=1530802618]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer/HBoxContainer/TrophiesButton/Panel/MarginContainer" unique_id=173019588]
+custom_minimum_size = Vector2(288, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer/HBoxContainer/TrophiesButton/Panel/MarginContainer/HBoxContainer" unique_id=369905435]
+layout_mode = 2
+texture = ExtResource("4_qskbg")
+stretch_mode = 3
+
+[node name="TrophiesLabel" type="Label" parent="MainPanel/MarginContainer/HBoxContainer/TrophiesButton/Panel/MarginContainer/HBoxContainer" unique_id=1422623453]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "420"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="MarginContainer2" type="MarginContainer" parent="MainPanel" unique_id=1057611549]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 160
+theme_override_constants/margin_right = 160
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/MarginContainer2" unique_id=414075869]
+custom_minimum_size = Vector2(374, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="ShopButton" parent="MainPanel/MarginContainer2/VBoxContainer" unique_id=112804911 instance=ExtResource("7_6w0v2")]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MainPanel/MarginContainer2/VBoxContainer/ShopButton" unique_id=477525434]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_dom2f")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer2/VBoxContainer/ShopButton/Panel" unique_id=1556160986]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer2/VBoxContainer/ShopButton/Panel/MarginContainer" unique_id=798788904]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -64
+
+[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer2/VBoxContainer/ShopButton/Panel/MarginContainer/HBoxContainer" unique_id=137345355]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("5_gs2u0")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="MainPanel/MarginContainer2/VBoxContainer/ShopButton/Panel/MarginContainer/HBoxContainer" unique_id=1783371213]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "SHOP"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ArmoryButton" parent="MainPanel/MarginContainer2/VBoxContainer" unique_id=2013824488 instance=ExtResource("7_6w0v2")]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton" unique_id=2101240803]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_dom2f")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton/Panel" unique_id=2071100103]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton/Panel/MarginContainer" unique_id=166863183]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -64
+
+[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton/Panel/MarginContainer/HBoxContainer" unique_id=1481472016]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("8_rxu4d")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton/Panel/MarginContainer/HBoxContainer" unique_id=1618322723]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "ARMORY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MainPanel/MarginContainer2" unique_id=1957001238]
+custom_minimum_size = Vector2(374, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="FriendsButton" parent="MainPanel/MarginContainer2/VBoxContainer2" unique_id=1207622048 instance=ExtResource("7_6w0v2")]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton" unique_id=956139092]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_dom2f")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton/Panel" unique_id=266623471]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton/Panel/MarginContainer" unique_id=1023334043]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -64
+
+[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton/Panel/MarginContainer/HBoxContainer" unique_id=273217745]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_3b0ks")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton/Panel/MarginContainer/HBoxContainer" unique_id=1071395985]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "FRIENDS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RanksButton" parent="MainPanel/MarginContainer2/VBoxContainer2" unique_id=1911595775 instance=ExtResource("7_6w0v2")]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MainPanel/MarginContainer2/VBoxContainer2/RanksButton" unique_id=1528772718]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_dom2f")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/RanksButton/Panel" unique_id=1923081896]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 8
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 8
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/RanksButton/Panel/MarginContainer" unique_id=650945012]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = -64
+
+[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer2/VBoxContainer2/RanksButton/Panel/MarginContainer/HBoxContainer" unique_id=399353313]
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("9_rxu4d")
+stretch_mode = 3
+
+[node name="Label" type="Label" parent="MainPanel/MarginContainer2/VBoxContainer2/RanksButton/Panel/MarginContainer/HBoxContainer" unique_id=2032083313]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "RANKS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MainPanel" unique_id=720583998]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/HBoxContainer3" unique_id=384726693]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_bottom = 32
+
+[node name="ChestButton" parent="MainPanel/HBoxContainer3/MarginContainer" unique_id=1352913184 instance=ExtResource("7_6w0v2")]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton" unique_id=1386081020]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 176
+theme_override_constants/margin_bottom = 64
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton/MarginContainer" unique_id=879942363]
+layout_mode = 2
+theme_override_constants/separation = 150
+
+[node name="TextureRect" type="TextureRect" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton/MarginContainer/HBoxContainer" unique_id=653861874]
+layout_mode = 2
+texture = ExtResource("21_ncut8")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton/MarginContainer/HBoxContainer" unique_id=24347859]
+show_behind_parent = true
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+
+[node name="ProgressBar" type="ProgressBar" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton/MarginContainer/HBoxContainer/MarginContainer" unique_id=1258706789]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+mouse_filter = 1
+theme_override_styles/background = SubResource("StyleBoxTexture_afxux")
+theme_override_styles/fill = SubResource("StyleBoxTexture_s74wb")
+max_value = 3.0
+step = 1.0
+value = 1.0
+show_percentage = false
+
+[node name="Label" type="Label" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton/MarginContainer/HBoxContainer/MarginContainer" unique_id=1559589483]
+layout_mode = 2
+text = "1/3"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="MarginContainer2" type="MarginContainer" parent="MainPanel/HBoxContainer3" unique_id=1207862044]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+theme_override_constants/margin_bottom = 96
+
+[node name="GameModeButton" parent="MainPanel/HBoxContainer3/MarginContainer2" unique_id=432938554 instance=ExtResource("7_6w0v2")]
+custom_minimum_size = Vector2(0, 160)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton" unique_id=296882766]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_l7lr6")
+
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel" unique_id=1106747335]
+layout_mode = 0
+offset_right = 730.0
+offset_bottom = 160.0
+mouse_filter = 2
+theme_override_constants/margin_left = 128
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 24
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel/MarginContainer" unique_id=298442232]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 96
+
+[node name="GameModeTextureRect" type="TextureRect" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer" unique_id=901940831]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+texture = ExtResource("26_s74wb")
+expand_mode = 1
+stretch_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer" unique_id=1221341127]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+theme_override_constants/separation = -10
+alignment = 1
+
+[node name="GameModeLabel" type="Label" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=581274904]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "SUPERWOMP"
+
+[node name="RankedLabel" type="Label" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1551199013]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.23921569, 0.4392157, 1, 1)
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 8
+theme_override_constants/shadow_outline_size = 8
+theme_override_font_sizes/font_size = 32
+text = "RANKED"
+vertical_alignment = 2
+
+[node name="MarginContainer3" type="MarginContainer" parent="MainPanel/HBoxContainer3" unique_id=815703450]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+mouse_filter = 2
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="PlayButton" parent="MainPanel/HBoxContainer3/MarginContainer3" unique_id=738369133 instance=ExtResource("7_6w0v2")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 224)
+layout_mode = 2
+toggle_mode = true
+
+[node name="PlayButtonPanel" type="Panel" parent="MainPanel/HBoxContainer3/MarginContainer3/PlayButton" unique_id=1947473841]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_3sly6")
+
+[node name="PlayButtonLabel" type="Label" parent="MainPanel/HBoxContainer3/MarginContainer3/PlayButton/PlayButtonPanel" unique_id=186575185]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_constants/shadow_offset_y = 8
+theme_override_constants/outline_size = 32
+theme_override_constants/shadow_outline_size = 32
+theme_override_font_sizes/font_size = 128
+text = "PLAY"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Button5" type="Button" parent="." unique_id=890367105]
+visible = false
+layout_mode = 0
+offset_left = 1514.0
+offset_top = 178.0
+offset_right = 2108.0
+offset_bottom = 255.0
+text = "redeem"
+
+[node name="FriendsPanel" parent="." unique_id=1844430048 instance=ExtResource("23_1etha")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="GameModePanel" parent="." unique_id=318218996 instance=ExtResource("24_lky5g")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="ArmoryScreen" parent="." unique_id=809997163 instance=ExtResource("20_x2gyi")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="VersionLabel" type="Label" parent="." unique_id=1065290807]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -84.0
+offset_top = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.17, 0.17, 0.17, 1)
+theme_override_font_sizes/font_size = 32
+text = "v1.0.0"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer/ShopButton" to="." method="_on_shop_button_pressed"]
+[connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton" to="." method="_on_armory_button_pressed"]
+[connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton" to="." method="_on_friends_button_pressed"]
+[connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer2/RanksButton" to="." method="_on_ranks_button_pressed"]
+[connection signal="pressed" from="MainPanel/HBoxContainer3/MarginContainer/ChestButton" to="." method="_on_chest_button_pressed"]
+[connection signal="pressed" from="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton" to="." method="_on_game_mode_button_pressed"]
+[connection signal="toggled" from="MainPanel/HBoxContainer3/MarginContainer3/PlayButton" to="." method="_on_play_button_toggled"]
+[connection signal="pressed" from="Button5" to="." method="_on_button_5_pressed"]
+[connection signal="add_friends_button_pressed" from="FriendsPanel" to="." method="_on_friends_panel_add_friends_button_pressed"]
+[connection signal="player_invited" from="FriendsPanel" to="." method="_on_friends_panel_player_invited"]
+[connection signal="game_mode_selected" from="GameModePanel" to="." method="_on_game_mode_panel_game_mode_selected"]

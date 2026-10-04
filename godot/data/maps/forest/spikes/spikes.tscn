@@ -1,0 +1,31 @@
+[gd_scene format=3 uid="uid://dcnh410asayul"]
+
+[ext_resource type="Texture2D" uid="uid://dowb2ykuj5ur3" path="res://data/maps/forest/spikes/spikes.png" id="1_eqc60"]
+[ext_resource type="Script" uid="uid://dnfqcc0x4l3pk" path="res://data/maps/forest/spikes/spikes.gd" id="1_hyuin"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b8jmo"]
+size = Vector2(768, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y7nr1"]
+size = Vector2(768, 16)
+
+[node name="Spikes" type="StaticBody2D" unique_id=643328224]
+collision_mask = 0
+script = ExtResource("1_hyuin")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1926798622]
+texture = ExtResource("1_eqc60")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1480234584]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_b8jmo")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=101915898]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1903912329]
+position = Vector2(0, -24)
+shape = SubResource("RectangleShape2D_y7nr1")
+
+[connection signal="area_entered" from="Hitbox" to="." method="_on_hitbox_area_entered"]

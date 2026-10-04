@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Dash" format=3 uid="uid://cnxeb7c7ee6mo"]
+
+[ext_resource type="Script" uid="uid://bhb1fejffv0dv" path="res://data/items/abilities/dash/dash.gd" id="1_2xgbs"]
+[ext_resource type="Texture2D" uid="uid://dyuhrplnew3me" path="res://data/items/abilities/dash/dash_card.png" id="1_iglbj"]
+
+[resource]
+script = ExtResource("1_2xgbs")
+distance = 500
+charge = 30
+card_texture = ExtResource("1_iglbj")
+metadata/_custom_type_script = "uid://bhb1fejffv0dv"

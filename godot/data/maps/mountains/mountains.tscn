@@ -1,0 +1,129 @@
+[gd_scene format=3 uid="uid://bd0gp0jke70o"]
+
+[ext_resource type="Texture2D" uid="uid://ybuy2l7od0lx" path="res://data/maps/mountains/mountains_l1.png" id="1_3f574"]
+[ext_resource type="Script" uid="uid://d2oqa0vjbxgfq" path="res://data/maps/mountains/mountains.gd" id="1_qvtbo"]
+[ext_resource type="Texture2D" uid="uid://dpp1aq1mryybb" path="res://data/maps/mountains/mountains_l2.png" id="2_qjglh"]
+[ext_resource type="Texture2D" uid="uid://cupdgw08mvm6p" path="res://data/maps/mountains/mountains_l3.png" id="3_qvtbo"]
+[ext_resource type="Texture2D" uid="uid://di2j7naduyyd4" path="res://data/maps/mountains/mountains_l4.png" id="4_i0d1h"]
+[ext_resource type="Texture2D" uid="uid://ckbhmbvuo2t1l" path="res://data/maps/mountains/mountains_l5.png" id="5_e2uhk"]
+[ext_resource type="Texture2D" uid="uid://dfiqk7bcyf0u4" path="res://data/maps/mountains/mountains_l6.png" id="6_6ax1s"]
+[ext_resource type="Texture2D" uid="uid://3uxptaje8mw6" path="res://data/maps/mountains/mountains_l7.png" id="7_h5p7s"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qjglh"]
+size = Vector2(1324.5, 89.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qvtbo"]
+size = Vector2(698, 83)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i0d1h"]
+size = Vector2(902, 112)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6ax1s"]
+size = Vector2(777.5, 112)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h5p7s"]
+size = Vector2(608, 112)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e2uhk"]
+size = Vector2(3840, 3577)
+
+[node name="Mountains" type="StaticBody2D" unique_id=338891805]
+script = ExtResource("1_qvtbo")
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=511170937]
+
+[node name="Marker2D" type="Marker2D" parent="SpawnPoints" unique_id=1239120156]
+position = Vector2(-930, -142)
+
+[node name="Marker2D2" type="Marker2D" parent="SpawnPoints" unique_id=578355805]
+position = Vector2(1004, -300)
+
+<<<<<<< HEAD
+[node name="Marker2D4" type="Marker2D" parent="SpawnPoints" unique_id=1729767066]
+position = Vector2(1212, 498)
+
+[node name="Marker2D3" type="Marker2D" parent="SpawnPoints" unique_id=130176273]
+position = Vector2(-1206, 490)
+
+=======
+>>>>>>> origin/main
+[node name="L1" type="Sprite2D" parent="." unique_id=880554690]
+texture = ExtResource("1_3f574")
+
+[node name="ParallaxL2" type="Parallax2D" parent="." unique_id=674608491]
+scroll_scale = Vector2(0.2, 1)
+
+[node name="L2" type="Sprite2D" parent="ParallaxL2" unique_id=1155479212]
+texture = ExtResource("2_qjglh")
+
+[node name="ParallaxL3" type="Parallax2D" parent="." unique_id=680644717]
+scroll_scale = Vector2(0.25, 1)
+
+[node name="L3" type="Sprite2D" parent="ParallaxL3" unique_id=1688308860]
+texture = ExtResource("3_qvtbo")
+offset = Vector2(700, 0)
+
+[node name="ParallaxL4" type="Parallax2D" parent="." unique_id=98479021]
+scroll_scale = Vector2(0.3, 1)
+
+[node name="L4" type="Sprite2D" parent="ParallaxL4" unique_id=1119363201]
+position = Vector2(350, 0)
+texture = ExtResource("4_i0d1h")
+
+[node name="ParallaxL5" type="Parallax2D" parent="." unique_id=1043109038]
+scroll_scale = Vector2(0.35, 1)
+
+[node name="L5" type="Sprite2D" parent="ParallaxL5" unique_id=1521912711]
+position = Vector2(400, 0)
+texture = ExtResource("5_e2uhk")
+
+[node name="L6" type="Sprite2D" parent="." unique_id=1774653066]
+texture = ExtResource("6_6ax1s")
+
+[node name="ParallaxL7" type="Parallax2D" parent="." unique_id=1436401427]
+z_index = 3
+scroll_scale = Vector2(0.4, 1)
+
+[node name="L7" type="Sprite2D" parent="ParallaxL7" unique_id=573938006]
+position = Vector2(600, 0)
+texture = ExtResource("7_h5p7s")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=2059340908]
+position = Vector2(-1160, 702)
+shape = SubResource("RectangleShape2D_qjglh")
+one_way_collision = true
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=632597990]
+position = Vector2(161, 366.5)
+shape = SubResource("RectangleShape2D_qvtbo")
+one_way_collision = true
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="." unique_id=1136525237]
+position = Vector2(1198, 741)
+shape = SubResource("RectangleShape2D_i0d1h")
+one_way_collision = true
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="." unique_id=2046726757]
+position = Vector2(996.25, -98)
+shape = SubResource("RectangleShape2D_6ax1s")
+one_way_collision = true
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="." unique_id=593592789]
+position = Vector2(-910, 53)
+shape = SubResource("RectangleShape2D_h5p7s")
+one_way_collision = true
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1242360427]
+zoom = Vector2(0.68, 0.68)
+limit_left = -1920
+limit_top = -1080
+limit_right = 1920
+limit_bottom = 1080
+
+[node name="Arena" type="Area2D" parent="." unique_id=416531899]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena" unique_id=531275149]
+position = Vector2(0, -707.5)
+shape = SubResource("RectangleShape2D_e2uhk")

@@ -1,0 +1,12 @@
+.git
+.agents
+.claude
+.windsurf
+node_modules
+dist
+generated
+coverage
+.env
+.env.*
+*.log
+.DS_Store

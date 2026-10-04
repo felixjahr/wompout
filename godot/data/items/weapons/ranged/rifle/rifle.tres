@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="Ranged" format=3 uid="uid://b5e6g4hpqxjio"]
+
+[ext_resource type="Script" uid="uid://dc58rhvdfubb2" path="res://data/items/weapons/ranged/ranged.gd" id="1_bddi5"]
+[ext_resource type="Script" uid="uid://duuv22b7jqrgp" path="res://data/items/weapons/aim_hint_line.gd" id="1_d6fuu"]
+[ext_resource type="Texture2D" uid="uid://dkv680i7p1wa6" path="res://data/items/weapons/ranged/rifle/rifle_card.png" id="2_d6fuu"]
+
+[sub_resource type="Resource" id="Resource_6hi41"]
+script = ExtResource("1_d6fuu")
+length = 800.0
+width = 20.0
+offset = Vector2(200, -1)
+metadata/_custom_type_script = "uid://duuv22b7jqrgp"
+
+[resource]
+script = ExtResource("1_bddi5")
+bullet_range = 1000
+bullet_speed = 3000
+bullet_damage = 3
+bullet_offset = Vector2(200, -1)
+bullet_amount = 5
+two_handed = true
+attack_duration = 0.9
+max_ammunition = 3
+reload_time = 3.0
+aim_hint = SubResource("Resource_6hi41")
+card_texture = ExtResource("2_d6fuu")
+metadata/_custom_type_script = "uid://dc58rhvdfubb2"

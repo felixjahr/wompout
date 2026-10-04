@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Armour" format=3 uid="uid://c0wdmf60bruqe"]
+
+[ext_resource type="Texture2D" uid="uid://rv54yi24nec2" path="res://data/items/armours/light_armour/light_armour_card.png" id="1_dhss4"]
+[ext_resource type="Script" uid="uid://bp2853oookgav" path="res://data/items/armours/armour.gd" id="1_vnnqh"]
+[ext_resource type="Texture2D" uid="uid://cd2buq85hfydb" path="res://data/items/armours/light_armour/light_armour.png" id="2_32235"]
+
+[resource]
+script = ExtResource("1_vnnqh")
+texture = ExtResource("2_32235")
+speed_multiplier = 1.2
+knockback_multiplier = 1.2
+damage_multiplier = 1.2
+jump_multiplier = 1.0
+card_texture = ExtResource("1_dhss4")
+metadata/_custom_type_script = "uid://bp2853oookgav"

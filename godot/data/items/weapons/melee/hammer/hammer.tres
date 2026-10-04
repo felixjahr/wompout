@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Melee" format=3 uid="uid://bq1dcqim54uvm"]
+
+[ext_resource type="Texture2D" uid="uid://dx3usy4nt2dc8" path="res://data/items/weapons/melee/hammer/hammer_card.png" id="1_537f4"]
+[ext_resource type="Script" uid="uid://dma0ut8h4lfxi" path="res://data/items/weapons/melee/melee.gd" id="1_pahft"]
+[ext_resource type="Texture2D" uid="uid://cxn3vaixw4gm7" path="res://data/items/weapons/melee/hammer/hammer.png" id="3_tpr6u"]
+
+[resource]
+script = ExtResource("1_pahft")
+damage = 10
+knockback = 1000
+hitbox_size = Vector2(200, 120)
+moonwalk = true
+sprite_texture = ExtResource("3_tpr6u")
+card_texture = ExtResource("1_537f4")
+metadata/_custom_type_script = "uid://dma0ut8h4lfxi"

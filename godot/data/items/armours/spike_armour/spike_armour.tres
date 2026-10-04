@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Armour" format=3 uid="uid://hgksqo5xvls3"]
+
+[ext_resource type="Script" uid="uid://bp2853oookgav" path="res://data/items/armours/armour.gd" id="1_4jg6n"]
+[ext_resource type="Texture2D" uid="uid://blk0wjm0601p5" path="res://data/items/armours/spike_armour/spike_armour_card.png" id="1_6s4nh"]
+[ext_resource type="Texture2D" uid="uid://cvsol2a1xxgc2" path="res://data/items/armours/spike_armour/spike_armour.png" id="3_h7ovb"]
+
+[resource]
+script = ExtResource("1_4jg6n")
+texture = ExtResource("3_h7ovb")
+speed_multiplier = 1.0
+knockback_multiplier = 1.0
+damage_multiplier = 1.0
+jump_multiplier = 1.0
+card_texture = ExtResource("1_6s4nh")
+metadata/_custom_type_script = "uid://bp2853oookgav"

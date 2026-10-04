@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Mode" format=3 uid="uid://bilosrbr2okxk"]
+
+[ext_resource type="Texture2D" uid="uid://diouban2cijcn" path="res://data/modes/womp/duo_womp_ranked_icon.png" id="1_bbkg4"]
+[ext_resource type="Script" uid="uid://dun332qh8ony6" path="res://data/modes/mode.gd" id="3_74xi2"]
+[ext_resource type="Texture2D" uid="uid://bwd6ogpx42ckj" path="res://data/modes/womp/duo_womp_thumbnail.png" id="3_bbkg4"]
+
+[resource]
+script = ExtResource("3_74xi2")
+id = "duo_womp_ranked"
+display_name = "DUO WOMP"
+ranked = true
+max_lobby_size = 2
+icon_texture = ExtResource("1_bbkg4")
+thumbnail_texture = ExtResource("3_bbkg4")
+metadata/_custom_type_script = "uid://dun332qh8ony6"

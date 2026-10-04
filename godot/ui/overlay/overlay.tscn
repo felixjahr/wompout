@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://bvbatgtjk5jkt"]
+
+[ext_resource type="Script" uid="uid://8dpsjq06au1" path="res://ui/overlay/overlay.gd" id="1_1xumj"]
+[ext_resource type="PackedScene" uid="uid://dmr0fcamx7t56" path="res://ui/overlay/joystick/joystick.tscn" id="1_yc8ku"]
+[ext_resource type="PackedScene" uid="uid://chc7meg2bqff6" path="res://ui/overlay/dpad/dpad.tscn" id="3_ai64t"]
+[ext_resource type="Texture2D" uid="uid://qcdiblib5shu" path="res://ui/overlay/joystick/joystick_tip_ranged.png" id="3_d84jb"]
+[ext_resource type="PackedScene" uid="uid://byesepmn17h43" path="res://ui/overlay/jump_button/jump_button.tscn" id="4_2mrie"]
+[ext_resource type="PackedScene" uid="uid://cu6128d5tdhyp" path="res://ui/overlay/ability_button/ability_button.tscn" id="4_nxmck"]
+[ext_resource type="Texture2D" uid="uid://7eqbpor2e70x" path="res://ui/overlay/joystick/joystick_tip_ranged_pressed.png" id="5_bbjur"]
+
+[node name="Overlay" type="Control" unique_id=849933501]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1xumj")
+
+[node name="Dpad" parent="." unique_id=489050156 instance=ExtResource("3_ai64t")]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 960.0
+grow_vertical = 2
+
+[node name="Base" parent="Dpad/CanvasGroup" parent_id_path=PackedInt32Array(489050156, 117024496) index="0" unique_id=551360948]
+offset_left = 256.0
+offset_top = 800.0
+offset_right = 706.0
+offset_bottom = 992.0
+
+[node name="AbilityButton" parent="." unique_id=287344035 instance=ExtResource("4_nxmck")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -832.0
+offset_top = -632.0
+offset_right = -632.0
+offset_bottom = -432.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="JumpButton" parent="." unique_id=673379120 instance=ExtResource("4_2mrie")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -488.0
+offset_top = -288.0
+offset_right = -288.0
+offset_bottom = -88.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="MeleeJoystick" parent="." unique_id=2075489000 instance=ExtResource("1_yc8ku")]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -960.0
+offset_top = 640.0
+offset_bottom = 640.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="Base" parent="MeleeJoystick/CanvasGroup" parent_id_path=PackedInt32Array(2075489000, 1740765945) index="0" unique_id=287405360]
+offset_left = 16.0
+offset_top = 64.0
+offset_right = 316.0
+offset_bottom = 364.0
+
+[node name="RangedJoystick" parent="." unique_id=62368011 instance=ExtResource("1_yc8ku")]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -960.0
+grow_horizontal = 0
+grow_vertical = 2
+tip_pressed = ExtResource("5_bbjur")
+
+[node name="Base" parent="RangedJoystick/CanvasGroup" parent_id_path=PackedInt32Array(62368011, 1740765945) index="0" unique_id=287405360]
+offset_left = 384.0
+offset_top = 336.0
+offset_right = 684.0
+offset_bottom = 636.0
+
+[node name="Tip" parent="RangedJoystick/CanvasGroup/Base" index="0" unique_id=1441699964]
+texture = ExtResource("3_d84jb")
+
+[connection signal="pressed" from="AbilityButton" to="." method="_on_ability_button_pressed"]
+[connection signal="pressed" from="JumpButton" to="." method="_on_jump_button_pressed"]
+[connection signal="released" from="MeleeJoystick" to="." method="_on_melee_joystick_released"]
+[connection signal="released" from="RangedJoystick" to="." method="_on_ranged_joystick_released"]
+
+[editable path="Dpad"]
+[editable path="MeleeJoystick"]
+[editable path="RangedJoystick"]

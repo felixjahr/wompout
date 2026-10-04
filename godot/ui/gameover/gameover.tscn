@@ -1,0 +1,210 @@
+[gd_scene format=3 uid="uid://bic5sq2oc0whu"]
+
+<<<<<<< HEAD
+[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_theme"]
+[ext_resource type="Script" uid="uid://cg7fvrl7mftc3" path="res://ui/gameover/gameover.gd" id="2_script"]
+
+[sub_resource type="StyleBoxFlat" id="Style_own"]
+content_margin_left = 28.0
+content_margin_top = 26.0
+content_margin_right = 28.0
+content_margin_bottom = 28.0
+bg_color = Color(0.055, 0.13, 0.15, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.23, 0.5, 0.43, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="StyleBoxFlat" id="Style_opponent"]
+content_margin_left = 28.0
+content_margin_top = 26.0
+content_margin_right = 28.0
+content_margin_bottom = 28.0
+bg_color = Color(0.15, 0.09, 0.13, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.28, 0.31, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[node name="Gameover" type="Control" unique_id=173281342]
+=======
+[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_vigs4"]
+[ext_resource type="Script" uid="uid://cg7fvrl7mftc3" path="res://ui/gameover/gameover.gd" id="1_w8oxy"]
+
+[node name="Gameover" type="Control" unique_id=1331403375]
+>>>>>>> origin/main
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+<<<<<<< HEAD
+theme = ExtResource("1_theme")
+script = ExtResource("2_script")
+
+[node name="Background" type="ColorRect" parent="." unique_id=621013136]
+=======
+theme = ExtResource("1_vigs4")
+script = ExtResource("1_w8oxy")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=227238940]
+>>>>>>> origin/main
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+<<<<<<< HEAD
+mouse_filter = 2
+color = Color(0.025, 0.04, 0.075, 1)
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=40297048]
+=======
+color = Color(0, 0, 0, 0.24705882)
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=237504526]
+>>>>>>> origin/main
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+<<<<<<< HEAD
+theme_override_constants/margin_left = 48
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 48
+theme_override_constants/margin_bottom = 28
+
+[node name="Layout" type="VBoxContainer" parent="Margin" unique_id=551845179]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Margin/Layout" unique_id=1645303678]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 68
+text = "MATCH COMPLETE"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="Margin/Layout" unique_id=1305900760]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.72, 0.82, 1)
+theme_override_font_sizes/font_size = 22
+text = "MATCH RESULTS"
+horizontal_alignment = 1
+
+[node name="Trophies" type="Label" parent="Margin/Layout" unique_id=1279578766]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Margin/Layout" unique_id=2014784946]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Teams" type="HBoxContainer" parent="Margin/Layout/Scroll" unique_id=1585039586]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+
+[node name="OwnPanel" type="PanelContainer" parent="Margin/Layout/Scroll/Teams" unique_id=29840055]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("Style_own")
+
+[node name="Layout" type="VBoxContainer" parent="Margin/Layout/Scroll/Teams/OwnPanel" unique_id=1758626747]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="OwnHeading" type="Label" parent="Margin/Layout/Scroll/Teams/OwnPanel/Layout" unique_id=1709572923]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.545, 0.906, 0.733, 1)
+theme_override_font_sizes/font_size = 28
+text = "YOUR TEAM"
+horizontal_alignment = 1
+
+[node name="OwnPlayers" type="HBoxContainer" parent="Margin/Layout/Scroll/Teams/OwnPanel/Layout" unique_id=736902687]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Versus" type="Label" parent="Margin/Layout/Scroll/Teams" unique_id=1243006853]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.57, 0.69, 1)
+theme_override_font_sizes/font_size = 28
+text = "VS"
+vertical_alignment = 1
+
+[node name="OpponentPanel" type="PanelContainer" parent="Margin/Layout/Scroll/Teams" unique_id=690934469]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("Style_opponent")
+
+[node name="Layout" type="VBoxContainer" parent="Margin/Layout/Scroll/Teams/OpponentPanel" unique_id=1280067779]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="OpponentHeading" type="Label" parent="Margin/Layout/Scroll/Teams/OpponentPanel/Layout" unique_id=933511352]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.667, 0.627, 1)
+theme_override_font_sizes/font_size = 28
+text = "OPPONENTS"
+horizontal_alignment = 1
+
+[node name="OpponentPlayers" type="HBoxContainer" parent="Margin/Layout/Scroll/Teams/OpponentPanel/Layout" unique_id=1450840385]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="Footer" type="CenterContainer" parent="Margin/Layout" unique_id=326419210]
+layout_mode = 2
+
+[node name="Continue" type="Button" parent="Margin/Layout/Footer" unique_id=533820896]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(380, 76)
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+text = "CONTINUE"
+
+[connection signal="pressed" from="Margin/Layout/Footer/Continue" to="." method="_on_continue_pressed"]
+=======
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=673147019]
+layout_mode = 2
+theme_override_constants/separation = 64
+
+[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=553211547]
+layout_mode = 2
+text = "The winner is: "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Continue" type="Button" parent="CenterContainer/VBoxContainer" unique_id=903590696]
+layout_mode = 2
+text = "Okay"
+>>>>>>> origin/main

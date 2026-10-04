@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Mode" format=3 uid="uid://clnj6s0rwk02r"]
+
+[ext_resource type="Texture2D" uid="uid://bim5jb7a71phy" path="res://data/modes/womp/super_womp_ranked_icon.png" id="1_g3sf8"]
+[ext_resource type="Texture2D" uid="uid://2dj3lrysoghi" path="res://data/modes/womp/super_womp_thumbnail.png" id="3_g3sf8"]
+[ext_resource type="Script" uid="uid://dun332qh8ony6" path="res://data/modes/mode.gd" id="3_lb5gx"]
+
+[resource]
+script = ExtResource("3_lb5gx")
+id = "super_womp_ranked"
+display_name = "SUPER WOMP"
+ranked = true
+max_lobby_size = 4
+icon_texture = ExtResource("1_g3sf8")
+thumbnail_texture = ExtResource("3_g3sf8")
+metadata/_custom_type_script = "uid://dun332qh8ony6"

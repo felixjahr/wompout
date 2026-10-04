@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://chc7meg2bqff6"]
+
+[ext_resource type="Script" uid="uid://cngta1w31cb4" path="res://ui/overlay/dpad/dpad.gd" id="1_gwufy"]
+[ext_resource type="Texture2D" uid="uid://by272o8xpax3q" path="res://ui/overlay/dpad/dpad_base.png" id="2_2tnq5"]
+[ext_resource type="Texture2D" uid="uid://cujgnvrcr2bbw" path="res://ui/overlay/dpad/dpad_tip_pressed.png" id="3_2tnq5"]
+[ext_resource type="Texture2D" uid="uid://dc17fyxbrkyb1" path="res://ui/overlay/dpad/dpad_tip.png" id="3_830yk"]
+
+[node name="Dpad" type="Control" unique_id=489050156]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_gwufy")
+tip_pressed = ExtResource("3_2tnq5")
+
+[node name="CanvasGroup" type="CanvasGroup" parent="." unique_id=117024496]
+self_modulate = Color(1, 1, 1, 0.78431374)
+
+[node name="Base" type="TextureRect" parent="CanvasGroup" unique_id=551360948]
+offset_right = 450.0
+offset_bottom = 192.0
+texture = ExtResource("2_2tnq5")
+
+[node name="Tip" type="TextureRect" parent="CanvasGroup/Base" unique_id=1711795483]
+layout_mode = 0
+offset_right = 450.0
+offset_bottom = 192.0
+texture = ExtResource("3_830yk")

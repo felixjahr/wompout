@@ -1,0 +1,61 @@
+[gd_scene format=3 uid="uid://mrx73yralrmc"]
+
+<<<<<<< HEAD
+[ext_resource type="Script" uid="uid://b0isbw7omtyso" path="res://client/client_controller.gd" id="1_ti1oh"]
+=======
+[ext_resource type="Script" uid="uid://cey8cauvutinj" path="res://client/client_controller.gd" id="1_ti1oh"]
+>>>>>>> origin/main
+[ext_resource type="Script" uid="uid://bg4cxsi1uiapg" path="res://client/client_auth_net.gd" id="2_7kp2r"]
+[ext_resource type="Script" uid="uid://c4shlg6lbs66t" path="res://client/client_backend_net.gd" id="3_7kp2r"]
+[ext_resource type="Script" uid="uid://dbadsd2pwibq5" path="res://client/client_game_net.gd" id="3_mgmel"]
+
+[node name="Controller" type="Node" unique_id=63357991]
+script = ExtResource("1_ti1oh")
+
+<<<<<<< HEAD
+[node name="UIContainer" type="CanvasLayer" parent="." unique_id=978794642]
+=======
+[node name="UI" type="CanvasLayer" parent="." unique_id=978794642]
+>>>>>>> origin/main
+
+[node name="Net" type="Node" parent="." unique_id=1471941793]
+
+[node name="AuthNet" type="Node" parent="Net" unique_id=439584374]
+script = ExtResource("2_7kp2r")
+
+[node name="BackendNet" type="Node" parent="Net" unique_id=1938416600]
+script = ExtResource("3_7kp2r")
+
+[node name="GameNet" type="Node" parent="Net" unique_id=1385322115]
+script = ExtResource("3_mgmel")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2070006225]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="AspectRatioContainer" type="AspectRatioContainer" parent="." unique_id=1221592803]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+ratio = 1.7778
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="AspectRatioContainer" unique_id=1883928005]
+layout_mode = 2
+stretch = true
+
+<<<<<<< HEAD
+[node name="GameContainer" type="SubViewport" parent="AspectRatioContainer/SubViewportContainer" unique_id=104578715]
+handle_input_locally = false
+size = Vector2i(1920, 1080)
+=======
+[node name="Game" type="SubViewport" parent="AspectRatioContainer/SubViewportContainer" unique_id=104578715]
+handle_input_locally = false
+size = Vector2i(1920, 1079)
+>>>>>>> origin/main
+render_target_update_mode = 4

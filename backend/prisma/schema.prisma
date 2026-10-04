@@ -1,0 +1,143 @@
+<<<<<<< HEAD
+generator client {
+  provider     = "prisma-client"
+  output       = "../generated/prisma"
+=======
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+>>>>>>> origin/main
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+<<<<<<< HEAD
+enum ItemType {
+  RANGED
+  MELEE
+  ARMOUR
+  ABILITY
+}
+
+model Player {
+  id          String   @id @default(uuid()) @db.Uuid
+  displayName String
+  email       String?  @unique
+  createdAt   DateTime @default(now())
+
+  progression           PlayerProgression?
+  loadout               PlayerLoadout?
+  items                 PlayerItem[]
+  sessions              Session[]
+  emailVerifiationCodes EmailVerificationCode[]
+  sentFriendInvites     FriendInvite[]
+  friendshipsA          Friendship[]            @relation("FriendshipPlayerA")
+  friendshipsB          Friendship[]            @relation("FriendshipPlayerB")
+}
+
+model Session {
+  id               String    @id @default(uuid()) @db.Uuid
+  playerId         String    @db.Uuid
+  refreshTokenHash String    @unique
+  createdAt        DateTime  @default(now())
+  expiresAt        DateTime
+  revokedAt        DateTime?
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([playerId])
+}
+
+model EmailVerificationCode {
+  id        String    @id @default(uuid()) @db.Uuid
+  playerId  String    @db.Uuid
+  email     String
+  codeHash  String
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  usedAt    DateTime?
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([email, createdAt])
+}
+
+model PlayerProgression {
+  playerId        String @id @db.Uuid
+  trophies        Int    @default(0)
+  highestTrophies Int    @default(0)
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([trophies(sort: Desc)])
+}
+
+model PlayerLoadout {
+  playerId  String @id @db.Uuid
+  rangedId  String
+  meleeId   String
+  armourId  String
+  abilityId String
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+}
+
+model PlayerItem {
+  playerId   String   @db.Uuid
+  itemType   ItemType
+  itemId     String
+  unlockedAt DateTime @default(now())
+
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@id([playerId, itemType, itemId])
+}
+
+model Friendship {
+  id        String   @id @default(uuid()) @db.Uuid
+  playerAId String   @db.Uuid
+  playerBId String   @db.Uuid
+  createdAt DateTime @default(now())
+
+  playerA Player @relation("FriendshipPlayerA", fields: [playerAId], references: [id], onDelete: Cascade)
+  playerB Player @relation("FriendshipPlayerB", fields: [playerBId], references: [id], onDelete: Cascade)
+
+  @@unique([playerAId, playerBId])
+  @@index([playerBId])
+}
+
+model FriendInvite {
+  id        String   @id @default(uuid()) @db.Uuid
+  inviterId String   @db.Uuid
+  tokenHash String   @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  inviter Player @relation(fields: [inviterId], references: [id], onDelete: Cascade)
+
+  @@index([inviterId])
+  @@index([expiresAt])
+=======
+model Player {
+  id        String   @id
+  name      String
+  createdAt DateTime @default(now())
+  sessions  Session[]
+}
+
+model Session {
+  id                 String    @id
+  playerId           String
+  refreshTokenHash   String    @unique
+  createdAt          DateTime  @default(now())
+  player Player @relation(fields: [playerId], references: [id])
+>>>>>>> origin/main
+}

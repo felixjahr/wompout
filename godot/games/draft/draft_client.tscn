@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://d35reedmb2e1t"]
+
+[ext_resource type="Script" uid="uid://n3pflikeoiuo" path="res://games/draft/draft_client.gd" id="1_8wrf6"]
+[ext_resource type="Script" uid="uid://dqsxm57ibh1wi" path="res://games/logic_client.gd" id="3_lynn4"]
+
+[node name="Draft" type="Node" unique_id=1463937241]
+script = ExtResource("1_8wrf6")
+
+[node name="Logic" type="Node" parent="." unique_id=1351783230]
+script = ExtResource("3_lynn4")
+
+[node name="MapContainer" type="Node2D" parent="Logic" unique_id=305322912]
+
+[node name="PlayerContainer" type="Node2D" parent="Logic" unique_id=32495405]
+
+[node name="BulletContainer" type="Node2D" parent="Logic" unique_id=748027622]

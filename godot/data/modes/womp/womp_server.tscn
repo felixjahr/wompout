@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://c03qylhwdkyf7"]
+
+[ext_resource type="PackedScene" uid="uid://dk64l8lsxw0in" path="res://data/modes/mode_server.tscn" id="1_bkjji"]
+[ext_resource type="Script" uid="uid://dy4cjlmy038dy" path="res://data/modes/womp/womp_server.gd" id="2_3y2p7"]
+
+[node name="Womp" unique_id=2126793095 instance=ExtResource("1_bkjji")]
+script = ExtResource("2_3y2p7")

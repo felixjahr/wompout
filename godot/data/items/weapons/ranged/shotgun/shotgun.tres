@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="Ranged" format=3 uid="uid://bkretlooefagf"]
+
+[ext_resource type="Script" uid="uid://dc58rhvdfubb2" path="res://data/items/weapons/ranged/ranged.gd" id="1_6x5mg"]
+[ext_resource type="Texture2D" uid="uid://dx5h66nv36msm" path="res://data/items/weapons/ranged/shotgun/shotgun_card.png" id="1_xra2f"]
+[ext_resource type="Texture2D" uid="uid://b3b05l3sffehs" path="res://data/items/weapons/ranged/shotgun/shotgun.png" id="3_lllg7"]
+
+[resource]
+script = ExtResource("1_6x5mg")
+bullet_speed = 4000
+bullet_damage = 5
+bullet_amount = 1
+attack_duration = 0.2
+aim_animation = "aim_ranged"
+attack_animation = "attack_ranged"
+max_ammunition = 3
+reload_time = 1.0
+sprite_texture = ExtResource("3_lllg7")
+sprite_offset = Vector2(30, 10)
+card_texture = ExtResource("1_xra2f")
+metadata/_custom_type_script = "uid://dc58rhvdfubb2"

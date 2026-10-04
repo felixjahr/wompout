@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://qgbih851xmp2"]
+
+[node name="HitEffect" type="CPUParticles2D" unique_id=1000520104]
+emitting = false
+one_shot = true
+spread = 180.0

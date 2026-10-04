@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="DoubleJump" format=3 uid="uid://ho33eav6bmsy"]
+
+[ext_resource type="Texture2D" uid="uid://dfeeiy8jquxpk" path="res://data/items/abilities/double_jump/double_jump_card.png" id="1_f1l4o"]
+[ext_resource type="Script" uid="uid://dsdjid7cecoh1" path="res://data/items/abilities/double_jump/double_jump.gd" id="1_p5ep0"]
+
+[resource]
+script = ExtResource("1_p5ep0")
+jump_multiplier = 1.2
+recharge_time = 2.0
+card_texture = ExtResource("1_f1l4o")
+metadata/_custom_type_script = "uid://dsdjid7cecoh1"

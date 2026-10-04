@@ -1,0 +1,90 @@
+[gd_scene format=3 uid="uid://cuu0quwq1d46k"]
+
+[ext_resource type="Script" uid="uid://dgchdpvh25gfe" path="res://ui/lobby/armory_screen/item_entry.gd" id="1_f08fj"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="2_tq80x"]
+[ext_resource type="PackedScene" uid="uid://cnlqm0mhmwdm2" path="res://ui/lobby/armory_screen/item_card.tscn" id="2_vdelg"]
+[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/lobby/side_button.png" id="4_38ypp"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q8m82"]
+bg_color = Color(0.36078432, 0.42352942, 0.53333336, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_crnc1"]
+texture = ExtResource("4_38ypp")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[node name="ItemEntry" type="CenterContainer" unique_id=287310603]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -2176.0
+offset_bottom = -776.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_f08fj")
+
+[node name="ItemCard" parent="." unique_id=604162406 instance=ExtResource("2_vdelg")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="EquipPopup" type="Panel" parent="ItemCard/Panel" parent_id_path=PackedInt32Array(604162406, 975396529) index="1" unique_id=171500483]
+unique_name_in_owner = true
+visible = false
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_q8m82")
+
+[node name="EquipButton" parent="ItemCard/Panel/EquipPopup" unique_id=585267520 instance=ExtResource("2_tq80x")]
+custom_minimum_size = Vector2(256, 128)
+layout_mode = 0
+offset_left = 16.0
+offset_top = 344.0
+offset_right = 272.0
+offset_bottom = 472.0
+
+[node name="Panel" type="Panel" parent="ItemCard/Panel/EquipPopup/EquipButton" unique_id=1908612667]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_crnc1")
+
+[node name="Label" type="Label" parent="ItemCard/Panel/EquipPopup/EquipButton/Panel" unique_id=2094576356]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "EQUIP"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="ItemCard" to="." method="_on_item_card_pressed"]
+[connection signal="pressed" from="ItemCard/Panel/EquipPopup/EquipButton" to="." method="_on_equip_button_pressed"]
+
+[editable path="ItemCard"]

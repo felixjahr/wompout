@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="Melee" format=3 uid="uid://bewuouv5mfi1c"]
+
+[ext_resource type="Script" uid="uid://duuv22b7jqrgp" path="res://data/items/weapons/aim_hint_line.gd" id="1_k0rn0"]
+[ext_resource type="Texture2D" uid="uid://c8c1j8qehqv13" path="res://data/items/weapons/melee/spear/spear_card.png" id="1_netgu"]
+[ext_resource type="Script" uid="uid://dma0ut8h4lfxi" path="res://data/items/weapons/melee/melee.gd" id="2_k0rn0"]
+
+[sub_resource type="Resource" id="Resource_ha1y1"]
+script = ExtResource("1_k0rn0")
+length = 210.0
+width = 120.0
+offset = Vector2(40, 0)
+metadata/_custom_type_script = "uid://duuv22b7jqrgp"
+
+[resource]
+script = ExtResource("2_k0rn0")
+damage = 10
+knockback = 2000
+hitbox_size = Vector2(250, 120)
+moonwalk = true
+two_handed = true
+attack_duration = 0.45
+max_ammunition = 2
+reload_time = 2.0
+aim_hint = SubResource("Resource_ha1y1")
+card_texture = ExtResource("1_netgu")
+metadata/_custom_type_script = "uid://dma0ut8h4lfxi"

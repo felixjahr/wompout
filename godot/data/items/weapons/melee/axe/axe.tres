@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="Melee" format=3 uid="uid://b3665creeq8k8"]
+
+[ext_resource type="Script" uid="uid://dma0ut8h4lfxi" path="res://data/items/weapons/melee/melee.gd" id="1_6qiaa"]
+[ext_resource type="Texture2D" uid="uid://cs8arly7vqy0k" path="res://data/items/weapons/melee/axe/axe_card.png" id="1_oq5gf"]
+[ext_resource type="Texture2D" uid="uid://uo0ybeufbna7" path="res://data/items/weapons/melee/axe/axe.png" id="3_bxwy4"]
+
+[resource]
+script = ExtResource("1_6qiaa")
+damage = 10
+knockback = 1000
+hitbox_size = Vector2(200, 120)
+moonwalk = true
+attack_duration = 0.2
+sprite_texture = ExtResource("3_bxwy4")
+card_texture = ExtResource("1_oq5gf")
+metadata/_custom_type_script = "uid://dma0ut8h4lfxi"

@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://kwm0g664i5pt"]
+
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="1_usn82"]
+[ext_resource type="Texture2D" uid="uid://bge5355jvk1dj" path="res://ui/lobby/close_button/close_button.png" id="2_66v81"]
+
+[node name="CloseButton" unique_id=604162406 instance=ExtResource("1_usn82")]
+custom_minimum_size = Vector2(96, 96)
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -160.0
+offset_top = 64.0
+offset_right = -64.0
+offset_bottom = 160.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+amount = 0.7
+
+[node name="TextureRect" type="TextureRect" parent="." index="0" unique_id=1122937323]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_66v81")

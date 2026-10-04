@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://ddpm0fviuv445"]
+
+[ext_resource type="Script" uid="uid://bvl1qu5tnnhov" path="res://participant/participant_server.gd" id="1_xdhm3"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_70xuj"]
+radius = 24.0
+height = 208.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_65fbn"]
+size = Vector2(64, 224)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q7r4q"]
+size = Vector2(256, 80)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_70xuj"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qhocm"]
+size = Vector2(64, 224)
+
+[node name="ParticipantServer" type="CharacterBody2D" unique_id=438842004]
+collision_layer = 0
+script = ExtResource("1_xdhm3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=912797869]
+shape = SubResource("CapsuleShape2D_70xuj")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=276046643]
+collision_layer = 2
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1441210291]
+shape = SubResource("RectangleShape2D_65fbn")
+
+[node name="SlamDown" type="Area2D" parent="." unique_id=603622016]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="SlamDown" unique_id=237870023]
+position = Vector2(0, 64)
+shape = SubResource("RectangleShape2D_q7r4q")
+
+[node name="SlamDownMarker" type="Marker2D" parent="." unique_id=1315547270]
+position = Vector2(0, 128)
+
+[node name="Pivot" type="Marker2D" parent="." unique_id=568768869]
+position = Vector2(0, -52)
+
+[node name="Hitbox" type="Area2D" parent="Pivot" unique_id=729236531]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pivot/Hitbox" unique_id=842468334]
+shape = SubResource("RectangleShape2D_70xuj")
+
+[node name="Arena" type="Area2D" parent="." unique_id=1275883959]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Arena" unique_id=1779909098]
+shape = SubResource("RectangleShape2D_qhocm")
+
+[connection signal="area_entered" from="Pivot/Hitbox" to="." method="_on_hitbox_area_entered"]
+[connection signal="area_exited" from="Arena" to="." method="_on_arena_area_exited"]

@@ -1,0 +1,207 @@
+[gd_scene format=3 uid="uid://blcpf8cku6m65"]
+
+[ext_resource type="PackedScene" uid="uid://bm0hcarc33bl4" path="res://ui/lobby/player_entry.tscn" id="1_4vh4t"]
+[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_mxp8a"]
+[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/lobby/mode_button_normal.png" id="2_mxp8a"]
+[ext_resource type="Script" uid="uid://dy7d7klb78k1b" path="res://ui/lobby/friends_panel/friends_panel.gd" id="2_r4evk"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="5_4yd2w"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/lobby/close_button/close_button.tscn" id="10_ypg3x"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7p47"]
+bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
+border_width_left = 10
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 8.0
+expand_margin_right = 128.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_l7lr6"]
+texture = ExtResource("2_mxp8a")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[node name="FriendsPanel" type="Panel" unique_id=1844430048]
+custom_minimum_size = Vector2(1080, 0)
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("1_mxp8a")
+theme_override_styles/panel = SubResource("StyleBoxFlat_c7p47")
+script = ExtResource("2_r4evk")
+side = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=353949477]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1954097641]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1941392049]
+layout_mode = 2
+text = "FRIENDS"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=111203786]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=1376060084]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="OnlineLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=1434220824]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "ONLINE"
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=1980916381]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+
+[node name="OnlineContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer" unique_id=734497806]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PlayerEntry" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/OnlineContainer" unique_id=37441086 instance=ExtResource("1_4vh4t")]
+layout_mode = 2
+
+[node name="PlayerEntry2" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/OnlineContainer" unique_id=914818965 instance=ExtResource("1_4vh4t")]
+layout_mode = 2
+
+[node name="PlayerEntry3" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/OnlineContainer" unique_id=260561602 instance=ExtResource("1_4vh4t")]
+layout_mode = 2
+
+[node name="OfflineLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=22693622]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "OFFLINE"
+
+[node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=746457590]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+
+[node name="OfflineContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2" unique_id=218999533]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PlayerEntry" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/OfflineContainer" unique_id=1394677650 instance=ExtResource("1_4vh4t")]
+layout_mode = 2
+
+[node name="PlayerEntry2" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/OfflineContainer" unique_id=1368919333 instance=ExtResource("1_4vh4t")]
+layout_mode = 2
+
+[node name="PlayerEntry3" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/OfflineContainer" unique_id=1173378065 instance=ExtResource("1_4vh4t")]
+layout_mode = 2
+
+[node name="PlayerEntry4" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/OfflineContainer" unique_id=435130305 instance=ExtResource("1_4vh4t")]
+layout_mode = 2
+
+[node name="PlayerEntry5" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/OfflineContainer" unique_id=754634683 instance=ExtResource("1_4vh4t")]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=810681454]
+layout_mode = 2
+theme_override_constants/separation = 64
+
+[node name="AddFriendsButton" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=604162406 instance=ExtResource("5_4yd2w")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/HBoxContainer/AddFriendsButton" unique_id=1201540549]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_l7lr6")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/AddFriendsButton/Panel" unique_id=285674583]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/AddFriendsButton/Panel/MarginContainer" unique_id=745583472]
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "ADD FRIENDS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="QuickGameButton" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=704103804 instance=ExtResource("5_4yd2w")]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/HBoxContainer/QuickGameButton" unique_id=1195076162]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_l7lr6")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/HBoxContainer/QuickGameButton/Panel" unique_id=157159146]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/HBoxContainer/QuickGameButton/Panel/MarginContainer" unique_id=104480545]
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "QUICK GAME"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CloseButton" parent="." unique_id=2013356944 instance=ExtResource("10_ypg3x")]
+layout_mode = 1
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/AddFriendsButton" to="." method="_on_add_friends_button_pressed"]
+[connection signal="pressed" from="CloseButton" to="." method="_on_close_button_pressed"]

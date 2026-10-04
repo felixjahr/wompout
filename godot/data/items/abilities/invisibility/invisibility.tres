@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="Invisibility" format=3 uid="uid://bmkpcscts3i13"]
+
+[ext_resource type="Script" uid="uid://bmke3ijuka00p" path="res://data/items/abilities/invisibility/invisibility.gd" id="1_3q2fe"]
+[ext_resource type="Texture2D" uid="uid://du8cwe86djt4j" path="res://data/items/abilities/invisibility/invisibility_card.png" id="1_7hqwf"]
+
+[resource]
+script = ExtResource("1_3q2fe")
+duration = 3.0
+charge = 40
+card_texture = ExtResource("1_7hqwf")
+metadata/_custom_type_script = "uid://bmke3ijuka00p"

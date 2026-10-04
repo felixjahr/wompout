@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://lglsdv0m2jwh"]
+
+[ext_resource type="Script" uid="uid://n3pflikeoiuo" path="res://data/modes/draft/draft_client.gd" id="1_8wrf6"]
+[ext_resource type="PackedScene" uid="uid://cp2y1n86c6otj" path="res://data/modes/mode_client.tscn" id="1_o26ex"]
+
+[node name="Draft" unique_id=1463937241 instance=ExtResource("1_o26ex")]
+script = ExtResource("1_8wrf6")

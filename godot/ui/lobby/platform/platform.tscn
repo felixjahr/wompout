@@ -1,0 +1,145 @@
+[gd_scene format=3 uid="uid://5niwhgkdbm6m"]
+
+[ext_resource type="Script" uid="uid://cei6k48q11moy" path="res://ui/lobby/platform/platform.gd" id="1_6t0w2"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="1_jhax7"]
+[ext_resource type="Texture2D" uid="uid://ba8dbc55rr6i1" path="res://ui/lobby/platform/platform.png" id="1_k7pa1"]
+[ext_resource type="Texture2D" uid="uid://bt38x2hjmtrwl" path="res://ui/lobby/platform/rays.png" id="2_6t0w2"]
+[ext_resource type="PackedScene" uid="uid://273mne8qk0jw" path="res://participant/participant_client.tscn" id="3_kp4wc"]
+[ext_resource type="Shader" uid="uid://bcwr2d8cri1nn" path="res://participant/participant.gdshader" id="5_jhax7"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6dvus"]
+resource_local_to_scene = true
+bg_color = Color(0.27450982, 0.8352941, 0.22745098, 1)
+corner_radius_top_left = 14
+corner_radius_top_right = 14
+corner_radius_bottom_right = 14
+corner_radius_bottom_left = 14
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_deuci"]
+resource_local_to_scene = true
+bg_color = Color(0.84705883, 0.38039216, 0.11764706, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ky1j6"]
+resource_local_to_scene = true
+bg_color = Color(0.84705883, 0.38039216, 0.11764706, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5o5wd"]
+resource_local_to_scene = true
+bg_color = Color(0.84705883, 0.38039216, 0.11764706, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rbre5"]
+resource_local_to_scene = true
+bg_color = Color(0.84705883, 0.38039216, 0.11764706, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_poepv"]
+resource_local_to_scene = true
+bg_color = Color(0.84705883, 0.38039216, 0.11764706, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dkemw"]
+resource_local_to_scene = true
+shader = ExtResource("5_jhax7")
+shader_parameter/flash_amount = 0.0
+shader_parameter/invisibility_amount = 0.0
+shader_parameter/reveal_amount = 0.0
+
+[node name="Platform" unique_id=604162406 instance=ExtResource("1_jhax7")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_6t0w2")
+
+[node name="Control" type="Control" parent="." index="0" unique_id=2000097207]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Node2D" type="Node2D" parent="Control" index="0" unique_id=490042527]
+
+[node name="Rays" type="Sprite2D" parent="Control/Node2D" index="0" unique_id=1595568842]
+unique_name_in_owner = true
+visible = false
+position = Vector2(31, -381)
+texture = ExtResource("2_6t0w2")
+
+[node name="Sprite2D" type="Sprite2D" parent="Control/Node2D" index="1" unique_id=2013378151]
+position = Vector2(0, 576)
+texture = ExtResource("1_k7pa1")
+
+[node name="PlayerClient" parent="Control/Node2D" index="2" unique_id=1793409614 instance=ExtResource("3_kp4wc")]
+unique_name_in_owner = true
+scale = Vector2(1.5, 1.5)
+
+[node name="VBoxContainer" parent="Control/Node2D/PlayerClient/Status" parent_id_path=PackedInt32Array(1793409614, 1887862741) index="1" unique_id=623400581]
+visible = false
+
+[node name="HealthBar" parent="Control/Node2D/PlayerClient/Status/VBoxContainer" index="1" unique_id=868168642]
+theme_override_styles/fill = SubResource("StyleBoxFlat_6dvus")
+
+[node name="WeaponAmmunitionBarSegment" parent="Control/Node2D/PlayerClient/Status/VBoxContainer/MarginContainer/VBoxContainer/RangedAmmunitionBar" parent_id_path=PackedInt32Array(1793409614, 1868968135) index="0" unique_id=497963735]
+theme_override_styles/fill = SubResource("StyleBoxFlat_deuci")
+
+[node name="WeaponAmmunitionBarSegment2" parent="Control/Node2D/PlayerClient/Status/VBoxContainer/MarginContainer/VBoxContainer/RangedAmmunitionBar" parent_id_path=PackedInt32Array(1793409614, 1868968135) index="1" unique_id=54695042]
+theme_override_styles/fill = SubResource("StyleBoxFlat_ky1j6")
+
+[node name="WeaponAmmunitionBarSegment3" parent="Control/Node2D/PlayerClient/Status/VBoxContainer/MarginContainer/VBoxContainer/RangedAmmunitionBar" parent_id_path=PackedInt32Array(1793409614, 1868968135) index="2" unique_id=635004617]
+theme_override_styles/fill = SubResource("StyleBoxFlat_5o5wd")
+
+[node name="WeaponAmmunitionBarSegment4" parent="Control/Node2D/PlayerClient/Status/VBoxContainer/MarginContainer/VBoxContainer/MeleeAmmunitionBar" parent_id_path=PackedInt32Array(1793409614, 628645159) index="0" unique_id=1594060933]
+theme_override_styles/fill = SubResource("StyleBoxFlat_rbre5")
+
+[node name="WeaponAmmunitionBarSegment5" parent="Control/Node2D/PlayerClient/Status/VBoxContainer/MarginContainer/VBoxContainer/MeleeAmmunitionBar" parent_id_path=PackedInt32Array(1793409614, 628645159) index="1" unique_id=1309301700]
+theme_override_styles/fill = SubResource("StyleBoxFlat_poepv")
+
+[node name="Sprite" parent="Control/Node2D/PlayerClient" index="3" unique_id=672538185]
+material = SubResource("ShaderMaterial_dkemw")
+
+[node name="ReadyLabel" type="Label" parent="Control" index="1" unique_id=455423110]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -95.0
+offset_top = 93.5
+offset_right = 95.0
+offset_bottom = 170.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.23921569, 0.4392157, 1, 1)
+text = "READY"
+horizontal_alignment = 1
+
+[editable path="Control/Node2D/PlayerClient"]

@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="Mode" format=3 uid="uid://b73mb1vjjg4jt"]
+
+[ext_resource type="Texture2D" uid="uid://ldvj3vhk5qxl" path="res://data/modes/draft/womp_draft_unranked_icon.png" id="1_pealf"]
+[ext_resource type="Texture2D" uid="uid://d3qdekxn1y53n" path="res://data/modes/draft/womp_draft_thumbnail.png" id="3_dqu32"]
+[ext_resource type="Script" uid="uid://dun332qh8ony6" path="res://data/modes/mode.gd" id="3_ivo1j"]
+
+[resource]
+script = ExtResource("3_ivo1j")
+id = "womp_draft_unranked"
+display_name = "WOMP DRAFT"
+icon_texture = ExtResource("1_pealf")
+thumbnail_texture = ExtResource("3_dqu32")
+metadata/_custom_type_script = "uid://dun332qh8ony6"
