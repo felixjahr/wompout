@@ -11,8 +11,8 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { FriendsService } from './friends.service';
-import { AuthGuard } from '../auth/auth.guard';
-import { PlayerId } from '../auth/decorators/player-id.decorator';
+import { SessionsGuard } from '../sessions/sessions.guard';
+import { PlayerId } from '../sessions/decorators/player-id.decorator';
 import { CreateFriendInviteResponseDto } from './dto/create-friend-invite-response.dto';
 import type { Request, Response } from 'express';
 
@@ -21,7 +21,7 @@ export class FriendsController {
   constructor(private readonly friendsService: FriendsService) {}
 
   @Post('invite')
-  @UseGuards(AuthGuard)
+  @UseGuards(SessionsGuard)
   createInvite(
     @PlayerId() playerId: string,
   ): Promise<CreateFriendInviteResponseDto> {
@@ -29,7 +29,7 @@ export class FriendsController {
   }
 
   @Post('invite/:token/redeem')
-  @UseGuards(AuthGuard)
+  @UseGuards(SessionsGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   redeemInvite(
     @PlayerId() playerId: string,

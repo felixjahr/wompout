@@ -1,27 +1,22 @@
 [gd_scene format=3 uid="uid://mrx73yralrmc"]
 
-<<<<<<< HEAD
 [ext_resource type="Script" uid="uid://b0isbw7omtyso" path="res://client/client_controller.gd" id="1_ti1oh"]
-=======
-[ext_resource type="Script" uid="uid://cey8cauvutinj" path="res://client/client_controller.gd" id="1_ti1oh"]
->>>>>>> origin/main
-[ext_resource type="Script" uid="uid://bg4cxsi1uiapg" path="res://client/client_auth_net.gd" id="2_7kp2r"]
+[ext_resource type="PackedScene" uid="uid://cnkgxg3kerd75" path="res://ui/error_popup/error_popup.tscn" id="2_sjp5b"]
 [ext_resource type="Script" uid="uid://c4shlg6lbs66t" path="res://client/client_backend_net.gd" id="3_7kp2r"]
 [ext_resource type="Script" uid="uid://dbadsd2pwibq5" path="res://client/client_game_net.gd" id="3_mgmel"]
 
 [node name="Controller" type="Node" unique_id=63357991]
 script = ExtResource("1_ti1oh")
 
-<<<<<<< HEAD
 [node name="UIContainer" type="CanvasLayer" parent="." unique_id=978794642]
-=======
-[node name="UI" type="CanvasLayer" parent="." unique_id=978794642]
->>>>>>> origin/main
+
+[node name="PopupContainer" type="CanvasLayer" parent="." unique_id=1955074052]
+layer = 10
+
+[node name="ErrorPopup" parent="PopupContainer" unique_id=128908540 instance=ExtResource("2_sjp5b")]
+unique_name_in_owner = true
 
 [node name="Net" type="Node" parent="." unique_id=1471941793]
-
-[node name="AuthNet" type="Node" parent="Net" unique_id=439584374]
-script = ExtResource("2_7kp2r")
 
 [node name="BackendNet" type="Node" parent="Net" unique_id=1938416600]
 script = ExtResource("3_7kp2r")
@@ -49,13 +44,20 @@ ratio = 1.7778
 layout_mode = 2
 stretch = true
 
-<<<<<<< HEAD
 [node name="GameContainer" type="SubViewport" parent="AspectRatioContainer/SubViewportContainer" unique_id=104578715]
 handle_input_locally = false
 size = Vector2i(1920, 1080)
-=======
-[node name="Game" type="SubViewport" parent="AspectRatioContainer/SubViewportContainer" unique_id=104578715]
-handle_input_locally = false
-size = Vector2i(1920, 1079)
->>>>>>> origin/main
 render_target_update_mode = 4
+
+[connection signal="error" from="Net/BackendNet" to="." method="_on_backend_net_error"]
+[connection signal="friends_updated" from="Net/BackendNet" to="." method="_on_backend_net_friends_updated"]
+[connection signal="lobby_invites_updated" from="Net/BackendNet" to="." method="_on_backend_net_lobby_invites_updated"]
+[connection signal="lobby_updated" from="Net/BackendNet" to="." method="_on_backend_net_lobby_updated"]
+[connection signal="match_updated" from="Net/BackendNet" to="." method="_on_backend_net_match_updated"]
+[connection signal="player_updated" from="Net/BackendNet" to="." method="_on_backend_net_player_updated"]
+[connection signal="rankings_updated" from="Net/BackendNet" to="." method="_on_backend_net_rankings_updated"]
+[connection signal="shop_updated" from="Net/BackendNet" to="." method="_on_backend_net_shop_updated"]
+[connection signal="subscribed" from="Net/BackendNet" to="." method="_on_backend_net_subscribed"]
+[connection signal="websocket_disconnected" from="Net/BackendNet" to="." method="_on_backend_net_websocket_disconnected"]
+[connection signal="connection_failed" from="Net/GameNet" to="." method="_on_game_net_connection_failed"]
+[connection signal="init_received" from="Net/GameNet" to="." method="_on_game_net_init_received"]

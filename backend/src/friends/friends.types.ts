@@ -5,10 +5,4 @@ export interface Friends {
     trophies: number;
     status: 'offline' | 'open' | 'matchmaking' | 'in-game';
   }[];
-
-  lobbyInvites: {
-    inviteId: string;
-    sourcePlayerId: string;
-    sourceDisplayName: string;
-  }[];
 }

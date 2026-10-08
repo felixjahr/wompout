@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dl705b8jfsfkc" path="res://ui/lobby/armory_screen/armory_screen.gd" id="1_ajc3h"]
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="2_i86d6"]
 [ext_resource type="Script" uid="uid://db3luxn6g70v7" path="res://ui/lobby/lobby_panel.gd" id="3_yt16h"]
-[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/lobby/close_button/close_button.tscn" id="4_lr8ns"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/close_button.tscn" id="4_lr8ns"]
 [ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="5_agi0w"]
 [ext_resource type="PackedScene" uid="uid://cuu0quwq1d46k" path="res://ui/lobby/armory_screen/item_entry.tscn" id="5_s4758"]
 [ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/lobby/platform/platform.tscn" id="7_f5oej"]
@@ -47,6 +47,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
+theme = ExtResource("2_i86d6")
 script = ExtResource("1_ajc3h")
 
 [node name="ArmoryPanel" type="Panel" parent="." unique_id=830429449]
@@ -349,7 +350,6 @@ layout_mode = 1
 
 [node name="Platform" parent="." unique_id=1447817100 instance=ExtResource("7_f5oej")]
 unique_name_in_owner = true
-show_behind_parent = true
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.5

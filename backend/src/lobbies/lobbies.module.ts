@@ -2,17 +2,17 @@ import { Module } from '@nestjs/common';
 import { LobbiesService } from './lobbies.service';
 import { LobbiesController } from './lobbies.controller';
 import { RealtimeModule } from '../realtime/realtime.module';
-import { PrismaModule } from '../prisma/prisma.module';
 import { MatchmakingModule } from '../matchmaking/matchmaking.module';
-import { AuthModule } from '../auth/auth.module';
 import { GameServersModule } from '../game-servers/game-servers.module';
+import { SessionsModule } from '../sessions/sessions.module';
+import { PlayersModule } from '../players/players.module';
 
 @Module({
   imports: [
-    PrismaModule,
+    PlayersModule,
     RealtimeModule,
     MatchmakingModule,
-    AuthModule,
+    SessionsModule,
     GameServersModule,
   ],
   controllers: [LobbiesController],

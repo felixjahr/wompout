@@ -7,18 +7,25 @@ import { CompletedGame, Game, GameSpec } from './game-servers.types';
 import { ConfigService } from '@nestjs/config';
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { spawn } from 'node:child_process';
-import { EndGameRequestDto } from './dto/end-game-request.dto';
+import { GameResultsDto } from './dto/game-results.dto';
 import { RealtimeService } from '../realtime/realtime.service';
 import { Subject } from 'rxjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { PlayersService } from '../players/players.service';
 import { MODES } from '../config/modes.config';
+import { MatchesService } from '../matches/matches.service';
 
 @Injectable()
 export class GameServersService {
   private readonly games = new Map<string, Game>();
   private nextGamePort: number;
+
   private readonly completedGames = new Map<string, CompletedGame>();
+  private readonly reportedResults = new Map<
+    string,
+    Map<string, Promise<void>>
+  >();
+  private readonly releasedPlayers = new Map<string, Set<string>>();
 
   private readonly gameClosedSubject = new Subject<string[]>();
   readonly gameClosed$ = this.gameClosedSubject.asObservable();
@@ -28,6 +35,7 @@ export class GameServersService {
     private readonly realtimeService: RealtimeService,
     private readonly prismaService: PrismaService,
     private readonly playersService: PlayersService,
+    private readonly matchesService: MatchesService,
   ) {
     this.nextGamePort = Number(
       this.configService.getOrThrow<string>('GAME_BASE_PORT'),
@@ -56,36 +64,43 @@ export class GameServersService {
     game.status = 'ready';
 
     for (const player of game.players) {
-      this.realtimeService.sendToPlayer(player.id, 'gameReady', {
-        ip: game.ip,
-        port: game.port,
-        playerToken: game.playerTokens[player.id],
+      this.matchesService.updateMatch(player.id, {
+        gameId: game.id,
+        modeId: game.modeId,
+        mapId: game.mapId,
+        status: 'ready',
+        connection: {
+          ip: game.ip,
+          port: game.port,
+          playerToken: game.playerTokens[player.id],
+        },
       });
     }
   }
 
-  async endGame(gameId: string, request: EndGameRequestDto): Promise<void> {
-    const existing = this.completedGames.get(gameId);
-    if (existing && existing.expiresAt > Date.now()) {
-      return existing.completionPromise;
-    }
-
+  async reportResults(gameId: string, request: GameResultsDto): Promise<void> {
     const game = this.games.get(gameId);
+
     if (!game) {
+      const completed = this.completedGames.get(gameId);
+      if (completed) return completed.completionPromise;
+
       throw new NotFoundException('Game not found');
     }
 
-    const mode = MODES[game.modeId as keyof typeof MODES];
-
-    const participants = new Map(
-      [...game.players, ...game.bots].map((participant) => [
-        participant.id,
-        participant,
-      ]),
-    );
+    const participants = [...game.players, ...game.bots];
+    const teamCount = new Set(
+      participants.map((participant) => participant.teamId),
+    ).size;
 
     const results = request.results.map((result) => {
-      const participant = participants.get(result.participantId)!;
+      const participant = participants.find(
+        (participant) => participant.id === result.participantId,
+      );
+
+      if (!participant || result.placement > teamCount) {
+        throw new BadRequestException('Invalid result');
+      }
 
       return {
         participantId: participant.id,
@@ -96,9 +111,111 @@ export class GameServersService {
       };
     });
 
-    const placementById = new Map(
-      results.map((result) => [result.participantId, result.placement]),
-    );
+    const includedIds = new Set(results.map((result) => result.participantId));
+    const includedTeams = new Set(results.map((result) => result.teamId));
+
+    for (const participant of participants) {
+      const required = teamCount === 2 || includedTeams.has(participant.teamId);
+
+      if (required && !includedIds.has(participant.id)) {
+        throw new BadRequestException('Incomplete team results');
+      }
+    }
+
+    const mode = MODES[game.modeId as keyof typeof MODES];
+    const players = game.players.filter((player) => includedIds.has(player.id));
+
+    if (
+      mode.ranked &&
+      results.some(
+        (result) => mode.trophyChanges[result.placement - 1] === undefined,
+      )
+    ) {
+      throw new BadRequestException('Invalid trophy placement');
+    }
+
+    let reported = this.reportedResults.get(gameId);
+
+    if (!reported) {
+      reported = new Map();
+      this.reportedResults.set(gameId, reported);
+    }
+
+    for (const player of players) {
+      const existing = reported.get(player.id);
+
+      if (existing) {
+        await existing;
+        continue;
+      }
+
+      const ownResult = results.find(
+        (result) => result.participantId === player.id,
+      )!;
+
+      const operation = Promise.resolve().then(async () => {
+        const trophyChange = mode.ranked
+          ? await this.playersService.updateTrophies(
+              player.id,
+              mode.trophyChanges[ownResult.placement - 1],
+            )
+          : null;
+
+        if (this.games.get(gameId) !== game) return;
+
+        this.matchesService.updateMatch(player.id, {
+          gameId,
+          modeId: game.modeId,
+          mapId: game.mapId,
+          status: 'completed',
+          results:
+            teamCount === 2
+              ? results
+              : results.filter((result) => result.teamId === player.teamId),
+          trophyChange,
+        });
+      });
+
+      reported.set(player.id, operation);
+      await operation;
+    }
+
+    if (this.games.get(gameId) !== game) {
+      return;
+    }
+
+    let released = this.releasedPlayers.get(gameId);
+
+    if (!released) {
+      released = new Set();
+      this.releasedPlayers.set(gameId, released);
+    }
+
+    const newlyFinished = players
+      .map((player) => player.id)
+      .filter((playerId) => !released.has(playerId));
+
+    for (const playerId of newlyFinished) {
+      released.add(playerId);
+    }
+
+    if (newlyFinished.length > 0) {
+      this.gameClosedSubject.next(newlyFinished);
+    }
+  }
+
+  async endGame(gameId: string): Promise<void> {
+    const existing = this.completedGames.get(gameId);
+    if (existing) return existing.completionPromise;
+
+    const game = this.games.get(gameId);
+    if (!game) throw new NotFoundException('Game not found');
+
+    const released = this.releasedPlayers.get(gameId);
+
+    if (game.players.some((player) => !released?.has(player.id))) {
+      throw new BadRequestException('Report all player results first');
+    }
 
     const completed: CompletedGame = {
       id: gameId,
@@ -109,119 +226,20 @@ export class GameServersService {
 
     this.completedGames.set(gameId, completed);
 
-    completed.completionPromise = Promise.resolve().then(async () => {
-      let trophyChanges = new Map<string, number>();
+    if (game.startupTimer) {
+      clearTimeout(game.startupTimer);
+    }
 
-      if (mode.ranked) {
-        const configuredChanges: readonly number[] = mode.trophyChanges;
+    this.games.delete(gameId);
 
-        trophyChanges = await this.prismaService
-          .$transaction(
-            async (tx) => {
-              const changes = new Map<string, number>();
+    const retentionMs = 10 * 60 * 1000;
+    completed.expiresAt = Date.now() + retentionMs;
 
-              const players = [...game.players].sort((a, b) =>
-                a.id.localeCompare(b.id),
-              );
-
-              for (const player of players) {
-                const placement = placementById.get(player.id)!;
-                const change = configuredChanges[placement - 1];
-
-                if (change === undefined) {
-                  throw new BadRequestException(
-                    'Missing trophy configuration for placement',
-                  );
-                }
-
-                const progression =
-                  await tx.playerProgression.findUniqueOrThrow({
-                    where: { playerId: player.id },
-                  });
-
-                const trophies = Math.max(0, progression.trophies + change);
-
-                await tx.playerProgression.update({
-                  where: { playerId: player.id },
-                  data: {
-                    trophies,
-                    highestTrophies: Math.max(
-                      progression.highestTrophies,
-                      trophies,
-                    ),
-                  },
-                });
-
-                changes.set(player.id, trophies - progression.trophies);
-              }
-
-              return changes;
-            },
-            { isolationLevel: 'Serializable' },
-          )
-          .catch((error: unknown) => {
-            this.completedGames.delete(gameId);
-            throw error;
-          });
-      }
-
-      const retentionMs = 10 * 60 * 1000;
-      completed.expiresAt = Date.now() + retentionMs;
-
-      const timer = setTimeout(() => {
-        this.completedGames.delete(gameId);
-      }, retentionMs);
-
-      timer.unref();
-
-      if (game.startupTimer) {
-        clearTimeout(game.startupTimer);
-        delete game.startupTimer;
-      }
-
-      this.games.delete(gameId);
-
-      if (mode.ranked) {
-        for (const participant of game.players) {
-          try {
-            const player = await this.playersService.getPlayerForPlayer(
-              participant.id,
-            );
-
-            this.realtimeService.sendToPlayer(participant.id, 'playerUpdated', {
-              player,
-            });
-          } catch (error) {
-            console.error('Failed to send playerUpdated', error);
-          }
-        }
-      }
-
-      this.gameClosedSubject.next(game.players.map((player) => player.id));
-
-      for (const player of game.players) {
-        try {
-          if (mode.ranked) {
-            this.realtimeService.sendToPlayer(player.id, 'gameOver', {
-              gameId,
-              results,
-              ranked: true,
-              trophyChange: trophyChanges.get(player.id)!,
-            });
-          } else {
-            this.realtimeService.sendToPlayer(player.id, 'gameOver', {
-              gameId,
-              results,
-              ranked: false,
-            });
-          }
-        } catch (error) {
-          console.error('Failed to send gameOver', error);
-        }
-      }
-    });
-
-    return completed.completionPromise;
+    setTimeout(() => {
+      this.completedGames.delete(gameId);
+      this.reportedResults.delete(gameId);
+      this.releasedPlayers.delete(gameId);
+    }, retentionMs).unref();
   }
 
   startGame(gameSpec: GameSpec): void {
@@ -256,6 +274,16 @@ export class GameServersService {
       playerTokens,
       callbackTokenHash,
     };
+
+    this.matchesService.assignMatch(
+      gameSpec.players.map((player) => player.id),
+      {
+        gameId: gameSpec.id,
+        modeId: gameSpec.modeId,
+        mapId: gameSpec.mapId,
+        status: 'starting',
+      },
+    );
 
     game.startupTimer = setTimeout(
       () => {
@@ -343,20 +371,6 @@ export class GameServersService {
     return timingSafeEqual(actual, expected);
   }
 
-  sendActiveGameToPlayer(playerId: string): void {
-    for (const game of this.games.values()) {
-      if (game.status !== 'ready') continue;
-      if (!game.players.some((player) => player.id === playerId)) continue;
-
-      this.realtimeService.sendToPlayer(playerId, 'gameReady', {
-        ip: game.ip,
-        port: game.port,
-        playerToken: game.playerTokens[playerId],
-      });
-      return;
-    }
-  }
-
   private createCallbackToken(): string {
     return randomBytes(64).toString('base64url');
   }
@@ -388,28 +402,41 @@ export class GameServersService {
         ? 'Game server failed to start'
         : 'Game server stopped unexpectedly';
 
-    this.games.delete(game.id);
     game.status = 'failed';
+    this.games.delete(gameId);
 
     if (game.startupTimer) {
       clearTimeout(game.startupTimer);
-      delete game.startupTimer;
     }
 
-    for (const player of game.players) {
-      this.realtimeService.sendToPlayer(player.id, 'gameFailed', {
+    const released = this.releasedPlayers.get(gameId);
+    const unfinishedPlayers = game.players.filter(
+      (player) => !released?.has(player.id),
+    );
+
+    for (const player of unfinishedPlayers) {
+      this.matchesService.updateMatch(player.id, {
+        gameId,
+        modeId: game.modeId,
+        mapId: game.mapId,
+        status: 'failed',
         reason,
       });
     }
 
-    this.gameClosedSubject.next(game.players.map((player) => player.id));
+    if (unfinishedPlayers.length > 0) {
+      this.gameClosedSubject.next(unfinishedPlayers.map((player) => player.id));
+    }
+
+    this.reportedResults.delete(gameId);
+    this.releasedPlayers.delete(gameId);
 
     const stop = spawn('docker', ['stop', gameId], {
       stdio: 'ignore',
     });
 
     stop.once('error', (error) => {
-      console.error(`Failed to run Docker stop for ${gameId}:`, error);
+      console.error(`Failed to stop game ${gameId}:`, error);
     });
   }
 }

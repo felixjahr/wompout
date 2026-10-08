@@ -24,15 +24,12 @@ position = Vector2(-1338, 337)
 [node name="Marker2D2" type="Marker2D" parent="SpawnPoints" unique_id=1258525238]
 position = Vector2(1338, 369)
 
-<<<<<<< HEAD
 [node name="Marker2D3" type="Marker2D" parent="SpawnPoints" unique_id=1544471112]
 position = Vector2(586, 629)
 
 [node name="Marker2D4" type="Marker2D" parent="SpawnPoints" unique_id=800068527]
 position = Vector2(-573, 629)
 
-=======
->>>>>>> origin/main
 [node name="L1" type="Sprite2D" parent="." unique_id=1179159011]
 texture = ExtResource("1_x5joe")
 

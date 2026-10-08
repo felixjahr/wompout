@@ -323,10 +323,12 @@ func _on_arena_area_exited(area: Area2D) -> void:
 
 
 func _get_auto_aim_direction() -> Vector2:
-	var auto_aim_direction := Vector2.RIGHT
+	var auto_aim_direction := Vector2(facing, 0)
 	var shortest_distance_squared := INF
 	for participant in logic.participants.values():
 		if not logic.can_hit(participant_id, participant.participant_id, false) or participant.dead:
+			continue
+		if participant.ability_id == "invisibility" and participant.ability_active:
 			continue
 		var player_position: Vector2 = participant.pivot.global_position
 		var distance: float = player_position.distance_squared_to(pivot.global_position)

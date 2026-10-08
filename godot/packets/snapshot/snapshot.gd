@@ -8,14 +8,9 @@ const SIGNED_16_BIAS := 32768
 const SIGNED_8_BIAS := 128
 
 var tick: int
-<<<<<<< HEAD
 var local_team_id: int
 
 var participants: Array[ParticipantSnapshot] = []
-=======
-
-var players: Array[PlayerSnapshot] = []
->>>>>>> origin/main
 var bullets: Array[BulletSnapshot] = []
 var events: Array[EventSnapshot] = []
 
@@ -24,18 +19,11 @@ func to_packet() -> PackedByteArray:
 	var peer := StreamPeerBuffer.new()
 	peer.big_endian = false
 	peer.put_u32(tick)
-<<<<<<< HEAD
 	peer.put_u8(local_team_id)
 	peer.put_u8(participants.size())
 	peer.put_u8(bullets.size())
 	peer.put_u8(events.size())
 	for snapshot in participants:
-=======
-	peer.put_u8(players.size())
-	peer.put_u8(bullets.size())
-	peer.put_u8(events.size())
-	for snapshot in players:
->>>>>>> origin/main
 		_write_player(peer, snapshot)
 	for snapshot in bullets:
 		_write_bullet(peer, snapshot)
@@ -50,7 +38,6 @@ static func from_packet(packet: PackedByteArray) -> Snapshot:
 	peer.data_array = packet
 	var snapshot := Snapshot.new()
 	snapshot.tick = int(peer.get_u32())
-<<<<<<< HEAD
 	snapshot.local_team_id = int(peer.get_u8())
 	var player_count := int(peer.get_u8())
 	var bullet_count := int(peer.get_u8())
@@ -58,14 +45,6 @@ static func from_packet(packet: PackedByteArray) -> Snapshot:
 	snapshot.participants = []
 	for i in player_count:
 		snapshot.participants.append(_read_player(peer))
-=======
-	var player_count := int(peer.get_u8())
-	var bullet_count := int(peer.get_u8())
-	var event_count := int(peer.get_u8())
-	snapshot.players = []
-	for i in player_count:
-		snapshot.players.append(_read_player(peer))
->>>>>>> origin/main
 	snapshot.bullets = []
 	for i in bullet_count:
 		snapshot.bullets.append(_read_bullet(peer))
@@ -75,14 +54,9 @@ static func from_packet(packet: PackedByteArray) -> Snapshot:
 	return snapshot
 
 
-<<<<<<< HEAD
 static func _write_player(peer: StreamPeerBuffer, snapshot: ParticipantSnapshot) -> void:
 	_write_string(peer, snapshot.participant_id)
 	peer.put_u8(snapshot.team_id)
-=======
-static func _write_player(peer: StreamPeerBuffer, snapshot: PlayerSnapshot) -> void:
-	_write_string(peer, snapshot.player_id)
->>>>>>> origin/main
 	_write_quantized_vector2(peer, snapshot.position, POSITION_SCALE)
 	_write_quantized_vector2(peer, snapshot.velocity, VELOCITY_SCALE)
 	peer.put_u16(clampi(snapshot.health, 0, 65535))
@@ -111,16 +85,10 @@ static func _write_player(peer: StreamPeerBuffer, snapshot: PlayerSnapshot) -> v
 	peer.put_u16(clampi(snapshot.ability_charge, 0, 65535))
 
 
-<<<<<<< HEAD
 static func _read_player(peer: StreamPeerBuffer) -> ParticipantSnapshot:
 	var snapshot := ParticipantSnapshot.new()
 	snapshot.participant_id = _read_string(peer)
 	snapshot.team_id = int(peer.get_u8())
-=======
-static func _read_player(peer: StreamPeerBuffer) -> PlayerSnapshot:
-	var snapshot := PlayerSnapshot.new()
-	snapshot.player_id = _read_string(peer)
->>>>>>> origin/main
 	snapshot.position = _read_quantized_vector2(peer, POSITION_SCALE)
 	snapshot.velocity = _read_quantized_vector2(peer, VELOCITY_SCALE)
 	snapshot.health = int(peer.get_u16())

@@ -1,8 +1,7 @@
 extends Node
 
 signal snapshot_received(snapshot: Snapshot)
-<<<<<<< HEAD
-signal init_received(mode_id: String, map_id: String)
+signal init_received(mode_id: String, map_id: String, participant_names: Dictionary)
 signal state_sync_received(state_sync: StateSync)
 
 signal connection_failed
@@ -46,22 +45,6 @@ func disconnect_from_server() -> void:
 	connection_active = false
 	game_token = ""
 	join_timer.stop()
-=======
-signal init_received(game_id: String, map_id: String)
-signal state_sync_received(state_sync: StateSync)
-
-
-func create_client(port: int, ip: String) -> void:
-	var peer := ENetMultiplayerPeer.new()
-	var err := peer.create_client(ip, port)
-	if err != OK:
-		push_error("Failed to create game client: %s" % err)
-		return
-	multiplayer.multiplayer_peer = peer
-
-
-func disconnect_from_server() -> void:
->>>>>>> origin/main
 	if multiplayer.multiplayer_peer:
 		multiplayer.multiplayer_peer.close()
 		multiplayer.multiplayer_peer = null
@@ -73,11 +56,7 @@ func is_connected_to_server() -> bool:
 	return multiplayer.multiplayer_peer.get_connection_status() == MultiplayerPeer.CONNECTION_CONNECTED
 
 
-<<<<<<< HEAD
 func send_input_batch(input_batch: ParticipantInputBatch) -> bool:
-=======
-func send_input_batch(input_batch: PlayerInputBatch) -> bool:
->>>>>>> origin/main
 	if not is_connected_to_server():
 		return false
 	if input_batch.inputs.is_empty():
@@ -102,34 +81,23 @@ func send_game_request(game_request: GameRequest) -> bool:
 
 @rpc("authority", "unreliable")
 func receive_snapshot(snapshot: PackedByteArray) -> void:
-<<<<<<< HEAD
 	if not connection_active:
 		return
-=======
->>>>>>> origin/main
 	emit_signal("snapshot_received", Snapshot.from_packet(snapshot))
 
 
 @rpc("authority", "reliable")
-<<<<<<< HEAD
-func receive_init(mode_id: String, map_id: String) -> void:
+func receive_init(mode_id: String, map_id: String, participant_names: Dictionary) -> void:
 	if not connection_active:
 		return
-	emit_signal("init_received", mode_id, map_id)
-=======
-func receive_init(game_id: String, map_id: String) -> void:
-	emit_signal("init_received", game_id, map_id)
->>>>>>> origin/main
+	emit_signal("init_received", mode_id, map_id, participant_names)
 
 
 @rpc("authority", "reliable")
 func receive_state_sync(state_sync: Dictionary) -> void:
-<<<<<<< HEAD
 	if not connection_active:
 		return
 	join_timer.stop()
-=======
->>>>>>> origin/main
 	emit_signal("state_sync_received", StateSync.from_dict(state_sync))
 
 
@@ -146,7 +114,6 @@ func receive_game_token(game_token: String) -> void:
 @rpc("any_peer", "reliable")
 func receive_game_request(game_request: Dictionary) -> void:
 	pass
-<<<<<<< HEAD
 
 
 func _on_connected_to_server() -> void:
@@ -166,5 +133,3 @@ func _on_connection_failed() -> void:
 
 	disconnect_from_server()
 	connection_failed.emit()
-=======
->>>>>>> origin/main

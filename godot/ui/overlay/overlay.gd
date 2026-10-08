@@ -16,13 +16,8 @@ var attack_weapon := 0
 @onready var logic: Node = get_parent().get_parent().game.logic
 
 
-<<<<<<< HEAD
 func poll() -> ParticipantInput:
 	var input := ParticipantInput.new()
-=======
-func poll() -> PlayerInput:
-	var input := PlayerInput.new()
->>>>>>> origin/main
 	if not attacking:
 		if melee_joystick.is_active:
 			current_weapon = 0
@@ -47,11 +42,7 @@ func poll() -> PlayerInput:
 	return input
 
 
-<<<<<<< HEAD
 func apply_snapshot(snapshot: ParticipantSnapshot) -> void:
-=======
-func apply_snapshot(snapshot: PlayerSnapshot) -> void:
->>>>>>> origin/main
 	if ability_button.ability_id != snapshot.ability_id:
 		ability_button.set_ability(snapshot.ability_id)
 	var total_charge = Data.ABILITY[snapshot.ability_id].charge

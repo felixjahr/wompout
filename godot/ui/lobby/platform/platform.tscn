@@ -92,7 +92,8 @@ visible = false
 position = Vector2(31, -381)
 texture = ExtResource("2_6t0w2")
 
-[node name="Sprite2D" type="Sprite2D" parent="Control/Node2D" index="1" unique_id=2013378151]
+[node name="Base" type="Sprite2D" parent="Control/Node2D" index="1" unique_id=2013378151]
+unique_name_in_owner = true
 position = Vector2(0, 576)
 texture = ExtResource("1_k7pa1")
 

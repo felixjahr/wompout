@@ -25,7 +25,7 @@ size = Vector2(777.5, 112)
 size = Vector2(608, 112)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_e2uhk"]
-size = Vector2(3840, 3577)
+size = Vector2(6912, 3577)
 
 [node name="Mountains" type="StaticBody2D" unique_id=338891805]
 script = ExtResource("1_qvtbo")
@@ -38,15 +38,12 @@ position = Vector2(-930, -142)
 [node name="Marker2D2" type="Marker2D" parent="SpawnPoints" unique_id=578355805]
 position = Vector2(1004, -300)
 
-<<<<<<< HEAD
 [node name="Marker2D4" type="Marker2D" parent="SpawnPoints" unique_id=1729767066]
 position = Vector2(1212, 498)
 
 [node name="Marker2D3" type="Marker2D" parent="SpawnPoints" unique_id=130176273]
 position = Vector2(-1206, 490)
 
-=======
->>>>>>> origin/main
 [node name="L1" type="Sprite2D" parent="." unique_id=880554690]
 texture = ExtResource("1_3f574")
 

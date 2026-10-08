@@ -1,32 +1,138 @@
-import { Injectable, NotFoundException, OnModuleInit } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+  OnModuleInit,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { Player } from './players.types';
+import { Player, PlayerLoadout } from './players.types';
 import { RealtimeService } from '../realtime/realtime.service';
-import { AuthService } from '../auth/auth.service';
-import { merge } from 'rxjs';
+import { ResourceName } from '../realtime/realtime.types';
+import { Subject } from 'rxjs';
 
 @Injectable()
 export class PlayersService implements OnModuleInit {
+  private readonly publicProfileChangedSubject = new Subject<string>();
+  readonly publicProfileChanged$ =
+    this.publicProfileChangedSubject.asObservable();
+
   constructor(
     private readonly prismaService: PrismaService,
     private readonly realtimeService: RealtimeService,
-    private readonly authService: AuthService,
   ) {}
 
   onModuleInit(): void {
-    merge(
-      this.realtimeService.connected$,
-      this.authService.playerChanged$,
-    ).subscribe((playerId) => {
-      if (!this.realtimeService.isPlayerConnected(playerId)) return;
-
-      void this.getPlayerForPlayer(playerId)
-        .then((player) => this.sendPlayerToPlayer(playerId, player))
-        .catch(console.error);
-    });
+    this.realtimeService.registerSnapshotProvider(
+      ResourceName.Player,
+      (playerId) => this.getPlayer(playerId),
+    );
   }
 
-  async getPlayerForPlayer(playerId: string): Promise<Player> {
+  async updateEmail(playerId: string, email: string): Promise<void> {
+    await this.prismaService.player.update({
+      where: {
+        id: playerId,
+      },
+      data: {
+        email: email,
+      },
+    });
+    await this.publishPlayer(playerId);
+  }
+
+  async updateTrophies(playerId: string, delta: number): Promise<number> {
+    const actualChange = await this.prismaService.$transaction(
+      async (tx) => {
+        const progression = await tx.playerProgression.findUniqueOrThrow({
+          where: { playerId },
+        });
+
+        const previousTrophies = progression.trophies;
+        const newTrophies = Math.max(0, previousTrophies + delta);
+
+        await tx.playerProgression.update({
+          where: { playerId },
+          data: {
+            trophies: newTrophies,
+            highestTrophies: Math.max(progression.highestTrophies, newTrophies),
+          },
+        });
+
+        return newTrophies - previousTrophies;
+      },
+      { isolationLevel: 'Serializable' },
+    );
+
+    this.publicProfileChangedSubject.next(playerId);
+    await this.publishPlayer(playerId);
+
+    return actualChange;
+  }
+
+  async updateLoadout(
+    playerId: string,
+    loadout: PlayerLoadout,
+  ): Promise<PlayerLoadout> {
+    const requestedItems = [
+      { itemType: 'RANGED' as const, itemId: loadout.rangedId },
+      { itemType: 'MELEE' as const, itemId: loadout.meleeId },
+      { itemType: 'ARMOUR' as const, itemId: loadout.armourId },
+      { itemType: 'ABILITY' as const, itemId: loadout.abilityId },
+    ];
+
+    const savedLoadout = await this.prismaService.$transaction(async (tx) => {
+      const ownedItems = await tx.playerItem.findMany({
+        where: {
+          playerId,
+          OR: requestedItems,
+        },
+        select: {
+          itemType: true,
+          itemId: true,
+        },
+      });
+
+      const ownsEveryItem = requestedItems.every((requested) =>
+        ownedItems.some(
+          (owned) =>
+            owned.itemType === requested.itemType &&
+            owned.itemId === requested.itemId,
+        ),
+      );
+
+      if (!ownsEveryItem) {
+        throw new ForbiddenException(
+          'Loadout contains an item you do not own in that category',
+        );
+      }
+
+      return tx.playerLoadout.update({
+        where: { playerId },
+        data: {
+          rangedId: loadout.rangedId,
+          meleeId: loadout.meleeId,
+          armourId: loadout.armourId,
+          abilityId: loadout.abilityId,
+        },
+        select: {
+          rangedId: true,
+          meleeId: true,
+          armourId: true,
+          abilityId: true,
+        },
+      });
+    });
+
+    try {
+      await this.publishPlayer(playerId);
+    } catch (error) {
+      console.error('Failed to publish player after loadout change', error);
+    }
+
+    return savedLoadout;
+  }
+
+  async getPlayer(playerId: string): Promise<Player> {
     const player = await this.prismaService.player.findUnique({
       where: { id: playerId },
       include: {
@@ -60,14 +166,11 @@ export class PlayersService implements OnModuleInit {
     };
   }
 
-  private sendPlayerToPlayer(playerId: string, player: Player): void {
-    this.realtimeService.sendToPlayer(playerId, 'playerUpdated', { player });
-  }
+  private async publishPlayer(playerId: string): Promise<void> {
+    const player = await this.getPlayer(playerId);
 
-  private async updatePlayer(playerId: string): Promise<void> {
-    if (!this.realtimeService.isPlayerConnected(playerId)) return;
-
-    const player = await this.getPlayerForPlayer(playerId);
-    this.sendPlayerToPlayer(playerId, player);
+    this.realtimeService.publishToPlayers(ResourceName.Player, player, [
+      playerId,
+    ]);
   }
 }

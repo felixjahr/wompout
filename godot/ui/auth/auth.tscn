@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://ydtxjdwoduhj"]
+
+[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_vyn6v"]
+[ext_resource type="Texture2D" uid="uid://dfvpauulose7w" path="res://ui/background.png" id="2_6sjyn"]
+[ext_resource type="Script" uid="uid://6p5fcovpc6t1" path="res://ui/auth/auth.gd" id="3_uxraw"]
+[ext_resource type="PackedScene" uid="uid://dfapfcw7cmn0m" path="res://ui/auth/signup.tscn" id="4_ldoqa"]
+[ext_resource type="PackedScene" uid="uid://cy4ndek7f0r3s" path="res://ui/auth/login.tscn" id="5_vyn6v"]
+[ext_resource type="PackedScene" uid="uid://yjsk4cs8sv3m" path="res://ui/auth/verify.tscn" id="6_6sjyn"]
+[ext_resource type="PackedScene" uid="uid://bt30mk34lo4b" path="res://ui/auth/guest.tscn" id="6_uxraw"]
+
+[node name="Auth" type="TextureRect" unique_id=59963827]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_vyn6v")
+texture = ExtResource("2_6sjyn")
+script = ExtResource("3_uxraw")
+
+[node name="Guest" parent="." unique_id=962552651 instance=ExtResource("6_uxraw")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="Signup" parent="." unique_id=124301334 instance=ExtResource("4_ldoqa")]
+unique_name_in_owner = true
+layout_mode = 1
+
+[node name="Login" parent="." unique_id=593852244 instance=ExtResource("5_vyn6v")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="Verify" parent="." unique_id=1874788501 instance=ExtResource("6_6sjyn")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[connection signal="back_pressed" from="Guest" to="." method="_on_guest_back_pressed"]
+[connection signal="create_guest_requested" from="Guest" to="." method="_on_guest_create_guest_requested"]
+[connection signal="guest_pressed" from="Signup" to="." method="_on_signup_guest_pressed"]
+[connection signal="login_pressed" from="Signup" to="." method="_on_signup_login_pressed"]
+[connection signal="start_signup_requested" from="Signup" to="." method="_on_signup_start_signup_requested"]
+[connection signal="guest_pressed" from="Login" to="." method="_on_login_guest_pressed"]
+[connection signal="signup_pressed" from="Login" to="." method="_on_login_signup_pressed"]
+[connection signal="start_login_requested" from="Login" to="." method="_on_login_start_login_requested"]
+[connection signal="back_pressed" from="Verify" to="." method="_on_verify_back_pressed"]
+[connection signal="code_entered" from="Verify" to="." method="_on_verify_code_entered"]

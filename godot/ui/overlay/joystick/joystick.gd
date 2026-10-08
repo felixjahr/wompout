@@ -1,9 +1,5 @@
 extends Control
-<<<<<<< HEAD
 class_name Joystick
-=======
-class_name VirtualJoystick
->>>>>>> origin/main
 
 signal released(direction: Vector2)
 
@@ -69,6 +65,8 @@ func _update_output(touch_position: Vector2) -> void:
 		is_outside_deadzone = true
 		output = vector.normalized()
 	else:
+		if is_outside_deadzone:
+			Input.vibrate_handheld(30)
 		is_outside_deadzone = false
 		output = Vector2.ZERO
 

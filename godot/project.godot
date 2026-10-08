@@ -10,31 +10,22 @@ config_version=5
 
 [application]
 
-<<<<<<< HEAD
 config/name="Wompout"
 config/version="1.1.0"
 run/main_scene="uid://cnxwscj2y2tnj"
 config/features=PackedStringArray("4.7", "Forward Plus")
-=======
-config/name="Smash Dash"
-config/version="1.0.0"
-run/main_scene="uid://cnxwscj2y2tnj"
-config/features=PackedStringArray("4.6", "Forward Plus")
->>>>>>> origin/main
+boot_splash/image="uid://dugneghkgu6ag"
 config/icon="res://icon.svg"
 
 [display]
 
-<<<<<<< HEAD
 window/size/viewport_width=2400
-=======
-window/size/viewport_width=1920
->>>>>>> origin/main
 window/size/viewport_height=1080
 window/size/window_width_override=2340
 window/size/window_height_override=1080
 window/stretch/mode="canvas_items"
 window/stretch/aspect="expand"
+window/handheld/orientation=4
 
 [input]
 

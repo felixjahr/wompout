@@ -1,12 +1,17 @@
 import {
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
   OnModuleInit,
 } from '@nestjs/common';
-import { Lobby, LobbyInvite, LobbyPlayer } from './lobbies.types';
-import { PrismaService } from '../prisma/prisma.service';
+import {
+  Lobby,
+  LobbyInvite,
+  LobbyInviteSnapshot,
+  LobbyPlayer,
+} from './lobbies.types';
 import { randomUUID } from 'node:crypto';
 import {
   DEFAULT_MODE_ID_BY_LOBBY_SIZE,
@@ -20,6 +25,10 @@ import { RealtimeService } from '../realtime/realtime.service';
 import { MatchmakingService } from '../matchmaking/matchmaking.service';
 import { GameServersService } from '../game-servers/game-servers.service';
 import { Subject } from 'rxjs';
+import { ResourceName } from '../realtime/realtime.types';
+import { WsException } from '@nestjs/websockets';
+import { PlayersService } from '../players/players.service';
+import { UpdateLoadoutRequestDto } from './dto/update-loadout-request.dto';
 
 @Injectable()
 export class LobbiesService implements OnModuleInit {
@@ -33,28 +42,42 @@ export class LobbiesService implements OnModuleInit {
   private readonly playerLobbyStatusChangedSubject = new Subject<string[]>();
   readonly playerLobbyStatusChanged$ =
     this.playerLobbyStatusChangedSubject.asObservable();
-  private readonly invitesChangedSubject = new Subject<string[]>();
-  readonly invitesChanged$ = this.invitesChangedSubject.asObservable();
 
   constructor(
-    private readonly prismaService: PrismaService,
+    private readonly playersService: PlayersService,
     private readonly realtimeService: RealtimeService,
     private readonly matchmakingService: MatchmakingService,
     private readonly gameServersService: GameServersService,
   ) {}
 
   onModuleInit(): void {
-    this.realtimeService.connected$.subscribe({
-      next: (playerId) => {
-        void this.handlePlayerConnected(playerId).catch(console.error);
+    this.realtimeService.registerSnapshotProvider(
+      ResourceName.Lobby,
+      (playerId) => {
+        const lobby = this.getLobbyForPlayer(playerId);
+        if (!lobby) {
+          throw new WsException('Lobby is not available');
+        }
+        return structuredClone(lobby);
       },
-    });
+    );
 
-    this.realtimeService.disconnected$.subscribe({
-      next: (playerId) => {
-        this.handlePlayerDisconnected(playerId);
-      },
-    });
+    this.realtimeService.registerSnapshotProvider(
+      ResourceName.LobbyInvites,
+      (playerId) => this.getIncomingInvites(playerId),
+    );
+
+    this.realtimeService.registerBeforeAuthenticated((playerId) =>
+      this.ensureLobby(playerId),
+    );
+
+    this.realtimeService.registerAfterAuthenticated((playerId) =>
+      this.playerLobbyStatusChangedSubject.next([playerId]),
+    );
+
+    this.realtimeService.registerAfterDisconnected((playerId) =>
+      this.cleanupPlayer(playerId),
+    );
 
     this.matchmakingService.matchCreated$.subscribe({
       next: (lobbyIds) => {
@@ -64,7 +87,7 @@ export class LobbiesService implements OnModuleInit {
 
     this.gameServersService.gameClosed$.subscribe({
       next: (playerIds) => {
-        this.handleGameClosed(playerIds);
+        this.handleMatchClosed(playerIds);
       },
     });
   }
@@ -108,7 +131,7 @@ export class LobbiesService implements OnModuleInit {
       invitedPlayerId: request.invitedPlayerId,
     });
 
-    this.invitesChangedSubject.next([request.invitedPlayerId]);
+    this.publishInvites(new Set([request.invitedPlayerId]));
   }
 
   async acceptInvite(playerId: string, inviteId: string): Promise<void> {
@@ -119,6 +142,7 @@ export class LobbiesService implements OnModuleInit {
     }
 
     const sourceLobby = this.lobbies.get(invite.sourceLobbyId);
+    const previousLobby = this.getLobbyForPlayer(playerId);
 
     if (
       !sourceLobby ||
@@ -152,8 +176,11 @@ export class LobbiesService implements OnModuleInit {
       player.ready = false;
     }
 
-    this.sendLobbyToPlayers(sourceLobby);
-    this.notifyInvitesChanged(affectedRecipients);
+    if (previousLobby) {
+      this.publishLobby(previousLobby);
+    }
+    this.publishLobby(sourceLobby);
+    this.publishInvites(affectedRecipients);
   }
 
   declineInvite(playerId: string, inviteId: string): void {
@@ -165,16 +192,21 @@ export class LobbiesService implements OnModuleInit {
 
     const affectedRecipients = new Set<string>();
     this.deleteInvite(inviteId, affectedRecipients);
-    this.notifyInvitesChanged(affectedRecipients);
+    this.publishInvites(affectedRecipients);
   }
 
   async leaveLobby(playerId: string): Promise<void> {
+    const lobby = this.getLobbyForPlayer(playerId);
     this.removePlayerFromLobby(playerId);
-    await this.createLobby(playerId);
+    if (lobby) {
+      this.publishLobby(lobby);
+    }
 
     const affectedRecipients = new Set<string>();
     this.deleteInvitesInvolvingSourcePlayer(playerId, affectedRecipients);
-    this.notifyInvitesChanged(affectedRecipients);
+    this.publishInvites(affectedRecipients);
+
+    await this.ensureLobby(playerId);
   }
 
   updateMode(playerId: string, request: UpdateModeRequestDto): void {
@@ -206,7 +238,7 @@ export class LobbiesService implements OnModuleInit {
       player.ready = false;
     }
 
-    this.sendLobbyToPlayers(lobby);
+    this.publishLobby(lobby);
   }
 
   updateReady(playerId: string, request: UpdateReadyRequestDto): void {
@@ -246,41 +278,32 @@ export class LobbiesService implements OnModuleInit {
       );
     }
 
-    this.sendLobbyToPlayers(lobby);
+    this.publishLobby(lobby);
   }
 
-  async handlePlayerConnected(playerId: string): Promise<void> {
+  async updateLoadout(
+    playerId: string,
+    request: UpdateLoadoutRequestDto,
+  ): Promise<void> {
     const lobby = this.getLobbyForPlayer(playerId);
 
     if (!lobby) {
-      await this.createLobby(playerId);
-      return;
+      throw new NotFoundException('Lobby not found');
     }
 
-    if (lobby.status === 'open') {
-      this.removePlayerFromLobby(playerId);
-      await this.createLobby(playerId);
-      return;
+    if (lobby.status !== 'open') {
+      throw new ConflictException('Lobby is not open');
     }
 
-    this.sendLobbyToPlayer(playerId, lobby);
-    this.playerLobbyStatusChangedSubject.next([playerId]);
-    this.gameServersService.sendActiveGameToPlayer(playerId);
-  }
+    const member = lobby.players.find((player) => player.id === playerId);
 
-  handlePlayerDisconnected(playerId: string): void {
-    const affectedRecipients = new Set<string>();
-    this.deleteInvitesInvolvingSourcePlayer(playerId, affectedRecipients);
-    this.deleteInvitesInvolvingInvitedPlayer(playerId, affectedRecipients);
-
-    const lobby = this.getLobbyForPlayer(playerId);
-
-    if (lobby?.status === 'open') {
-      this.removePlayerFromLobby(playerId);
+    if (!member) {
+      throw new ForbiddenException('Player is not in this lobby');
     }
 
-    this.notifyInvitesChanged(affectedRecipients);
-    this.playerLobbyStatusChangedSubject.next([playerId]);
+    member.loadout = await this.playersService.updateLoadout(playerId, request);
+
+    this.publishLobby(lobby);
   }
 
   getPlayerLobbyStatus(playerId: string): Lobby['status'] | 'offline' {
@@ -290,34 +313,6 @@ export class LobbiesService implements OnModuleInit {
     return this.getLobbyForPlayer(playerId)?.status ?? 'offline';
   }
 
-  getIncomingInvites(playerId: string): {
-    inviteId: string;
-    sourcePlayerId: string;
-    sourceDisplayName: string;
-  }[] {
-    const inviteIds = this.inviteIdsByInvitedPlayerId.get(playerId);
-    if (!inviteIds) return [];
-
-    return [...inviteIds].flatMap((inviteId) => {
-      const invite = this.invites.get(inviteId);
-      if (!invite) return [];
-
-      const sourceLobby = this.lobbies.get(invite.sourceLobbyId);
-      const sourcePlayer = sourceLobby?.players.find(
-        (player) => player.id === invite.sourcePlayerId,
-      );
-      if (!sourcePlayer) return [];
-
-      return [
-        {
-          inviteId: invite.id,
-          sourcePlayerId: invite.sourcePlayerId,
-          sourceDisplayName: sourcePlayer.displayName,
-        },
-      ];
-    });
-  }
-
   private handleMatchCreated(lobbyIds: string[]): void {
     const affectedPlayers = new Set<string>();
     for (const lobbyId of lobbyIds) {
@@ -325,7 +320,7 @@ export class LobbiesService implements OnModuleInit {
       if (!lobby) continue;
 
       lobby.status = 'in-game';
-      this.sendLobbyToPlayers(lobby);
+      this.publishLobby(lobby);
 
       for (const player of lobby.players) {
         affectedPlayers.add(player.id);
@@ -336,7 +331,7 @@ export class LobbiesService implements OnModuleInit {
     }
   }
 
-  private handleGameClosed(playerIds: string[]): void {
+  private handleMatchClosed(playerIds: string[]): void {
     const affectedLobbyIds = new Set<string>();
 
     for (const playerId of playerIds) {
@@ -368,14 +363,16 @@ export class LobbiesService implements OnModuleInit {
         continue;
       }
 
-      this.sendLobbyToPlayers(lobby);
+      this.publishLobby(lobby);
       this.playerLobbyStatusChangedSubject.next(
         lobby.players.map((player) => player.id),
       );
     }
   }
 
-  private async createLobby(playerId: string): Promise<void> {
+  private async ensureLobby(playerId: string): Promise<void> {
+    if (this.getLobbyForPlayer(playerId)) return;
+
     const lobby: Lobby = {
       id: randomUUID(),
       modeId: DEFAULT_MODE_ID_BY_LOBBY_SIZE[1],
@@ -384,9 +381,22 @@ export class LobbiesService implements OnModuleInit {
     };
 
     await this.addPlayerToLobby(playerId, lobby);
-
     this.lobbies.set(lobby.id, lobby);
-    this.sendLobbyToPlayers(lobby);
+    this.publishLobby(lobby);
+  }
+
+  private cleanupPlayer(playerId: string): void {
+    const affectedRecipients = new Set<string>();
+    this.deleteInvitesInvolvingSourcePlayer(playerId, affectedRecipients);
+    this.deleteInvitesInvolvingInvitedPlayer(playerId, affectedRecipients);
+    this.publishInvites(affectedRecipients);
+
+    const lobby = this.getLobbyForPlayer(playerId);
+    if (lobby?.status === 'open') {
+      this.removePlayerFromLobby(playerId);
+      this.publishLobby(lobby);
+    }
+
     this.playerLobbyStatusChangedSubject.next([playerId]);
   }
 
@@ -394,29 +404,13 @@ export class LobbiesService implements OnModuleInit {
     playerId: string,
     lobby: Lobby,
   ): Promise<void> {
-    const player = await this.prismaService.player.findUnique({
-      where: {
-        id: playerId,
-      },
-      include: {
-        loadout: true,
-      },
-    });
-
-    if (!player || !player.loadout) {
-      throw new NotFoundException('Player or loadout not found');
-    }
+    const player = await this.playersService.getPlayer(playerId);
 
     const lobbyPlayer: LobbyPlayer = {
       id: player.id,
       displayName: player.displayName,
       ready: false,
-      loadout: {
-        rangedId: player.loadout.rangedId,
-        meleeId: player.loadout.meleeId,
-        armourId: player.loadout.armourId,
-        abilityId: player.loadout.abilityId,
-      },
+      loadout: { ...player.loadout },
     };
 
     lobby.players.push(lobbyPlayer);
@@ -445,8 +439,6 @@ export class LobbiesService implements OnModuleInit {
     for (const player of lobby.players) {
       player.ready = false;
     }
-
-    this.sendLobbyToPlayers(lobby);
   }
 
   private addInvite(invite: LobbyInvite): void {
@@ -537,12 +529,6 @@ export class LobbiesService implements OnModuleInit {
     }
   }
 
-  private notifyInvitesChanged(affectedRecipients: Set<string>): void {
-    if (affectedRecipients.size === 0) return;
-
-    this.invitesChangedSubject.next([...affectedRecipients]);
-  }
-
   private getLobbyForPlayer(playerId: string): Lobby | undefined {
     const lobbyId = this.lobbyIdByPlayerId.get(playerId);
 
@@ -553,13 +539,45 @@ export class LobbiesService implements OnModuleInit {
     return this.lobbies.get(lobbyId);
   }
 
-  private sendLobbyToPlayers(lobby: Lobby): void {
-    for (const player of lobby.players) {
-      this.sendLobbyToPlayer(player.id, lobby);
-    }
+  private getIncomingInvites(playerId: string): LobbyInviteSnapshot[] {
+    const inviteIds = this.inviteIdsByInvitedPlayerId.get(playerId);
+    if (!inviteIds) return [];
+
+    return [...inviteIds].flatMap((inviteId) => {
+      const invite = this.invites.get(inviteId);
+      if (!invite) return [];
+
+      const sourceLobby = this.lobbies.get(invite.sourceLobbyId);
+      const sourcePlayer = sourceLobby?.players.find(
+        (player) => player.id === invite.sourcePlayerId,
+      );
+      if (!sourcePlayer) return [];
+
+      return [
+        {
+          inviteId: invite.id,
+          sourcePlayerId: invite.sourcePlayerId,
+          sourceDisplayName: sourcePlayer.displayName,
+        },
+      ];
+    });
   }
 
-  private sendLobbyToPlayer(playerId: string, lobby: Lobby): void {
-    this.realtimeService.sendToPlayer(playerId, 'lobbyUpdated', { lobby });
+  private publishLobby(lobby: Lobby): void {
+    this.realtimeService.publishToPlayers(
+      ResourceName.Lobby,
+      lobby,
+      lobby.players.map((player) => player.id),
+    );
+  }
+
+  private publishInvites(playerIds: Set<string>): void {
+    for (const playerId of playerIds) {
+      this.realtimeService.publishToPlayers(
+        ResourceName.LobbyInvites,
+        this.getIncomingInvites(playerId),
+        [playerId],
+      );
+    }
   }
 }

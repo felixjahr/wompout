@@ -6,7 +6,6 @@ const MAPS: Dictionary[String, PackedScene] = {
 	"mountains": preload("res://data/maps/mountains/mountains.tscn"),
 }
 
-<<<<<<< HEAD
 const MODES: Dictionary[String, Mode] = {
 	"solo_womp_ranked": preload("res://data/modes/womp/solo_womp_ranked.tres"),
 	"duo_womp_ranked": preload("res://data/modes/womp/duo_womp_ranked.tres"),
@@ -23,8 +22,6 @@ const MODE_IDS: Array[String] = [
 	"super_womp_unranked",
 ]
 
-=======
->>>>>>> origin/main
 const ARMOUR_IDS: Array[String] = [
 	"heavy_armour",
 	"light_armour",
@@ -86,19 +83,26 @@ const ABILITY: Dictionary[String, Ability] = {
 	#"slam_down": preload("res://data/items/abilities/slam_down/slam_down.tres"),
  }
 
+const STYLE_IDS: Array[String] = [
+	"red",
+]
+
+const STYLE: Dictionary[String, Style] = {
+	"red": preload("res://data/items/styles/red.tres")
+}
+
 const CATEGORIES: Dictionary[String, Dictionary] = {
 	"armour": ARMOUR,
 	"melee" : MELEE,
 	"ranged": RANGED,
 	"ability": ABILITY,
+	"style": STYLE
 }
-<<<<<<< HEAD
 
 const CATEGORY_ITEM_IDS: Dictionary[String, Array] = {
 	"armour": ARMOUR_IDS,
 	"melee" : MELEE_IDS,
 	"ranged": RANGED_IDS,
 	"ability": ABILITY_IDS,
+	"style": STYLE_IDS,
 }
-=======
->>>>>>> origin/main

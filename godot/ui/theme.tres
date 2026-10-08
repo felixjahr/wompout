@@ -1,10 +1,6 @@
 [gd_resource type="Theme" format=3 uid="uid://bnnsol31t7ddn"]
 
-<<<<<<< HEAD
 [ext_resource type="FontFile" uid="uid://oa5dfbx7gq6k" path="res://ui/fira_sans.ttf" id="1_rqugq"]
-=======
-[ext_resource type="FontFile" uid="uid://oa5dfbx7gq6k" path="res://ui/font.ttf" id="1_o2r72"]
->>>>>>> origin/main
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ml8bw"]
 bg_color = Color(0, 0, 0, 0.35686275)
@@ -34,12 +30,6 @@ corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
 
-<<<<<<< HEAD
-=======
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oic2i"]
-bg_color = Color(0.6, 0.6, 0.6, 0)
-
->>>>>>> origin/main
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o2r72"]
 bg_color = Color(0, 0, 0, 0.60784316)
 corner_radius_top_left = 25
@@ -50,18 +40,12 @@ expand_margin_left = 64.0
 expand_margin_right = 64.0
 
 [resource]
-<<<<<<< HEAD
 default_font = ExtResource("1_rqugq")
 default_font_size = 64
-=======
-Button/font_sizes/font_size = 72
-Button/fonts/font = ExtResource("1_o2r72")
->>>>>>> origin/main
 Button/styles/hover = SubResource("StyleBoxFlat_ml8bw")
 Button/styles/hover_pressed = SubResource("StyleBoxFlat_er5qh")
 Button/styles/normal = SubResource("StyleBoxFlat_1nwmw")
 Button/styles/pressed = SubResource("StyleBoxFlat_vu5tu")
-<<<<<<< HEAD
 Label/colors/font_shadow_color = Color(0, 0, 0, 1)
 Label/constants/outline_size = 16
 Label/constants/shadow_offset_x = 0
@@ -69,12 +53,5 @@ Label/constants/shadow_offset_y = 4
 Label/constants/shadow_outline_size = 16
 LineEdit/font_sizes/font_size = 128
 LineEdit/fonts/font = ExtResource("1_rqugq")
-=======
-Label/font_sizes/font_size = 72
-Label/fonts/font = ExtResource("1_o2r72")
-Label/styles/normal = SubResource("StyleBoxFlat_oic2i")
-LineEdit/font_sizes/font_size = 128
-LineEdit/fonts/font = ExtResource("1_o2r72")
->>>>>>> origin/main
 LineEdit/styles/focus = SubResource("StyleBoxFlat_o2r72")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_o2r72")

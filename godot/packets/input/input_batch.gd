@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 class_name ParticipantInputBatch
-=======
-class_name PlayerInputBatch
->>>>>>> origin/main
 extends RefCounted
 
 const AIM_SCALE := 127.0
@@ -13,11 +9,7 @@ const ABILITY_FLAG := 4
 const DIRECTION_FLAGS_SHIFT := 3
 const DIRECTION_FLAGS_MASK := 3
 
-<<<<<<< HEAD
 var inputs: Array[ParticipantInput] = []
-=======
-var inputs: Array[PlayerInput] = []
->>>>>>> origin/main
 
 
 func to_packet() -> PackedByteArray:
@@ -30,30 +22,18 @@ func to_packet() -> PackedByteArray:
 	return peer.data_array
 
 
-<<<<<<< HEAD
 static func from_packet(packet: PackedByteArray) -> ParticipantInputBatch:
 	var peer := StreamPeerBuffer.new()
 	peer.big_endian = false
 	peer.data_array = packet
 	var batch := ParticipantInputBatch.new()
-=======
-static func from_packet(packet: PackedByteArray) -> PlayerInputBatch:
-	var peer := StreamPeerBuffer.new()
-	peer.big_endian = false
-	peer.data_array = packet
-	var batch := PlayerInputBatch.new()
->>>>>>> origin/main
 	var input_count := int(peer.get_u8())
 	for i in input_count:
 		batch.inputs.append(_read_input(peer))
 	return batch
 
 
-<<<<<<< HEAD
 static func _write_input(peer: StreamPeerBuffer, input: ParticipantInput) -> void:
-=======
-static func _write_input(peer: StreamPeerBuffer, input: PlayerInput) -> void:
->>>>>>> origin/main
 	peer.put_u32(input.tick)
 	var flags := 0
 	if input.jumping:
@@ -68,13 +48,8 @@ static func _write_input(peer: StreamPeerBuffer, input: PlayerInput) -> void:
 	_write_quantized_unit_vector2(peer, input.aim_direction)
 
 
-<<<<<<< HEAD
 static func _read_input(peer: StreamPeerBuffer) -> ParticipantInput:
 	var input := ParticipantInput.new()
-=======
-static func _read_input(peer: StreamPeerBuffer) -> PlayerInput:
-	var input := PlayerInput.new()
->>>>>>> origin/main
 	input.tick = int(peer.get_u32())
 	var flags := int(peer.get_u8())
 	input.jumping = (flags & JUMPING_FLAG) != 0

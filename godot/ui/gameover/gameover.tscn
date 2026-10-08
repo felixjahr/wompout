@@ -1,210 +1,160 @@
 [gd_scene format=3 uid="uid://bic5sq2oc0whu"]
 
-<<<<<<< HEAD
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_theme"]
 [ext_resource type="Script" uid="uid://cg7fvrl7mftc3" path="res://ui/gameover/gameover.gd" id="2_script"]
+[ext_resource type="Texture2D" uid="uid://tlfdvftpu2ag" path="res://ui/lobby/trophy.png" id="3_7ba4x"]
+[ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/lobby/platform/platform.tscn" id="3_iaqe1"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="5_ob546"]
+[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/grey_button.png" id="6_nxtgo"]
 
-[sub_resource type="StyleBoxFlat" id="Style_own"]
-content_margin_left = 28.0
-content_margin_top = 26.0
-content_margin_right = 28.0
-content_margin_bottom = 28.0
-bg_color = Color(0.055, 0.13, 0.15, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.23, 0.5, 0.43, 1)
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vigs4"]
+bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
 
-[sub_resource type="StyleBoxFlat" id="Style_opponent"]
-content_margin_left = 28.0
-content_margin_top = 26.0
-content_margin_right = 28.0
-content_margin_bottom = 28.0
-bg_color = Color(0.15, 0.09, 0.13, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(0.5, 0.28, 0.31, 1)
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ob546"]
+bg_color = Color(0.11372549, 0.13333334, 0.16862746, 1)
 
-[node name="Gameover" type="Control" unique_id=173281342]
-=======
-[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_vigs4"]
-[ext_resource type="Script" uid="uid://cg7fvrl7mftc3" path="res://ui/gameover/gameover.gd" id="1_w8oxy"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3cut4"]
+texture = ExtResource("6_nxtgo")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
 
-[node name="Gameover" type="Control" unique_id=1331403375]
->>>>>>> origin/main
-layout_mode = 3
+[node name="Gameover" type="Panel" unique_id=1653976693]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-<<<<<<< HEAD
 theme = ExtResource("1_theme")
+theme_override_styles/panel = SubResource("StyleBoxFlat_vigs4")
 script = ExtResource("2_script")
 
-[node name="Background" type="ColorRect" parent="." unique_id=621013136]
-=======
-theme = ExtResource("1_vigs4")
-script = ExtResource("1_w8oxy")
+[node name="ScreenDivider" type="Panel" parent="." unique_id=1975507948]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 1.0000001
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ob546")
+metadata/_edit_use_anchors_ = true
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=227238940]
->>>>>>> origin/main
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1599461631]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-<<<<<<< HEAD
-mouse_filter = 2
-color = Color(0.025, 0.04, 0.075, 1)
+theme_override_constants/margin_left = 96
+theme_override_constants/margin_top = 96
+theme_override_constants/margin_right = 96
+theme_override_constants/margin_bottom = 96
 
-[node name="Margin" type="MarginContainer" parent="." unique_id=40297048]
-=======
-color = Color(0, 0, 0, 0.24705882)
-
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=237504526]
->>>>>>> origin/main
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-<<<<<<< HEAD
-theme_override_constants/margin_left = 48
-theme_override_constants/margin_top = 28
-theme_override_constants/margin_right = 48
-theme_override_constants/margin_bottom = 28
-
-[node name="Layout" type="VBoxContainer" parent="Margin" unique_id=551845179]
-layout_mode = 2
-theme_override_constants/separation = 16
-
-[node name="Title" type="Label" parent="Margin/Layout" unique_id=1645303678]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 68
-text = "MATCH COMPLETE"
-horizontal_alignment = 1
-
-[node name="Subtitle" type="Label" parent="Margin/Layout" unique_id=1305900760]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.65, 0.72, 0.82, 1)
-theme_override_font_sizes/font_size = 22
-text = "MATCH RESULTS"
-horizontal_alignment = 1
-
-[node name="Trophies" type="Label" parent="Margin/Layout" unique_id=1279578766]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-theme_override_font_sizes/font_size = 32
-horizontal_alignment = 1
-
-[node name="Scroll" type="ScrollContainer" parent="Margin/Layout" unique_id=2014784946]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="Teams" type="HBoxContainer" parent="Margin/Layout/Scroll" unique_id=1585039586]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme_override_constants/separation = 24
-
-[node name="OwnPanel" type="PanelContainer" parent="Margin/Layout/Scroll/Teams" unique_id=29840055]
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("Style_own")
-
-[node name="Layout" type="VBoxContainer" parent="Margin/Layout/Scroll/Teams/OwnPanel" unique_id=1758626747]
-layout_mode = 2
-theme_override_constants/separation = 24
-
-[node name="OwnHeading" type="Label" parent="Margin/Layout/Scroll/Teams/OwnPanel/Layout" unique_id=1709572923]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.545, 0.906, 0.733, 1)
-theme_override_font_sizes/font_size = 28
-text = "YOUR TEAM"
-horizontal_alignment = 1
-
-[node name="OwnPlayers" type="HBoxContainer" parent="Margin/Layout/Scroll/Teams/OwnPanel/Layout" unique_id=736902687]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 24
-alignment = 1
-
-[node name="Versus" type="Label" parent="Margin/Layout/Scroll/Teams" unique_id=1243006853]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(0.5, 0.57, 0.69, 1)
-theme_override_font_sizes/font_size = 28
-text = "VS"
-vertical_alignment = 1
-
-[node name="OpponentPanel" type="PanelContainer" parent="Margin/Layout/Scroll/Teams" unique_id=690934469]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-theme_override_styles/panel = SubResource("Style_opponent")
-
-[node name="Layout" type="VBoxContainer" parent="Margin/Layout/Scroll/Teams/OpponentPanel" unique_id=1280067779]
-layout_mode = 2
-theme_override_constants/separation = 24
-
-[node name="OpponentHeading" type="Label" parent="Margin/Layout/Scroll/Teams/OpponentPanel/Layout" unique_id=933511352]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_colors/font_color = Color(1, 0.667, 0.627, 1)
-theme_override_font_sizes/font_size = 28
-text = "OPPONENTS"
-horizontal_alignment = 1
-
-[node name="OpponentPlayers" type="HBoxContainer" parent="Margin/Layout/Scroll/Teams/OpponentPanel/Layout" unique_id=1450840385]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_vertical = 3
-theme_override_constants/separation = 24
-alignment = 1
-
-[node name="Footer" type="CenterContainer" parent="Margin/Layout" unique_id=326419210]
-layout_mode = 2
-
-[node name="Continue" type="Button" parent="Margin/Layout/Footer" unique_id=533820896]
-unique_name_in_owner = true
-custom_minimum_size = Vector2(380, 76)
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-text = "CONTINUE"
-
-[connection signal="pressed" from="Margin/Layout/Footer/Continue" to="." method="_on_continue_pressed"]
-=======
-
-[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=673147019]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1735031866]
 layout_mode = 2
 theme_override_constants/separation = 64
 
-[node name="Label" type="Label" parent="CenterContainer/VBoxContainer" unique_id=553211547]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1305957498]
 layout_mode = 2
-text = "The winner is: "
+size_flags_horizontal = 0
+theme_override_constants/separation = -24
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=715914]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 128
+text = "VICTORY"
+horizontal_alignment = 1
+
+[node name="TrophiesContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=145895801]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+theme_override_constants/separation = 0
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/VBoxContainer/TrophiesContainer" unique_id=1328355886]
+layout_mode = 2
+texture = ExtResource("3_7ba4x")
+
+[node name="TrophiesLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/TrophiesContainer" unique_id=988336831]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(128, 0)
+layout_mode = 2
+text = "+8"
+clip_text = true
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1811989422]
+show_behind_parent = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer2" unique_id=896104695]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="AllyContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer2/HBoxContainer" unique_id=2121594044]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Platform" parent="MarginContainer/VBoxContainer/VBoxContainer2/HBoxContainer/AllyContainer" unique_id=604162406 instance=ExtResource("3_iaqe1")]
+show_behind_parent = true
+layout_mode = 2
+
+[node name="Platform2" parent="MarginContainer/VBoxContainer/VBoxContainer2/HBoxContainer/AllyContainer" unique_id=1125367925 instance=ExtResource("3_iaqe1")]
+show_behind_parent = true
+layout_mode = 2
+
+[node name="EnemyContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer2/HBoxContainer" unique_id=9798991]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Platform" parent="MarginContainer/VBoxContainer/VBoxContainer2/HBoxContainer/EnemyContainer" unique_id=1397955992 instance=ExtResource("3_iaqe1")]
+show_behind_parent = true
+layout_mode = 2
+
+[node name="Platform2" parent="MarginContainer/VBoxContainer/VBoxContainer2/HBoxContainer/EnemyContainer" unique_id=668960146 instance=ExtResource("3_iaqe1")]
+show_behind_parent = true
+layout_mode = 2
+
+[node name="ContinueButton" parent="MarginContainer/VBoxContainer/VBoxContainer2" unique_id=2097416613 instance=ExtResource("5_ob546")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(374, 140)
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/VBoxContainer2/ContinueButton" unique_id=686932221]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_3cut4")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer2/ContinueButton/Panel" unique_id=300029144]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer2/ContinueButton/Panel/MarginContainer" unique_id=1260937058]
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "CONTINUE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Continue" type="Button" parent="CenterContainer/VBoxContainer" unique_id=903590696]
-layout_mode = 2
-text = "Okay"
->>>>>>> origin/main
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer2/ContinueButton" to="." method="_on_continue_button_pressed"]

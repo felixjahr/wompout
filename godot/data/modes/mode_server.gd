@@ -1,7 +1,8 @@
 class_name ModeServer
 extends Node
 
-signal gameover(results: Array)
+signal results_ready(results: Array)
+signal gameover
 
 enum ModeState {
 	PREPARING,
@@ -16,10 +17,7 @@ var players: Array
 var bots: Array
 
 var remaining_ids: Array[String] = []
-var elimination_order: Array[String] = []
 var spawn_positions: Dictionary[String, Vector2] = {}
-
-var results: Array[Dictionary] = []
 
 @onready var game_net := $"../Net/GameNet"
 @onready var logic := $Logic
@@ -93,7 +91,7 @@ func _enter_state() -> void:
 		ModeState.GAMEOVER:
 			logic.set_physics_process(false)
 			_enter_gameover()
-			gameover.emit(results.duplicate(true))
+			gameover.emit()
 	
 	for player in players:
 		_sync_player(player["id"])
@@ -115,33 +113,7 @@ func _enter_fight() -> void:
 
 
 func _enter_gameover() -> void:
-	results.clear()
-	var ranking: Array[String] = remaining_ids.duplicate()
-	var eliminated: Array[String] = elimination_order.duplicate()
-	eliminated.reverse()
-	ranking.append_array(eliminated)
-
-	var team_placements: Dictionary = {}
-
-	for participant_id in ranking:
-		var team_id: Variant = logic.participant_teams[participant_id]
-
-		if not team_placements.has(team_id):
-			team_placements[team_id] = team_placements.size() + 1
-
-	for participant_id in ranking:
-		var team_id: Variant = logic.participant_teams[participant_id]
-
-		results.append({
-			"participantId": participant_id,
-			"placement": team_placements[team_id],
-			"loadout": _get_loadout(participant_id).duplicate(true),
-		})
-
-	results.sort_custom(
-		func(a: Dictionary, b: Dictionary) -> bool:
-			return int(a["placement"]) < int(b["placement"])
-	)
+	pass
 
 
 func _exit_state() -> void:
@@ -192,22 +164,21 @@ func _on_participant_eliminated(participant_id: String) -> void:
 		return
 	if not remaining_ids.has(participant_id):
 		return
+	var team_id: int = int(logic.participant_teams[participant_id])
 	if state == ModeState.FIGHT:
 		logic.despawn_participant(participant_id)
 	remaining_ids.erase(participant_id)
-	elimination_order.append(participant_id)
-	if _is_game_over():
+	var remaining_teams := _get_remaining_teams()
+	if remaining_teams.has(team_id):
+		return
+	var team_results := _finish_team(team_id, remaining_teams.size() + 1)
+	if remaining_teams.size() <= 1:
+		for winner_team_id in remaining_teams:
+			team_results.append_array(_finish_team(int(winner_team_id), 1))
+		results_ready.emit(team_results)
 		_change_state(ModeState.GAMEOVER)
-
-
-func _is_game_over() -> bool:
-	var remaining_teams: Dictionary = {}
-
-	for participant_id in remaining_ids:
-		var team_id: Variant = logic.participant_teams[participant_id]
-		remaining_teams[team_id] = true
-
-	return remaining_teams.size() <= 1
+	else:
+		results_ready.emit(team_results)
 
 
 func _build_state_payload(_participant_id: String) -> Dictionary:
@@ -216,3 +187,26 @@ func _build_state_payload(_participant_id: String) -> Dictionary:
 
 func _on_net_game_request_received(_player_id: String, _game_request: GameRequest) -> void:
 	pass
+
+
+func _get_remaining_teams() -> Dictionary:
+	var teams: Dictionary = {}
+	for participant_id in remaining_ids:
+		var team_id: int = int(logic.participant_teams[participant_id])
+		teams[team_id] = true
+	return teams
+
+
+func _finish_team(team_id: int, placement: int) -> Array[Dictionary]:
+	var team_results: Array[Dictionary] = []
+	for participant in players + bots:
+		if int(participant["teamId"]) != team_id:
+			continue
+		var participant_id := str(participant["id"])
+		var result := {
+			"participantId": participant_id,
+			"placement": placement,
+			"loadout": _get_loadout(participant_id).duplicate(true),
+		}
+		team_results.append(result)
+	return team_results

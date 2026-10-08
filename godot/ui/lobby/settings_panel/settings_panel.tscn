@@ -1,0 +1,185 @@
+[gd_scene format=3 uid="uid://b4cxj2jy5kyas"]
+
+[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_j1ll3"]
+[ext_resource type="Script" uid="uid://bvacvlq2mm6ji" path="res://ui/lobby/settings_panel/settings_panel.gd" id="1_t4xwa"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/close_button.tscn" id="2_t4xwa"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="3_6l7n7"]
+[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/blue_button.png" id="4_7p8ig"]
+[ext_resource type="Texture2D" uid="uid://bn3qa22fvp7cj" path="res://ui/red_button.png" id="4_aa5g5"]
+[ext_resource type="PackedScene" uid="uid://bn3xxnax340p1" path="res://ui/auth/link.tscn" id="6_2bnec"]
+[ext_resource type="PackedScene" uid="uid://yjsk4cs8sv3m" path="res://ui/auth/verify.tscn" id="7_7e3w3"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4xwa"]
+bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+expand_margin_top = 128.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2bnec"]
+texture = ExtResource("4_7p8ig")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_7p8ig"]
+texture = ExtResource("4_aa5g5")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[node name="SettingsPanel" type="Panel" unique_id=1036722574]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_j1ll3")
+theme_override_styles/panel = SubResource("StyleBoxFlat_t4xwa")
+script = ExtResource("1_t4xwa")
+side = 1
+
+[node name="Main" type="MarginContainer" parent="." unique_id=574665830]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Main" unique_id=1197328175]
+custom_minimum_size = Vector2(1024, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Label" type="Label" parent="Main/VBoxContainer" unique_id=1221638128]
+layout_mode = 2
+text = "SETTINGS"
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Main/VBoxContainer" unique_id=443397624]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 32
+alignment = 1
+
+[node name="EmailLabel" type="Label" parent="Main/VBoxContainer/VBoxContainer" unique_id=1990910901]
+unique_name_in_owner = true
+layout_mode = 2
+text = "EMAIL:"
+
+[node name="LinkButton" parent="Main/VBoxContainer/VBoxContainer" unique_id=604162406 instance=ExtResource("3_6l7n7")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="Main/VBoxContainer/VBoxContainer/LinkButton" unique_id=1317410927]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_2bnec")
+
+[node name="MarginContainer" type="MarginContainer" parent="Main/VBoxContainer/VBoxContainer/LinkButton/Panel" unique_id=1213041820]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="LinkLabel" type="Label" parent="Main/VBoxContainer/VBoxContainer/LinkButton/Panel/MarginContainer" unique_id=813706765]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "LINK EMAIL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LogoutButton" parent="Main/VBoxContainer/VBoxContainer" unique_id=1914174054 instance=ExtResource("3_6l7n7")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="Main/VBoxContainer/VBoxContainer/LogoutButton" unique_id=1937423415]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_7p8ig")
+
+[node name="MarginContainer" type="MarginContainer" parent="Main/VBoxContainer/VBoxContainer/LogoutButton/Panel" unique_id=507527918]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="Main/VBoxContainer/VBoxContainer/LogoutButton/Panel/MarginContainer" unique_id=1538453774]
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "LOG OUT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Link" parent="." unique_id=124301334 instance=ExtResource("6_2bnec")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="Verify" parent="." unique_id=1789036226 instance=ExtResource("7_7e3w3")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="CloseButton" parent="." unique_id=711627931 instance=ExtResource("2_t4xwa")]
+layout_mode = 1
+
+[node name="VersionLabel" type="Label" parent="." unique_id=2012212469]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -84.0
+offset_top = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.17, 0.17, 0.17, 1)
+theme_override_font_sizes/font_size = 32
+text = "v1.0.0"
+horizontal_alignment = 2
+vertical_alignment = 2
+
+[connection signal="pressed" from="Main/VBoxContainer/VBoxContainer/LinkButton" to="." method="_on_link_button_pressed"]
+[connection signal="pressed" from="Main/VBoxContainer/VBoxContainer/LogoutButton" to="." method="_on_log_out_button_pressed"]
+[connection signal="back_pressed" from="Link" to="." method="_on_link_back_pressed"]
+[connection signal="start_link_requested" from="Link" to="." method="_on_link_start_link_requested"]
+[connection signal="back_pressed" from="Verify" to="." method="_on_verify_back_pressed"]
+[connection signal="code_entered" from="Verify" to="." method="_on_verify_code_entered"]
+[connection signal="pressed" from="CloseButton" to="." method="_on_close_button_pressed"]

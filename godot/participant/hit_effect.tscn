@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://qgbih851xmp2"]
+[gd_scene format=3 uid="uid://l2o53wh1qkog"]
 
 [node name="HitEffect" type="CPUParticles2D" unique_id=1000520104]
 emitting = false

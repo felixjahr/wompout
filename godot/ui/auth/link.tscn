@@ -1,0 +1,141 @@
+[gd_scene format=3 uid="uid://bn3xxnax340p1"]
+
+[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_gkpa6"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="2_48rob"]
+[ext_resource type="Script" uid="uid://bjpsmnhtgjiyi" path="res://ui/auth/link.gd" id="2_rtayn"]
+[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/blue_button.png" id="3_rtayn"]
+[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/grey_button.png" id="4_ew5y6"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6cuo5"]
+bg_color = Color(0, 0, 0, 0.2509804)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_ed4p1"]
+texture = ExtResource("3_rtayn")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nfdwk"]
+texture = ExtResource("4_ew5y6")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[node name="Link" type="CenterContainer" unique_id=124301334]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("1_gkpa6")
+script = ExtResource("2_rtayn")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1501436990]
+custom_minimum_size = Vector2(1024, 0)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_constants/separation = 16
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=1396569945]
+custom_minimum_size = Vector2(0, 280)
+layout_mode = 2
+theme_override_constants/separation = 128
+
+[node name="Label" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=690885871]
+custom_minimum_size = Vector2(196, 0)
+layout_mode = 2
+text = "EMAIL:"
+
+[node name="EmailLineEdit" type="LineEdit" parent="VBoxContainer/HBoxContainer" unique_id=670564254]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 96
+theme_override_styles/normal = SubResource("StyleBoxFlat_6cuo5")
+theme_override_styles/read_only = SubResource("StyleBoxFlat_6cuo5")
+theme_override_styles/focus = SubResource("StyleBoxFlat_6cuo5")
+max_length = 256
+virtual_keyboard_type = 5
+
+[node name="LinkButton" parent="VBoxContainer" unique_id=604162406 instance=ExtResource("2_48rob")]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/LinkButton" unique_id=1893351542]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_ed4p1")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/LinkButton/Panel" unique_id=1870691234]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/LinkButton/Panel/MarginContainer" unique_id=2060011679]
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "LINK EMAIL"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BackButton" parent="VBoxContainer" unique_id=1325445516 instance=ExtResource("2_48rob")]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="VBoxContainer/BackButton" unique_id=778960631]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_nfdwk")
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/BackButton/Panel" unique_id=1277406253]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/BackButton/Panel/MarginContainer" unique_id=909568302]
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "BACK"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/LinkButton" to="." method="_on_link_button_pressed"]
+[connection signal="pressed" from="VBoxContainer/BackButton" to="." method="_on_back_button_pressed"]

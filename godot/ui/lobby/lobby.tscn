@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_tgpby"]
 [ext_resource type="Script" uid="uid://bs0qlmuraofwo" path="res://ui/lobby/lobby.gd" id="2_ch43o"]
-[ext_resource type="Texture2D" uid="uid://bg4ljm328t3kh" path="res://ui/lobby/background.png" id="2_dom2f"]
+[ext_resource type="Texture2D" uid="uid://bg4ljm328t3kh" path="res://ui/background.png" id="2_dom2f"]
 [ext_resource type="Texture2D" uid="uid://dopkl0qredctd" path="res://ui/lobby/background_field.png" id="3_thpmu"]
 [ext_resource type="Texture2D" uid="uid://tlfdvftpu2ag" path="res://ui/lobby/trophy.png" id="4_qskbg"]
 [ext_resource type="Texture2D" uid="uid://bdsnepagp0cwu" path="res://ui/lobby/shop_icon.png" id="5_gs2u0"]
@@ -11,12 +11,14 @@
 [ext_resource type="Texture2D" uid="uid://dxmrnkbaucmlp" path="res://ui/lobby/armory_icon.png" id="8_rxu4d"]
 [ext_resource type="Texture2D" uid="uid://dnsd163tlmiej" path="res://ui/lobby/friends_icon.png" id="9_3b0ks"]
 [ext_resource type="Texture2D" uid="uid://v51uwy5ckexq" path="res://ui/lobby/ranks_icon.png" id="9_rxu4d"]
-[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/lobby/side_button.png" id="17_qnp4y"]
+[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/blue_button.png" id="17_qnp4y"]
+[ext_resource type="PackedScene" uid="uid://ceqje6b6jfyi" path="res://ui/lobby/rankings_panel/rankings_panel.tscn" id="19_jcpg8"]
 [ext_resource type="PackedScene" uid="uid://db4f1f5h8xqao" path="res://ui/lobby/armory_screen/armory_screen.tscn" id="20_x2gyi"]
 [ext_resource type="Texture2D" uid="uid://flbrn7g6884s" path="res://ui/lobby/chest.png" id="21_ncut8"]
+[ext_resource type="PackedScene" uid="uid://b4cxj2jy5kyas" path="res://ui/lobby/settings_panel/settings_panel.tscn" id="21_vdu1l"]
 [ext_resource type="Texture2D" uid="uid://c702bonrrav1o" path="res://ui/lobby/chest_progress_bar.png" id="22_eslaf"]
 [ext_resource type="PackedScene" uid="uid://blcpf8cku6m65" path="res://ui/lobby/friends_panel/friends_panel.tscn" id="23_1etha"]
-[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/lobby/mode_button_normal.png" id="23_wofsp"]
+[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/grey_button.png" id="23_wofsp"]
 [ext_resource type="PackedScene" uid="uid://8csnlk72lj5e" path="res://ui/lobby/game_mode_panel/game_mode_panel.tscn" id="24_lky5g"]
 [ext_resource type="Texture2D" uid="uid://bdgfgtjc7tlp" path="res://data/modes/womp/solo_womp_ranked_icon.png" id="26_s74wb"]
 [ext_resource type="Texture2D" uid="uid://bkcupf0hrdv6a" path="res://ui/lobby/play_button_normal.png" id="27_j7rwa"]
@@ -124,7 +126,6 @@ layout_mode = 2
 
 [node name="Platform4" parent="PlatformArea/HBoxContainer" unique_id=1653210786 instance=ExtResource("6_afxux")]
 unique_name_in_owner = true
-show_behind_parent = true
 layout_mode = 2
 
 [node name="MainPanel" type="VBoxContainer" parent="." unique_id=633513508]
@@ -135,6 +136,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="MarginContainer" type="MarginContainer" parent="MainPanel" unique_id=77748690]
 layout_mode = 2
@@ -145,11 +147,11 @@ custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 theme_override_constants/separation = 32
 
-[node name="NameButton" parent="MainPanel/MarginContainer/HBoxContainer" unique_id=604162406 instance=ExtResource("7_6w0v2")]
+[node name="SettingsButton" parent="MainPanel/MarginContainer/HBoxContainer" unique_id=604162406 instance=ExtResource("7_6w0v2")]
 custom_minimum_size = Vector2(512, 0)
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="MainPanel/MarginContainer/HBoxContainer/NameButton" unique_id=1936065060]
+[node name="Panel" type="Panel" parent="MainPanel/MarginContainer/HBoxContainer/SettingsButton" unique_id=1936065060]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -159,7 +161,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_gs2u0")
 
-[node name="NameLabel" type="Label" parent="MainPanel/MarginContainer/HBoxContainer/NameButton/Panel" unique_id=1630511819]
+[node name="NameLabel" type="Label" parent="MainPanel/MarginContainer/HBoxContainer/SettingsButton/Panel" unique_id=1630511819]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -216,6 +218,7 @@ clip_text = true
 [node name="MarginContainer2" type="MarginContainer" parent="MainPanel" unique_id=1057611549]
 layout_mode = 2
 size_flags_vertical = 3
+mouse_filter = 2
 theme_override_constants/margin_left = 160
 theme_override_constants/margin_right = 160
 
@@ -380,11 +383,11 @@ text = "FRIENDS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RanksButton" parent="MainPanel/MarginContainer2/VBoxContainer2" unique_id=1911595775 instance=ExtResource("7_6w0v2")]
+[node name="RankingsButton" parent="MainPanel/MarginContainer2/VBoxContainer2" unique_id=1911595775 instance=ExtResource("7_6w0v2")]
 custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
 
-[node name="Panel" type="Panel" parent="MainPanel/MarginContainer2/VBoxContainer2/RanksButton" unique_id=1528772718]
+[node name="Panel" type="Panel" parent="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton" unique_id=1528772718]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -394,7 +397,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_dom2f")
 
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/RanksButton/Panel" unique_id=1923081896]
+[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton/Panel" unique_id=1923081896]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -407,18 +410,18 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/RanksButton/Panel/MarginContainer" unique_id=650945012]
+[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton/Panel/MarginContainer" unique_id=650945012]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = -64
 
-[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer2/VBoxContainer2/RanksButton/Panel/MarginContainer/HBoxContainer" unique_id=399353313]
+[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton/Panel/MarginContainer/HBoxContainer" unique_id=399353313]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("9_rxu4d")
 stretch_mode = 3
 
-[node name="Label" type="Label" parent="MainPanel/MarginContainer2/VBoxContainer2/RanksButton/Panel/MarginContainer/HBoxContainer" unique_id=2032083313]
+[node name="Label" type="Label" parent="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton/Panel/MarginContainer/HBoxContainer" unique_id=2032083313]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/shadow_offset_y = 3
@@ -597,16 +600,12 @@ text = "PLAY"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Button5" type="Button" parent="." unique_id=890367105]
-visible = false
-layout_mode = 0
-offset_left = 1514.0
-offset_top = 178.0
-offset_right = 2108.0
-offset_bottom = 255.0
-text = "redeem"
-
 [node name="FriendsPanel" parent="." unique_id=1844430048 instance=ExtResource("23_1etha")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="RankingsPanel" parent="." unique_id=750180609 instance=ExtResource("19_jcpg8")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
@@ -616,37 +615,43 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
+[node name="SettingsPanel" parent="." unique_id=1036722574 instance=ExtResource("21_vdu1l")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
 [node name="ArmoryScreen" parent="." unique_id=809997163 instance=ExtResource("20_x2gyi")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
-[node name="VersionLabel" type="Label" parent="." unique_id=1065290807]
-unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -84.0
-offset_top = -39.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.17, 0.17, 0.17, 1)
-theme_override_font_sizes/font_size = 32
-text = "v1.0.0"
-horizontal_alignment = 2
-vertical_alignment = 2
+[node name="Button5" type="Button" parent="." unique_id=890367105]
+visible = false
+layout_mode = 0
+offset_left = 1514.0
+offset_top = 178.0
+offset_right = 2108.0
+offset_bottom = 255.0
+text = "redeem"
 
+[connection signal="pressed" from="MainPanel/MarginContainer/HBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer/ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton" to="." method="_on_armory_button_pressed"]
 [connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton" to="." method="_on_friends_button_pressed"]
-[connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer2/RanksButton" to="." method="_on_ranks_button_pressed"]
+[connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton" to="." method="_on_rankings_button_pressed"]
 [connection signal="pressed" from="MainPanel/HBoxContainer3/MarginContainer/ChestButton" to="." method="_on_chest_button_pressed"]
 [connection signal="pressed" from="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton" to="." method="_on_game_mode_button_pressed"]
 [connection signal="toggled" from="MainPanel/HBoxContainer3/MarginContainer3/PlayButton" to="." method="_on_play_button_toggled"]
-[connection signal="pressed" from="Button5" to="." method="_on_button_5_pressed"]
 [connection signal="add_friends_button_pressed" from="FriendsPanel" to="." method="_on_friends_panel_add_friends_button_pressed"]
+[connection signal="closed" from="FriendsPanel" to="." method="_on_friends_panel_closed"]
 [connection signal="player_invited" from="FriendsPanel" to="." method="_on_friends_panel_player_invited"]
+[connection signal="closed" from="RankingsPanel" to="." method="_on_rankings_panel_closed"]
+[connection signal="closed" from="GameModePanel" to="." method="_on_game_mode_panel_closed"]
 [connection signal="game_mode_selected" from="GameModePanel" to="." method="_on_game_mode_panel_game_mode_selected"]
+[connection signal="closed" from="SettingsPanel" to="." method="_on_settings_panel_closed"]
+[connection signal="logout_requested" from="SettingsPanel" to="." method="_on_settings_panel_logout_requested"]
+[connection signal="start_link_requested" from="SettingsPanel" to="." method="_on_settings_panel_start_link_requested"]
+[connection signal="verify_link_requested" from="SettingsPanel" to="." method="_on_settings_panel_verify_link_requested"]
+[connection signal="closed" from="ArmoryScreen" to="." method="_on_armory_screen_closed"]
+[connection signal="loadout_updated" from="ArmoryScreen" to="." method="_on_armory_screen_loadout_updated"]
+[connection signal="pressed" from="Button5" to="." method="_on_button_5_pressed"]

@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://dgchdpvh25gfe" path="res://ui/lobby/armory_screen/item_entry.gd" id="1_f08fj"]
 [ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="2_tq80x"]
 [ext_resource type="PackedScene" uid="uid://cnlqm0mhmwdm2" path="res://ui/lobby/armory_screen/item_card.tscn" id="2_vdelg"]
-[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/lobby/side_button.png" id="4_38ypp"]
+[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/blue_button.png" id="4_38ypp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q8m82"]
 bg_color = Color(0.36078432, 0.42352942, 0.53333336, 1)

@@ -1,17 +1,6 @@
-<<<<<<< HEAD
 generator client {
   provider     = "prisma-client"
   output       = "../generated/prisma"
-=======
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
-generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
->>>>>>> origin/main
   moduleFormat = "cjs"
 }
 
@@ -19,7 +8,6 @@ datasource db {
   provider = "postgresql"
 }
 
-<<<<<<< HEAD
 enum ItemType {
   RANGED
   MELEE
@@ -66,6 +54,18 @@ model EmailVerificationCode {
   usedAt    DateTime?
 
   player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+
+  @@index([email, createdAt])
+}
+
+model SignupVerificationCode {
+  id          String    @id @default(uuid()) @db.Uuid
+  displayName String
+  email       String
+  codeHash    String
+  createdAt   DateTime  @default(now())
+  expiresAt   DateTime
+  usedAt      DateTime?
 
   @@index([email, createdAt])
 }
@@ -125,19 +125,4 @@ model FriendInvite {
 
   @@index([inviterId])
   @@index([expiresAt])
-=======
-model Player {
-  id        String   @id
-  name      String
-  createdAt DateTime @default(now())
-  sessions  Session[]
-}
-
-model Session {
-  id                 String    @id
-  playerId           String
-  refreshTokenHash   String    @unique
-  createdAt          DateTime  @default(now())
-  player Player @relation(fields: [playerId], references: [id])
->>>>>>> origin/main
 }

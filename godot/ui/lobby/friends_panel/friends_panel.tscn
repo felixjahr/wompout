@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://blcpf8cku6m65"]
 
-[ext_resource type="PackedScene" uid="uid://bm0hcarc33bl4" path="res://ui/lobby/player_entry.tscn" id="1_4vh4t"]
+[ext_resource type="PackedScene" uid="uid://bm0hcarc33bl4" path="res://ui/lobby/player_entry/player_entry.tscn" id="1_4vh4t"]
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_mxp8a"]
-[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/lobby/mode_button_normal.png" id="2_mxp8a"]
+[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/grey_button.png" id="2_mxp8a"]
 [ext_resource type="Script" uid="uid://dy7d7klb78k1b" path="res://ui/lobby/friends_panel/friends_panel.gd" id="2_r4evk"]
 [ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="5_4yd2w"]
-[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/lobby/close_button/close_button.tscn" id="10_ypg3x"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/close_button.tscn" id="10_ypg3x"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7p47"]
 bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
-border_width_left = 10
+border_width_left = 8
 border_color = Color(0, 0, 0, 1)
 expand_margin_left = 8.0
 expand_margin_right = 128.0

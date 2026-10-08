@@ -34,6 +34,7 @@ var seen_event_index := 0
 
 var participant_names: Dictionary = {}
 var local_player_id := ""
+var camera_target_id := ""
 
 var overlay: Control
 var map: Node2D
@@ -128,10 +129,10 @@ func _render_interpolated_snapshot() -> void:
 			player.local_team_id = render_snapshot.local_team_id
 			if player_id == local_player_id:
 				player.local = true
-				player.camera = map.camera
 			participant_container.add_child(player)
 			return player
 	)
+	_update_camera_target(render_snapshot.local_team_id)
 	_apply_entity_snapshots(
 		bullets,
 		render_snapshot.bullets,
@@ -269,3 +270,21 @@ func _apply_event(event: EventSnapshot) -> void:
 		match event.effect_id:
 			"bullet":
 				pass
+
+
+func _update_camera_target(local_team_id: int) -> void:
+	if players.has(local_player_id):
+		camera_target_id = local_player_id
+	else:
+		if players.has(camera_target_id):
+			if players[camera_target_id].team_id != local_team_id:
+				camera_target_id = ""
+		else:
+			camera_target_id = ""
+		if camera_target_id.is_empty():
+			for participant_id in players:
+				if players[participant_id].team_id == local_team_id:
+					camera_target_id = participant_id
+					break
+	if players.has(camera_target_id):
+		map.camera.global_position = players[camera_target_id].global_position

@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_5ecad"]
 [ext_resource type="Script" uid="uid://bj06gr2c7rek0" path="res://ui/lobby/game_mode_panel/game_mode_panel.gd" id="2_as43x"]
 [ext_resource type="PackedScene" uid="uid://6r5j3okf8at7" path="res://ui/lobby/game_mode_panel/game_mode_entry.tscn" id="3_as43x"]
-[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/lobby/close_button/close_button.tscn" id="4_c71qv"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/close_button.tscn" id="4_c71qv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1etha"]
 bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)

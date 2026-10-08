@@ -1,5 +1,8 @@
 extends Control
 
+signal loadout_updated(loadout: Dictionary)
+signal closed
+
 const ITEM_ENTRY := preload("res://ui/lobby/armory_screen/item_entry.tscn")
 
 var player: Dictionary
@@ -16,10 +19,7 @@ var player: Dictionary
 @onready var style_button := %StyleButton
 
 
-func render_armory_screen(player: Dictionary) -> void:
-	self.player = player
-	platform.render_platform(player, false, true) 
-	
+func _ready() -> void:
 	melee_button.pressed.connect(_on_category_button_pressed.bind("melee", melee_button))
 	ranged_button.pressed.connect(_on_category_button_pressed.bind("ranged", ranged_button))
 	armour_button.pressed.connect(_on_category_button_pressed.bind("armour", armour_button))
@@ -27,17 +27,18 @@ func render_armory_screen(player: Dictionary) -> void:
 	style_button.pressed.connect(_on_category_button_pressed.bind("style", style_button))
 
 
-func open_armory_screen() -> void:
-	get_parent().main_panel.hide()
-	get_parent().platform_area.hide()
+func render_armory(player: Dictionary) -> void:
+	self.player = player
+	platform.render_platform(player, false, true)
+
+
+func show_armory() -> void:
 	armory_panel.animate_panel(true)
 	platform.show()
 	_on_category_button_pressed("melee", melee_button)
 
 
-func _on_close_button_pressed() -> void:
-	get_parent().main_panel.show()
-	get_parent().platform_area.show()
+func hide_armory() -> void:
 	armory_panel.animate_panel(false)
 	platform.hide()
 
@@ -56,4 +57,14 @@ func _on_category_button_pressed(category_id: String, tab_button: ShrinkButton) 
 			if item["itemId"] == item_id:
 				var new_item_entry := ITEM_ENTRY.instantiate()
 				item_card_container.add_child(new_item_entry)
+				new_item_entry.item_equipped.connect(_on_item_equipped.bind(category_id, item_id))
 				new_item_entry.render_item_entry(category_id, item_id, player["loadout"])
+
+
+func _on_item_equipped(category_id: String, item_id: String) -> void:
+	player["loadout"][category_id] = item_id
+	loadout_updated.emit(player["lodout"])
+
+
+func _on_close_button_pressed() -> void:
+	closed.emit()

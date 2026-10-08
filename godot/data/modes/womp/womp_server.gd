@@ -20,7 +20,4 @@ func _process(delta: float) -> void:
 		if not received_players.has(player_id):
 			return
 	
-	if _is_game_over():
-		_change_state(ModeState.GAMEOVER)
-	else:
-		_change_state(ModeState.FIGHT)
+	_change_state(ModeState.FIGHT)

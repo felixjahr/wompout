@@ -1,69 +1,85 @@
+import { UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
+  OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
+  WsException,
 } from '@nestjs/websockets';
 import { WebSocket } from 'ws';
-import { AuthService } from '../auth/auth.service';
+
+import { AuthenticateDto } from './dto/authenticate.dto';
+import { SubscriptionDto } from './dto/subscription.dto';
 import { RealtimeService } from './realtime.service';
+import { RealtimeFilter } from './realtime.filter';
 
-type AuthPayload = {
-  accessToken?: string;
-};
+@WebSocketGateway({
+  path: '/ws',
+  maxPayload: 16 * 1024,
+})
+@UseFilters(new RealtimeFilter())
+@UsePipes(
+  new ValidationPipe({
+    transform: true,
+    whitelist: true,
+    forbidNonWhitelisted: true,
+    exceptionFactory: () => new WsException('Invalid request'),
+  }),
+)
+export class RealtimeGateway
+  implements OnGatewayConnection<WebSocket>, OnGatewayDisconnect<WebSocket>
+{
+  constructor(private readonly realtimeService: RealtimeService) {}
 
-@WebSocketGateway({ path: '/ws' })
-export class RealtimeGateway implements OnGatewayDisconnect<WebSocket> {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly realtimeService: RealtimeService,
-  ) {}
+  handleConnection(client: WebSocket): void {
+    this.realtimeService.registerConnection(client);
+  }
 
   handleDisconnect(client: WebSocket): void {
-    this.realtimeService.unregisterSocket(client);
+    this.realtimeService.unregisterConnection(client);
   }
 
-  @SubscribeMessage('auth')
-  async handleAuth(
+  @SubscribeMessage('authenticate')
+  authenticate(
     @ConnectedSocket() client: WebSocket,
-    @MessageBody() payload: AuthPayload,
+    @MessageBody() payload: AuthenticateDto,
   ): Promise<void> {
-    const accessToken = payload?.accessToken;
-
-    if (!accessToken) {
-      this.sendAuthFailed(client);
-      return;
-    }
-
-    try {
-      const auth = await this.authService.verifyAccessToken(accessToken);
-
-      this.realtimeService.registerPlayer(auth.playerId, client);
-
-      this.sendAuthOk(client);
-
-      this.realtimeService.notifyPlayerConnected(auth.playerId);
-    } catch {
-      this.sendAuthFailed(client);
-    }
-  }
-
-  private sendAuthOk(client: WebSocket): void {
-    client.send(
-      JSON.stringify({
-        event: 'authOk',
-        data: {},
-      }),
+    return this.realtimeService.enqueue(client, () =>
+      this.realtimeService.authenticate(
+        client,
+        payload.requestId,
+        payload.accessToken,
+      ),
     );
   }
 
-  private sendAuthFailed(client: WebSocket): void {
-    client.send(
-      JSON.stringify({
-        event: 'authFailed',
-        data: {},
-      }),
+  @SubscribeMessage('subscribe')
+  subscribe(
+    @ConnectedSocket() client: WebSocket,
+    @MessageBody() payload: SubscriptionDto,
+  ): Promise<void> {
+    return this.realtimeService.enqueue(client, () =>
+      this.realtimeService.subscribe(
+        client,
+        payload.requestId,
+        payload.resources,
+      ),
+    );
+  }
+
+  @SubscribeMessage('unsubscribe')
+  unsubscribe(
+    @ConnectedSocket() client: WebSocket,
+    @MessageBody() payload: SubscriptionDto,
+  ): Promise<void> {
+    return this.realtimeService.enqueue(client, () =>
+      this.realtimeService.unsubscribe(
+        client,
+        payload.requestId,
+        payload.resources,
+      ),
     );
   }
 }

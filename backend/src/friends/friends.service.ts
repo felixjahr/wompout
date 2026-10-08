@@ -14,6 +14,8 @@ import type { Request, Response } from 'express';
 import { RealtimeService } from '../realtime/realtime.service';
 import { LobbiesService } from '../lobbies/lobbies.service';
 import { Friends } from './friends.types';
+import { ResourceName } from '../realtime/realtime.types';
+import { PlayersService } from '../players/players.service';
 
 @Injectable()
 export class FriendsService implements OnModuleInit {
@@ -22,22 +24,23 @@ export class FriendsService implements OnModuleInit {
     private readonly prismaService: PrismaService,
     private readonly realtimeService: RealtimeService,
     private readonly lobbiesService: LobbiesService,
+    private readonly playersService: PlayersService,
   ) {}
 
   onModuleInit(): void {
-    this.lobbiesService.invitesChanged$.subscribe((playerIds) => {
-      for (const id of playerIds) {
-        void this.updateFriends(id).catch(console.error);
+    this.realtimeService.registerSnapshotProvider(
+      ResourceName.Friends,
+      (playerId) => this.getFriendsForPlayer(playerId),
+    );
+
+    this.lobbiesService.playerLobbyStatusChanged$.subscribe((playerIds) => {
+      for (const playerId of new Set(playerIds)) {
+        void this.publishFriendsToFriendsOf(playerId).catch(console.error);
       }
     });
 
-    this.lobbiesService.playerLobbyStatusChanged$.subscribe((playerIds) => {
-      for (const id of playerIds) {
-        void Promise.all([
-          this.updateFriends(id),
-          this.refreshFriendsOfPlayer(id),
-        ]).catch(console.error);
-      }
+    this.playersService.publicProfileChanged$.subscribe((playerId) => {
+      void this.publishFriendsToFriendsOf(playerId).catch(console.error);
     });
   }
 
@@ -108,8 +111,8 @@ export class FriendsService implements OnModuleInit {
     });
 
     await Promise.all([
-      this.updateFriends(playerId),
-      this.updateFriends(invite.inviterId),
+      this.publishFriends(playerId),
+      this.publishFriends(invite.inviterId),
     ]).catch(console.error);
   }
 
@@ -143,14 +146,6 @@ export class FriendsService implements OnModuleInit {
     }
 
     response.redirect(HttpStatus.FOUND, storeUrl);
-  }
-
-  private createToken(): string {
-    return randomBytes(64).toString('base64url');
-  }
-
-  private hashToken(token: string): string {
-    return createHash('sha256').update(token).digest('hex');
   }
 
   async getFriendsForPlayer(playerId: string): Promise<Friends> {
@@ -191,24 +186,26 @@ export class FriendsService implements OnModuleInit {
       };
     });
 
-    return {
-      players,
-      lobbyInvites: this.lobbiesService.getIncomingInvites(playerId),
-    };
+    return { players };
   }
 
-  private sendFriendsToPlayer(playerId: string, friends: Friends): void {
-    this.realtimeService.sendToPlayer(playerId, 'friendsUpdated', { friends });
+  private createToken(): string {
+    return randomBytes(64).toString('base64url');
   }
 
-  private async updateFriends(playerId: string): Promise<void> {
-    if (!this.realtimeService.isPlayerConnected(playerId)) return;
-
-    const friends = await this.getFriendsForPlayer(playerId);
-    this.sendFriendsToPlayer(playerId, friends);
+  private hashToken(token: string): string {
+    return createHash('sha256').update(token).digest('hex');
   }
 
-  async refreshFriendsOfPlayer(playerId: string): Promise<void> {
+  private async publishFriends(playerId: string): Promise<void> {
+    const snapshot = await this.getFriendsForPlayer(playerId);
+
+    this.realtimeService.publishToPlayers(ResourceName.Friends, snapshot, [
+      playerId,
+    ]);
+  }
+
+  private async publishFriendsToFriendsOf(playerId: string): Promise<void> {
     const friendships = await this.prismaService.friendship.findMany({
       where: {
         OR: [{ playerAId: playerId }, { playerBId: playerId }],
@@ -219,15 +216,16 @@ export class FriendsService implements OnModuleInit {
       },
     });
 
-    await Promise.all(
-      friendships.map((friendship) => {
-        const friendId =
-          friendship.playerAId === playerId
-            ? friendship.playerBId
-            : friendship.playerAId;
+    const friendIds = new Set(
+      friendships.map((friendship) =>
+        friendship.playerAId === playerId
+          ? friendship.playerBId
+          : friendship.playerAId,
+      ),
+    );
 
-        return this.updateFriends(friendId);
-      }),
+    await Promise.all(
+      [...friendIds].map((friendId) => this.publishFriends(friendId)),
     );
   }
 }

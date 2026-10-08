@@ -8,27 +8,32 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { GameServersService } from './game-servers.service';
-import { EndGameRequestDto } from './dto/end-game-request.dto';
+import { GameResultsDto } from './dto/game-results.dto';
 import { GameServersGuard } from './game-servers.guard';
 
 @Controller('game-servers')
+@UseGuards(GameServersGuard)
 export class GameServersController {
   constructor(private readonly gameServersService: GameServersService) {}
 
   @Post(':gameId/ready')
-  @UseGuards(GameServersGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   markGameReady(@Param('gameId') gameId: string): void {
     this.gameServersService.markGameReady(gameId);
   }
 
-  @Post(':gameId/end')
-  @UseGuards(GameServersGuard)
+  @Post(':gameId/results')
   @HttpCode(HttpStatus.NO_CONTENT)
-  endGameSession(
+  reportResults(
     @Param('gameId') gameId: string,
-    @Body() request: EndGameRequestDto,
+    @Body() request: GameResultsDto,
   ): Promise<void> {
-    return this.gameServersService.endGame(gameId, request);
+    return this.gameServersService.reportResults(gameId, request);
+  }
+
+  @Post(':gameId/end')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  endGameSession(@Param('gameId') gameId: string): Promise<void> {
+    return this.gameServersService.endGame(gameId);
   }
 }

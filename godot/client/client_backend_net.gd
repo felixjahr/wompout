@@ -1,37 +1,40 @@
 extends Node
 
-<<<<<<< HEAD
-signal lobby_updated(lobby: Dictionary)
+signal subscribed(request_id: String, snapshots: Dictionary)
+signal unsubscribed(request_id: String, resources: Array)
+signal error(request_id: String, message: String)
+
 signal player_updated(player: Dictionary)
+signal lobby_updated(lobby: Dictionary)
+signal lobby_invites_updated(invites: Array)
+signal match_updated(snapshot: Variant)
 signal friends_updated(friends: Dictionary)
-signal game_ready_received(ip: String, port: int, player_token: String)
-signal game_over_received(data: Dictionary)
-signal game_failed_received(reason: String)
+signal rankings_updated(rankings: Array)
+signal shop_updated(shop: Dictionary)
 
 signal websocket_disconnected
+
+enum AuthResult {
+	SUCCEEDED,
+	AUTH_REQUIRED,
+	SERVER_UNAVAILABLE,
+}
 
 const HTTP_BASE_URL := "http://127.0.0.1:3000"
 const WEBSOCKET_URL := "ws://127.0.0.1:3000/ws"
 
+const HTTP_TIMEOUT_SECONDS := 10.0
 const WEBSOCKET_TIMEOUT_SECONDS := 8.0
+
+const ACCESS_TOKEN_EXPIRATION_SECONDS := 900
+const REFRESH_MARGIN_SECONDS := 30
+
+var access_token := ""
+var refresh_token := ""
+var access_token_expires_at := 0.0
 
 var socket := WebSocketPeer.new()
 var websocket_authenticated := false
-=======
-signal room_code_received(code: String)
-signal room_start_received(port: int, ip: String, game_token: String, player_names: Dictionary)
-signal room_failed_received
-
-const HTTP_BASE := "http://46.224.63.244:8000"
-
-const WS_URL := "ws://46.224.63.244:8000/ws"
-const WS_CONNECT_TIMEOUT := 8.0
-const WS_AUTH_TIMEOUT := 8.0
-var socket := WebSocketPeer.new()
-var socket_authed := false
->>>>>>> origin/main
-
-@onready var auth_net := $"../AuthNet"
 
 
 func _ready() -> void:
@@ -40,7 +43,6 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	socket.poll()
-<<<<<<< HEAD
 	
 	while socket.get_available_packet_count() > 0:
 		_handle_websocket_message(socket.get_packet().get_string_from_utf8())
@@ -51,96 +53,312 @@ func _process(_delta: float) -> void:
 		emit_signal("websocket_disconnected")
 
 
-func invite_player(player_id: String) -> Dictionary:
+func authenticate() -> AuthResult:
+	refresh_token = _load_refresh_token()
+	if refresh_token.is_empty():
+		return AuthResult.AUTH_REQUIRED
+	var result := await _refresh_session()
+	if result == AuthResult.AUTH_REQUIRED:
+		clear_session()
+	return result
+
+
+func auth_create_guest(displayName: String) -> Dictionary:
+	var response: Dictionary = await _request(
+		"/auth/guest",
+		{"displayName": displayName.strip_edges()}
+	)
+	return _handle_token_response(response)
+
+
+func auth_start_signup(displayName: String, email: String) -> Dictionary:
+	return await _request(
+		"/auth/signup/start",
+		{
+			"displayName": displayName.strip_edges(),
+			"email": email.strip_edges().to_lower(),
+		}
+	)
+
+
+func auth_verify_signup(email: String, code: String) -> Dictionary:
+	var response: Dictionary = await _request(
+		"/auth/signup/verify",
+		{
+			"email": email.strip_edges().to_lower(),
+			"code": code.strip_edges(),
+		}
+	)
+	return _handle_token_response(response)
+
+
+func auth_start_login(email: String) -> Dictionary:
+	return await _request(
+		"/auth/login/start",
+		{"email": email.strip_edges().to_lower()}
+	)
+
+
+func auth_verify_login(email: String, code: String) -> Dictionary:
+	var response: Dictionary = await _request(
+		"/auth/login/verify",
+		{
+			"email": email.strip_edges().to_lower(),
+			"code": code.strip_edges(),
+		}
+	)
+	return _handle_token_response(response)
+
+
+func auth_start_link(email: String) -> Dictionary:
+	return await _authenticated_request(
+		"/auth/link/start",
+		{"email": email.strip_edges().to_lower()}
+	)
+
+
+func auth_verify_link(email: String, code: String) -> Dictionary:
+	return await _authenticated_request(
+		"/auth/link/verify",
+		{
+			"email": email.strip_edges().to_lower(),
+			"code": code.strip_edges(),
+		}
+	)
+
+
+func sessions_logout() -> Dictionary:
+	return await _authenticated_request(
+		"/sessions/logout",
+	)
+
+
+func lobbies_invite_player(player_id: String) -> Dictionary:
 	return await _authenticated_request(
 		"/lobbies/invite",
-		HTTPClient.METHOD_POST,
 		{"invitedPlayerId": player_id}
 	)
 
 
-func accept_lobby_invite(invite_id: String) -> Dictionary:
+func lobbies_accept_invite(invite_id: String) -> Dictionary:
 	return await _authenticated_request(
-		"/lobbies/invites/%s/accept" % invite_id,
-		HTTPClient.METHOD_POST
+		"/lobbies/invites/%s/accept" % invite_id.uri_encode()
 	)
 
 
-func decline_lobby_invite(invite_id: String) -> Dictionary:
+func lobbies_decline_invite(invite_id: String) -> Dictionary:
 	return await _authenticated_request(
-		"/lobbies/invites/%s/decline" % invite_id,
-		HTTPClient.METHOD_POST
+		"/lobbies/invites/%s/decline" % invite_id.uri_encode()
 	)
 
 
-func leave_lobby() -> Dictionary:
+func lobbies_leave_lobby() -> Dictionary:
 	return await _authenticated_request(
-		"/lobbies/leave",
-		HTTPClient.METHOD_POST
+		"/lobbies/leave"
 	)
 
 
-func set_lobby_mode(mode_id: String) -> Dictionary:
+func lobbies_update_mode(mode_id: String) -> Dictionary:
 	return await _authenticated_request(
 		"/lobbies/mode",
-		HTTPClient.METHOD_POST,
 		{"mode": mode_id}
 	)
 
 
-func set_lobby_ready(ready: bool) -> Dictionary:
+func lobbies_update_ready(ready: bool) -> Dictionary:
 	return await _authenticated_request(
 		"/lobbies/ready",
-		HTTPClient.METHOD_POST,
 		{"ready": ready}
 	)
 
 
-func create_friend_invite() -> Dictionary:
+func lobbies_update_loadout(loadout: Dictionary) -> Dictionary:
 	return await _authenticated_request(
-		"/friends/invite",
-		HTTPClient.METHOD_POST
+		"/lobbies/loadout",
+		loadout
 	)
 
 
-func redeem_friend_invite(token: String) -> Dictionary:
+func friends_create_invite() -> Dictionary:
 	return await _authenticated_request(
-		"/friends/invite/%s/redeem" % token,
-		HTTPClient.METHOD_POST
+		"/friends/invite"
 	)
+
+
+func friends_redeem_invite(token: String) -> Dictionary:
+	return await _authenticated_request(
+		"/friends/invite/%s/redeem" % token.uri_encode()
+	)
+
+
+func matches_acknowledge_match(game_id: String) -> Dictionary:
+	return await _authenticated_request(
+		"/matches/%s/acknowledge" % game_id.uri_encode()
+	)
+
+
+func _authenticated_request(path: String, body: Variant = null, method := HTTPClient.METHOD_POST) -> Dictionary:
+	var token := await _get_valid_access_token()
+	if token.is_empty():
+		return {"ok": false, "status": 0, "data": null}
+	var headers: Array[String] = ["Authorization: Bearer " + token]
+	return await _request(path, body, headers, method)
+
+
+func _request(path: String, body: Variant = null, headers: Array[String] = [], method := HTTPClient.METHOD_POST) -> Dictionary:
+	var http := HTTPRequest.new()
+	http.timeout = HTTP_TIMEOUT_SECONDS
+	add_child(http)
+	
+	var final_headers := ["Content-Type: application/json"]
+	final_headers.append_array(headers)
+
+	var request_body := JSON.stringify(body) if body != null else ""
+	var err := http.request(HTTP_BASE_URL + path, final_headers, method, request_body)
+	
+	if err != OK:
+		http.queue_free()
+		push_error("Couldn't start request to %s: %s" % [path, err])
+		return {"ok": false, "status": 0, "data": null}
+
+	var response: Array = await http.request_completed
+	http.queue_free()
+	
+	var transport_result: int = response[0]
+	var status: int = response[1]
+	
+	if transport_result != HTTPRequest.RESULT_SUCCESS:
+		push_error("Transport failed for %s: %s" % [path, transport_result])
+		return {"ok": false, "status": status, "data": null}
+
+	var bytes: PackedByteArray = response[3]
+	var text := bytes.get_string_from_utf8().strip_edges()
+	var data: Variant = null
+	
+	if not text.is_empty():
+		var json := JSON.new()
+		if json.parse(text) != OK:
+			push_error("Invalid JSON response from " + path)
+			return {"ok": false, "status": status, "data": null}
+		data = json.data
+
+	return {
+		"ok": status >= 200 and status < 300,
+		"status": status,
+		"data": data,
+	}
+
+
+func _handle_token_response(response: Dictionary) -> Dictionary:
+	if not response["ok"]:
+		return response
+
+	var data: Variant = response["data"]
+	if not data is Dictionary:
+		push_error("Token response is not a dictionary")
+		response["ok"] = false
+		return response
+	
+	var new_access_token: Variant = data.get("access_token")
+	var new_refresh_token: Variant = data.get("refresh_token")
+	
+	if not new_access_token is String or not new_refresh_token is String:
+		push_error("Token response contains invalid token types")
+		response["ok"] = false
+		return response
+
+	if new_access_token.is_empty() or new_refresh_token.is_empty():
+		push_error("Token response contains empty tokens")
+		response["ok"] = false
+		return response
+	
+	access_token = new_access_token
+	refresh_token = new_refresh_token
+	access_token_expires_at = (
+		Time.get_ticks_msec() / 1000.0
+		+ ACCESS_TOKEN_EXPIRATION_SECONDS
+		- REFRESH_MARGIN_SECONDS
+	)
+	_save_refresh_token(refresh_token)
+	return response
+
+
+func subscribe_resources(resources: Array[String], request_id: String) -> bool:
+	if not websocket_authenticated:
+		push_error("Couldn't subscribe: WebSocket isn't authenticated or open.")
+		return false
+	var err := socket.send_text(JSON.stringify({
+		"event": "subscribe",
+		"data": {
+			"requestId": request_id,
+			"resources": resources,
+		},
+	}))
+	if err != OK:
+		push_error("Couldn't subscribe to %s: %s" % [str(resources), error_string(err)])
+		return false
+	return true
+
+
+func unsubscribe_resources(resources: Array[String], request_id: String) -> bool:
+	if not websocket_authenticated:
+		push_error("Couldn't unsubscribe: WebSocket isn't authenticated or open.")
+		return false
+	var err := socket.send_text(JSON.stringify({
+		"event": "unsubscribe",
+		"data": {
+			"requestId": request_id,
+			"resources": resources,
+		},
+	}))
+	if err != OK:
+		push_error("Couldn't unsubscribe from %s: %s" % [str(resources), error_string(err)])
+		return false
+	return true
 
 
 func connect_websocket() -> bool:
 	disconnect_websocket()
-
 	socket = WebSocketPeer.new()
 
-	if socket.connect_to_url(WEBSOCKET_URL) != OK:
+	var err := socket.connect_to_url(WEBSOCKET_URL)
+	if err != OK:
+		push_error("Couldn't start WebSocket connection: " + error_string(err))
+		disconnect_websocket()
 		return false
 
 	var timeout := get_tree().create_timer(WEBSOCKET_TIMEOUT_SECONDS)
 
-	while (
-		socket.get_ready_state() == WebSocketPeer.STATE_CONNECTING
-		and timeout.time_left > 0.0
-	):
+	while socket.get_ready_state() == WebSocketPeer.STATE_CONNECTING and timeout.time_left > 0.0:
 		socket.poll()
 		await get_tree().process_frame
 
 	if socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		if timeout.time_left <= 0.0:
+			push_error("WebSocket connection timed out.")
+		else:
+			push_error("WebSocket connection failed.")
+		disconnect_websocket()
 		return false
-
-	var auth_data: Dictionary = (
-		await auth_net.get_websocket_auth_data()
-	)
-
-	if auth_data.is_empty():
+	
+	var token := await _get_valid_access_token()
+	if token.is_empty():
+		push_error("Couldn't authenticate WebSocket: no valid access token.")
+		disconnect_websocket()
 		return false
+	
+	var request_id := "auth-%d" % Time.get_ticks_usec()
+	err = socket.send_text(JSON.stringify({
+		"event": "authenticate",
+		"data": {
+			"accessToken": token,
+			"requestId": request_id,
+		},
+	}))
 
-	if socket.send_text(JSON.stringify({
-		"event": "auth",
-		"data": auth_data,
-	})) != OK:
+	if err != OK:
+		push_error("Couldn't send WebSocket authentication: " + error_string(err))
+		disconnect_websocket()
 		return false
 
 	timeout = get_tree().create_timer(WEBSOCKET_TIMEOUT_SECONDS)
@@ -148,88 +366,101 @@ func connect_websocket() -> bool:
 	while timeout.time_left > 0.0:
 		socket.poll()
 
+		if socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+			push_error("WebSocket disconnected during authentication.")
+			disconnect_websocket()
+			return false
+
 		while socket.get_available_packet_count() > 0:
-			var message := _parse_websocket_message(
-				socket.get_packet().get_string_from_utf8()
-			)
+			var text := socket.get_packet().get_string_from_utf8()
+			var message := _parse_websocket_message(text)
+			var data: Variant = message.get("data", {})
+
+			if not data is Dictionary:
+				continue
+
+			if data.get("requestId") != request_id:
+				_handle_websocket_message(text)
+				continue
 
 			match str(message.get("event", "")):
-				"authOk":
+				"authenticated":
 					websocket_authenticated = true
 					set_process(true)
 					return true
-
-				"authFailed":
+				"error":
+					push_error("WebSocket authentication failed: " + str(data.get("message", "Unknown error")))
+					disconnect_websocket()
 					return false
 
 		await get_tree().process_frame
 
+	push_error("WebSocket authentication timed out.")
+	disconnect_websocket()
 	return false
 
 
 func disconnect_websocket() -> void:
 	set_process(false)
 	websocket_authenticated = false
-
 	if socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
 		socket.close()
-
 	socket = WebSocketPeer.new()
-
-
-func _authenticated_request(
-	path: String,
-	method: HTTPClient.Method = HTTPClient.METHOD_GET,
-	body: Variant = null
-) -> Dictionary:
-	var headers: Array[String] = await auth_net.get_auth_header()
-
-	if headers.is_empty():
-		return {"ok": false, "data": null}
-
-	return await HttpUtils.request(
-		self,
-		HTTP_BASE_URL + path,
-		method,
-		body,
-		headers
-	)
 
 
 func _handle_websocket_message(text: String) -> void:
 	var message := _parse_websocket_message(text)
-
 	if message.is_empty():
 		return
+	
+	var data: Variant = message.get("data")
+	if not data is Dictionary:
+		return
+	
+	match str(message.get("event", "")):
+		"subscribed":
+			var snapshots: Variant = data.get("snapshots")
+			if not snapshots is Dictionary:
+				return
+			subscribed.emit(str(data.get("requestId", "")), snapshots)
+		"unsubscribed":
+			var resources: Variant = data.get("resources")
+			if not resources is Array:
+				return
+			unsubscribed.emit(str(data.get("requestId", "")), resources)
+		"state":
+			if not data.has("snapshot"):
+				return
+			_handle_resource_snapshot(str(data.get("resource", "")), data["snapshot"])
+		"error":
+			var request_id: Variant = data.get("requestId")
+			var error_message := str(data.get("message", "Request failed"))
+			error.emit(request_id if request_id is String else "", error_message)
 
-	var event_name := str(message.get("event", ""))
-	var data: Variant = message.get("data", {})
 
-	match event_name:
-		"lobbyUpdated":
-			if data is Dictionary:
-				lobby_updated.emit(data.get("lobby", {}))
-		"playerUpdated":
-			if data is Dictionary:
-				player_updated.emit(data.get("player", {}))
-		"friendsUpdated":
-			if data is Dictionary:
-				friends_updated.emit(data.get("friends", {}))
-		"gameReady":
-			if data is Dictionary:
-				game_ready_received.emit(
-					str(data.get("ip", "")),
-					int(data.get("port", 0)),
-					str(data.get("playerToken", ""))
-				)
-		"gameOver":
-			if data is Dictionary:
-				game_over_received.emit(data)
-		"gameFailed":
-			if data is Dictionary:
-				game_failed_received.emit(
-					data.get("reason", "")
-				)
+func _handle_resource_snapshot(resource: String, snapshot: Variant) -> void:
+	match resource:
+		"player":
+			if snapshot is Dictionary:
+				player_updated.emit(snapshot)
+		"lobby":
+			if snapshot is Dictionary:
+				lobby_updated.emit(snapshot)
+		"lobbyInvites":
+			if snapshot is Array:
+				lobby_invites_updated.emit(snapshot)
+		"match":
+			if snapshot == null or snapshot is Dictionary:
+				match_updated.emit(snapshot)
+		"friends":
+			if snapshot is Dictionary:
+				friends_updated.emit(snapshot)
+		"rankings":
+			if snapshot is Array:
+				rankings_updated.emit(snapshot)
+		"shop":
+			if snapshot is Dictionary:
+				shop_updated.emit(snapshot)
 
 
 func _parse_websocket_message(text: String) -> Dictionary:
@@ -239,133 +470,87 @@ func _parse_websocket_message(text: String) -> Dictionary:
 		return message
 
 	return {}
-=======
-	if socket_authed and socket.get_ready_state() == WebSocketPeer.STATE_CLOSED:
-		socket_authed = false
-		set_process(false)
-		emit_signal("room_failed_received")
-		return
-	while socket.get_available_packet_count() > 0:
-		var msg = JSON.parse_string(socket.get_packet().get_string_from_utf8())
-		if not (msg is Dictionary):
-			continue
-		var event := str(msg.get("event", ""))
-		var data: Dictionary = msg.get("data", {})
-		match event:
-			"receiveRoomStart":
-				var ip := str(data.get("ip", ""))
-				var port := int(data.get("port", 0))
-				var game_token := str(data.get("gameToken", ""))
-				var player_names = data.get("playerNames", {})
-				if not (player_names is Dictionary):
-					player_names = {}
-				emit_signal("room_start_received", port, ip, game_token, player_names)
-			"roomFailed":
-				emit_signal("room_failed_received")
 
 
-func create_room() -> void:
-	if not (await _connect_ws()):
-		emit_signal("room_failed_received")
-		return
-	var headers = await auth_net.get_auth_header()
-	var response: Dictionary = await HttpUtils.request(
-		self,
-		HTTP_BASE + "/rooms/create",
-		HTTPClient.METHOD_POST,
-		null,
-		headers,
+func _refresh_session() -> AuthResult:
+	var response: Dictionary = await _request(
+		"/sessions/refresh",
+		{"refreshToken": refresh_token}
 	)
-	if not response.get("ok", false) or response.get("data") == null:
-		emit_signal("room_failed_received")
-		return
-	var data: Dictionary = response["data"]
-	var code := str(data.get("code", ""))
-	if code.is_empty():
-		push_error("Backend returned an empty room code")
-		emit_signal("room_failed_received")
-		return
-	emit_signal("room_code_received", code)
-
-
-func join_room(code: String) -> void:
-	if not (await _connect_ws()):
-		emit_signal("room_failed_received")
-		return
-	var headers = await auth_net.get_auth_header()
-	var response: Dictionary = await HttpUtils.request(
-		self,
-		HTTP_BASE + "/rooms/join/" + code,
-		HTTPClient.METHOD_POST,
-		null,
-		headers,
-	)
+	
+	if response.get("status", 0) == 401:
+		return AuthResult.AUTH_REQUIRED
+	
 	if not response.get("ok", false):
-		emit_signal("room_failed_received")
+		return AuthResult.SERVER_UNAVAILABLE
+	
+	var data = response.get("data")
+	if not data is Dictionary:
+		return AuthResult.SERVER_UNAVAILABLE
 
+	var new_access_token := str(data.get("access_token", ""))
+	var new_refresh_token := str(data.get("refresh_token", ""))
 
-func leave_room(code: String) -> void:
-	if code.is_empty():
-		return
-	var headers = await auth_net.get_auth_header()
-	var response: Dictionary = await HttpUtils.request(
-		self,
-		HTTP_BASE + "/rooms/leave/" + code,
-		HTTPClient.METHOD_POST,
-		null,
-		headers,
+	if new_access_token.is_empty() or new_refresh_token.is_empty():
+		return AuthResult.SERVER_UNAVAILABLE
+
+	access_token = new_access_token
+	refresh_token = new_refresh_token
+	access_token_expires_at = (
+		Time.get_ticks_msec() / 1000.0
+		+ ACCESS_TOKEN_EXPIRATION_SECONDS 
+		- REFRESH_MARGIN_SECONDS
 	)
-	if not response.get("ok", false):
-		push_error("Failed to leave room")
+	_save_refresh_token(refresh_token)
+	return AuthResult.SUCCEEDED
 
 
-func _connect_ws() -> bool:
-	if socket_authed and socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
-		return true
-	socket_authed = false
-	socket.close()
-	socket = WebSocketPeer.new()
-	socket.connect_to_url(WS_URL)
-	var connect_timeout := get_tree().create_timer(WS_CONNECT_TIMEOUT)
-	while socket.get_ready_state() == WebSocketPeer.STATE_CONNECTING and connect_timeout.time_left > 0.0:
-		socket.poll()
-		await get_tree().process_frame
-	if socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
-		push_error("WebSocket failed to connect")
-		return false
-	if not await _send_auth():
-		return false
-	var retried_auth := false
-	var auth_timeout := get_tree().create_timer(WS_AUTH_TIMEOUT)
-	while auth_timeout.time_left > 0.0:
-		socket.poll()
-		while socket.get_available_packet_count() > 0:
-			var msg = JSON.parse_string(socket.get_packet().get_string_from_utf8())
-			if not (msg is Dictionary):
-				continue
-			var event := str(msg.get("event", ""))
-			if event == "authOk":
-				socket_authed = true
-				set_process(true)
-				return true
-			if event == "authFailed" and not retried_auth:
-				retried_auth = true
-				if not await _send_auth():
-					return false
-		await get_tree().process_frame
-	push_error("WebSocket auth timed out")
-	return false
+func clear_session() -> void:
+	access_token = ""
+	refresh_token = ""
+	access_token_expires_at = 0.0
+	_save_refresh_token("")
 
 
-func _send_auth() -> bool:
-	var err := socket.send_text(JSON.stringify({
-		"event": "auth",
-		"data": {
-			"accessToken": await auth_net.get_valid_access_token()
-		}
-	}))
+func _save_refresh_token(token: String) -> void:
+	# Debug only
+	var suffix := ""
+	if OS.has_feature("1"):
+		suffix = "1"
+	elif OS.has_feature("2"):
+		suffix = "2"
+	elif OS.has_feature("3"):
+		suffix = "3"
+	elif OS.has_feature("4"):
+		suffix = "4"
+	
+	var cfg := ConfigFile.new()
+	cfg.set_value("auth", "refresh_token", token)
+	cfg.save("user://session" + suffix + ".cfg")
+
+
+func _load_refresh_token() -> String:
+	# Debug only
+	var suffix := ""
+	if OS.has_feature("1"):
+		suffix = "1"
+	elif OS.has_feature("2"):
+		suffix = "2"
+	elif OS.has_feature("3"):
+		suffix = "3"
+	elif OS.has_feature("4"):
+		suffix = "4"
+	
+	var cfg := ConfigFile.new()
+	var err := cfg.load("user://session" + suffix + ".cfg")
 	if err != OK:
-		push_error("WebSocket auth failed to send: %s" % err)
-		return false
-	return true
->>>>>>> origin/main
+		return ""
+	return str(cfg.get_value("auth", "refresh_token", ""))
+
+
+func _get_valid_access_token() -> String:
+	if not access_token.is_empty() and Time.get_ticks_msec() / 1000.0 < access_token_expires_at:
+		return access_token
+	if await _refresh_session() == AuthResult.SUCCEEDED:
+		return access_token
+	return ""

@@ -1,33 +1,110 @@
 [gd_scene format=3 uid="uid://ppa3hwhuennd"]
 
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_is4br"]
+[ext_resource type="Texture2D" uid="uid://bx5iaq65mhmy0" path="res://ui/loading/loading.png" id="2_2jffr"]
+[ext_resource type="Script" uid="uid://buxyryc5tw5dq" path="res://ui/loading/loading.gd" id="3_6oitr"]
+[ext_resource type="Texture2D" uid="uid://be3owkqie4hwj" path="res://ui/logo.png" id="3_dbd3p"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="4_jqdbn"]
 
-[node name="Loading" type="Control" unique_id=162888719]
-layout_mode = 3
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dbd3p"]
+bg_color = Color(0, 0, 0, 0.2509804)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6oitr"]
+bg_color = Color(0.99215686, 0.7372549, 0.11372549, 1)
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
+
+[node name="Loading" type="TextureRect" unique_id=699442503]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("1_is4br")
+texture = ExtResource("2_2jffr")
+stretch_mode = 6
+script = ExtResource("3_6oitr")
 
-[node name="ColorRect" type="ColorRect" parent="." unique_id=646919462]
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1457983582]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0, 0, 0, 1)
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
 
-[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1335776576]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="Label" type="Label" parent="CenterContainer" unique_id=521363744]
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1816232713]
+custom_minimum_size = Vector2(1024, 0)
 layout_mode = 2
-text = "Loading..."
+size_flags_horizontal = 4
+theme_override_constants/separation = 64
+
+[node name="ShrinkButton" parent="MarginContainer/VBoxContainer" unique_id=604162406 instance=ExtResource("4_jqdbn")]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/ShrinkButton" unique_id=1352433491]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 3
+texture = ExtResource("3_dbd3p")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=1870758832]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1331977159]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+text = "LOADING..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressBar" type="ProgressBar" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1381331651]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_dbd3p")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6oitr")
+value = 42.0
+
+[node name="SecondsElapsedLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1600109878]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="Timer" type="Timer" parent="." unique_id=1757382241]
+unique_name_in_owner = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

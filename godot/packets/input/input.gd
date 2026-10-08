@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 class_name ParticipantInput
 extends RefCounted
-=======
-class_name PlayerInput
-extends Node
->>>>>>> origin/main
 
 var tick: int
 

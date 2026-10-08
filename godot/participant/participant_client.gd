@@ -24,8 +24,6 @@ var armour_id: String
 var melee_id: String
 var ranged_id: String
 
-var camera: Camera2D
-
 @onready var status := $Status
 @onready var name_label := $Status/NameLabel
 @onready var heart_container := $Status/VBoxContainer/HeartContainer
@@ -74,7 +72,6 @@ func apply_snapshot(snapshot: ParticipantSnapshot) -> void:
 	health_bar.value = snapshot.health
 	
 	_update_hearts(snapshot)
-	_update_camera()
 	_update_ability_state(snapshot)
 	_update_armour(snapshot)
 	_update_weapons(snapshot)
@@ -101,11 +98,6 @@ func _update_hearts(snapshot: ParticipantSnapshot) -> void:
 	for i in snapshot.hearts:
 		var new_heart = HEART.instantiate()
 		heart_container.add_child(new_heart)
-
-
-func _update_camera() -> void:
-	if local:
-		camera.global_position = global_position
 
 
 func _update_ability_state(snapshot: ParticipantSnapshot) -> void:

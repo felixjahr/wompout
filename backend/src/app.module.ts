@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-<<<<<<< HEAD
 import { AuthModule } from './auth/auth.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
@@ -12,6 +11,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { MatchmakingModule } from './matchmaking/matchmaking.module';
 import { PlayersModule } from './players/players.module';
+import { ShopModule } from './shop/shop.module';
+import { RankingsModule } from './rankings/rankings.module';
+import { MatchesModule } from './matches/matches.module';
+import { SessionsModule } from './sessions/sessions.module';
 
 @Module({
   imports: [
@@ -27,17 +30,11 @@ import { PlayersModule } from './players/players.module';
     FriendsModule,
     MatchmakingModule,
     PlayersModule,
+    ShopModule,
+    RankingsModule,
+    MatchesModule,
+    SessionsModule,
   ],
-=======
-import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { RoomsModule } from './rooms/rooms.module';
-import { AuthModule } from './auth/auth.module';
-
-@Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), RoomsModule, AuthModule],
->>>>>>> origin/main
   controllers: [AppController],
   providers: [AppService],
 })

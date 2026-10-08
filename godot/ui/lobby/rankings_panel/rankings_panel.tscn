@@ -1,0 +1,85 @@
+[gd_scene format=3 uid="uid://ceqje6b6jfyi"]
+
+[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_r1jfr"]
+[ext_resource type="Script" uid="uid://b6hkmvfsmua3w" path="res://ui/lobby/rankings_panel/rankings_panel.gd" id="2_1ee2i"]
+[ext_resource type="PackedScene" uid="uid://bm0hcarc33bl4" path="res://ui/lobby/player_entry/player_entry.tscn" id="3_4py1c"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/close_button.tscn" id="6_hk2k5"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7p47"]
+bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
+border_width_left = 10
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 8.0
+expand_margin_right = 128.0
+
+[node name="RankingsPanel" type="Panel" unique_id=1844430048]
+custom_minimum_size = Vector2(1080, 0)
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("1_r1jfr")
+theme_override_styles/panel = SubResource("StyleBoxFlat_c7p47")
+script = ExtResource("2_1ee2i")
+side = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=353949477]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1954097641]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="Label" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1941392049]
+layout_mode = 2
+text = "RANKS"
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxContainer" unique_id=111203786]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer" unique_id=746457590]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 32
+
+[node name="PlayerEntryContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" unique_id=218999533]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="PlayerEntry" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/PlayerEntryContainer" unique_id=1394677650 instance=ExtResource("3_4py1c")]
+layout_mode = 2
+
+[node name="PlayerEntry2" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/PlayerEntryContainer" unique_id=1368919333 instance=ExtResource("3_4py1c")]
+layout_mode = 2
+
+[node name="PlayerEntry3" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/PlayerEntryContainer" unique_id=1173378065 instance=ExtResource("3_4py1c")]
+layout_mode = 2
+
+[node name="PlayerEntry4" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/PlayerEntryContainer" unique_id=435130305 instance=ExtResource("3_4py1c")]
+layout_mode = 2
+
+[node name="PlayerEntry5" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/PlayerEntryContainer" unique_id=754634683 instance=ExtResource("3_4py1c")]
+layout_mode = 2
+
+[node name="CloseButton" parent="." unique_id=2013356944 instance=ExtResource("6_hk2k5")]
+layout_mode = 1
+
+[connection signal="pressed" from="CloseButton" to="." method="_on_close_button_pressed"]

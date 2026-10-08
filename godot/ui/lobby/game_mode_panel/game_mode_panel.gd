@@ -1,6 +1,7 @@
 extends LobbyPanel
 
 signal game_mode_selected(mode_id: String)
+signal closed
 
 const GAME_MODE_ENTRY := preload("res://ui/lobby/game_mode_panel/game_mode_entry.tscn")
 
@@ -8,7 +9,7 @@ const GAME_MODE_ENTRY := preload("res://ui/lobby/game_mode_panel/game_mode_entry
 @onready var unranked_container := %UnrankedContainer
 
 
-func render_game_mode_panel() -> void:
+func _ready() -> void:
 	for child in ranked_container.get_children():
 		child.queue_free()
 	for child in unranked_container.get_children():
@@ -23,10 +24,9 @@ func render_game_mode_panel() -> void:
 		new_game_mode_entry.pressed.connect(_on_game_mode_entry_pressed.bind(mode_id))
 
 
-func _on_close_button_pressed() -> void:
-	animate_panel(false)
-
-
 func _on_game_mode_entry_pressed(mode_id: String) -> void:
-	animate_panel(false)
 	game_mode_selected.emit(mode_id)
+
+
+func _on_close_button_pressed() -> void:
+	closed.emit()

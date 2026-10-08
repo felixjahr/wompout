@@ -8,14 +8,15 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { LobbiesService } from './lobbies.service';
-import { AuthGuard } from '../auth/auth.guard';
-import { PlayerId } from '../auth/decorators/player-id.decorator';
+import { SessionsGuard } from '../sessions/sessions.guard';
+import { PlayerId } from '../sessions/decorators/player-id.decorator';
 import { InvitePlayerRequestDto } from './dto/invite-player-request.dto';
 import { UpdateModeRequestDto } from './dto/update-mode-request.dto';
 import { UpdateReadyRequestDto } from './dto/update-ready-request.dto';
+import { UpdateLoadoutRequestDto } from './dto/update-loadout-request.dto';
 
 @Controller('lobbies')
-@UseGuards(AuthGuard)
+@UseGuards(SessionsGuard)
 export class LobbiesController {
   constructor(private readonly lobbiesService: LobbiesService) {}
 
@@ -68,5 +69,14 @@ export class LobbiesController {
     @Body() request: UpdateReadyRequestDto,
   ): void {
     this.lobbiesService.updateReady(playerId, request);
+  }
+
+  @Post('loadout')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  updateLoadout(
+    @PlayerId() playerId: string,
+    @Body() request: UpdateLoadoutRequestDto,
+  ): Promise<void> {
+    return this.lobbiesService.updateLoadout(playerId, request);
   }
 }
