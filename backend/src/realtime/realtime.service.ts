@@ -84,11 +84,7 @@ export class RealtimeService {
     return result;
   }
 
-  async authenticate(
-    client: WebSocket,
-    requestId: string,
-    accessToken: string,
-  ): Promise<void> {
+  async authenticate(client: WebSocket, accessToken: string): Promise<void> {
     const connection = this.getConnection(client);
     const identity = await this.sessionsService.verifyAccessToken(accessToken);
 
@@ -129,7 +125,7 @@ export class RealtimeService {
 
     this.send(client, {
       event: 'authenticated',
-      data: { requestId },
+      data: {},
     });
 
     if (firstAuthentication) {
@@ -143,11 +139,7 @@ export class RealtimeService {
     }
   }
 
-  async subscribe(
-    client: WebSocket,
-    requestId: string,
-    resources: ResourceName[],
-  ): Promise<void> {
+  async subscribe(client: WebSocket, resources: ResourceName[]): Promise<void> {
     const connection = this.getAuthenticatedConnection(client);
     const playerId = connection.identity!.playerId;
     const requested = [...new Set(resources)];
@@ -182,7 +174,7 @@ export class RealtimeService {
 
         this.send(client, {
           event: 'subscribed',
-          data: { requestId, snapshots },
+          data: { snapshots },
         });
 
         return;
@@ -194,11 +186,7 @@ export class RealtimeService {
     }
   }
 
-  unsubscribe(
-    client: WebSocket,
-    requestId: string,
-    resources: ResourceName[],
-  ): void {
+  unsubscribe(client: WebSocket, resources: ResourceName[]): void {
     const connection = this.getAuthenticatedConnection(client);
 
     for (const resource of resources) {
@@ -207,7 +195,7 @@ export class RealtimeService {
 
     this.send(client, {
       event: 'unsubscribed',
-      data: { requestId, resources },
+      data: { resources },
     });
   }
 

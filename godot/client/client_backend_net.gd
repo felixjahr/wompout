@@ -1,8 +1,8 @@
 extends Node
 
-signal subscribed(request_id: String, snapshots: Dictionary)
-signal unsubscribed(request_id: String, resources: Array)
-signal error(request_id: String, message: String)
+signal subscribed(snapshots: Dictionary)
+signal unsubscribed(resources: Array)
+signal error(message: String)
 
 signal player_updated(player: Dictionary)
 signal lobby_updated(lobby: Dictionary)
@@ -283,14 +283,13 @@ func _handle_token_response(response: Dictionary) -> Dictionary:
 	return response
 
 
-func subscribe_resources(resources: Array[String], request_id: String) -> bool:
+func subscribe_resources(resources: Array[String]) -> bool:
 	if not websocket_authenticated:
 		push_error("Couldn't subscribe: WebSocket isn't authenticated or open.")
 		return false
 	var err := socket.send_text(JSON.stringify({
 		"event": "subscribe",
 		"data": {
-			"requestId": request_id,
 			"resources": resources,
 		},
 	}))
@@ -300,14 +299,13 @@ func subscribe_resources(resources: Array[String], request_id: String) -> bool:
 	return true
 
 
-func unsubscribe_resources(resources: Array[String], request_id: String) -> bool:
+func unsubscribe_resources(resources: Array[String]) -> bool:
 	if not websocket_authenticated:
 		push_error("Couldn't unsubscribe: WebSocket isn't authenticated or open.")
 		return false
 	var err := socket.send_text(JSON.stringify({
 		"event": "unsubscribe",
 		"data": {
-			"requestId": request_id,
 			"resources": resources,
 		},
 	}))
@@ -346,13 +344,11 @@ func connect_websocket() -> bool:
 		push_error("Couldn't authenticate WebSocket: no valid access token.")
 		disconnect_websocket()
 		return false
-	
-	var request_id := "auth-%d" % Time.get_ticks_usec()
+
 	err = socket.send_text(JSON.stringify({
 		"event": "authenticate",
 		"data": {
 			"accessToken": token,
-			"requestId": request_id,
 		},
 	}))
 
@@ -377,10 +373,6 @@ func connect_websocket() -> bool:
 			var data: Variant = message.get("data", {})
 
 			if not data is Dictionary:
-				continue
-
-			if data.get("requestId") != request_id:
-				_handle_websocket_message(text)
 				continue
 
 			match str(message.get("event", "")):
@@ -422,20 +414,18 @@ func _handle_websocket_message(text: String) -> void:
 			var snapshots: Variant = data.get("snapshots")
 			if not snapshots is Dictionary:
 				return
-			subscribed.emit(str(data.get("requestId", "")), snapshots)
+			subscribed.emit(snapshots)
 		"unsubscribed":
 			var resources: Variant = data.get("resources")
 			if not resources is Array:
 				return
-			unsubscribed.emit(str(data.get("requestId", "")), resources)
+			unsubscribed.emit(resources)
 		"state":
 			if not data.has("snapshot"):
 				return
 			_handle_resource_snapshot(str(data.get("resource", "")), data["snapshot"])
 		"error":
-			var request_id: Variant = data.get("requestId")
-			var error_message := str(data.get("message", "Request failed"))
-			error.emit(request_id if request_id is String else "", error_message)
+			error.emit(str(data.get("message", "Request failed")))
 
 
 func _handle_resource_snapshot(resource: String, snapshot: Variant) -> void:

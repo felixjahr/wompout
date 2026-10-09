@@ -47,11 +47,7 @@ export class RealtimeGateway
     @MessageBody() payload: AuthenticateDto,
   ): Promise<void> {
     return this.realtimeService.enqueue(client, () =>
-      this.realtimeService.authenticate(
-        client,
-        payload.requestId,
-        payload.accessToken,
-      ),
+      this.realtimeService.authenticate(client, payload.accessToken),
     );
   }
 
@@ -61,11 +57,7 @@ export class RealtimeGateway
     @MessageBody() payload: SubscriptionDto,
   ): Promise<void> {
     return this.realtimeService.enqueue(client, () =>
-      this.realtimeService.subscribe(
-        client,
-        payload.requestId,
-        payload.resources,
-      ),
+      this.realtimeService.subscribe(client, payload.resources),
     );
   }
 
@@ -75,11 +67,7 @@ export class RealtimeGateway
     @MessageBody() payload: SubscriptionDto,
   ): Promise<void> {
     return this.realtimeService.enqueue(client, () =>
-      this.realtimeService.unsubscribe(
-        client,
-        payload.requestId,
-        payload.resources,
-      ),
+      this.realtimeService.unsubscribe(client, payload.resources),
     );
   }
 }

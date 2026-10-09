@@ -36,7 +36,6 @@ var player: Dictionary = {}
 var lobby_invites = []
 var current_match = null
 
-var startup_request_id := ""
 var connected_game_id := ""
 var displayed_game_id := ""
 
@@ -149,7 +148,6 @@ func _load_session() -> void:
 		
 		connected_game_id = ""
 		displayed_game_id = ""
-		startup_request_id = ""
 		
 		var auth_result = await backend_net.authenticate()
 		
@@ -169,9 +167,7 @@ func _load_session() -> void:
 			
 			if connected:
 				ui.set_progress(42.0)
-				startup_request_id = "startup-%d" % Time.get_ticks_usec()
-				
-				var subscribed: bool = backend_net.subscribe_resources(STARTUP_RESOURCES, startup_request_id)
+				var subscribed: bool = backend_net.subscribe_resources(STARTUP_RESOURCES)
 				if subscribed:
 					ui.set_progress(69.0)
 					var timeout := get_tree().create_timer(8.0)
@@ -186,7 +182,6 @@ func _load_session() -> void:
 		if state != ClientState.LOADING:
 			return
 		
-		startup_request_id = ""
 		backend_net.disconnect_websocket()
 		
 		await get_tree().create_timer(retry_delay).timeout
@@ -240,7 +235,7 @@ func _apply_match_state() -> void:
 				push_error("Could not acknowledge the match result.")
 
 
-func _on_backend_net_subscribed(request_id: String, snapshots: Dictionary) -> void:
+func _on_backend_net_subscribed(snapshots: Dictionary) -> void:
 	if snapshots.has("friends"):
 		_on_backend_net_friends_updated(snapshots["friends"])
 	if snapshots.has("rankings"):
@@ -249,8 +244,6 @@ func _on_backend_net_subscribed(request_id: String, snapshots: Dictionary) -> vo
 		_on_backend_net_shop_updated(snapshots["shop"])
 	
 	if state != ClientState.LOADING:
-		return
-	if startup_request_id.is_empty() or request_id != startup_request_id:
 		return
 	for resource in STARTUP_RESOURCES:
 		if not snapshots.has(resource):
@@ -262,12 +255,11 @@ func _on_backend_net_subscribed(request_id: String, snapshots: Dictionary) -> vo
 	lobby_invites = snapshots["lobbyInvites"]
 	current_match = snapshots["match"]
 
-	startup_request_id = ""
 	_apply_match_state()
 	_try_redeem_friend_invites()
 
 
-func _on_backend_net_error(_request_id: String, message: String) -> void:
+func _on_backend_net_error(message: String) -> void:
 	push_error(message)
 
 
@@ -479,21 +471,13 @@ func _on_lobby_create_invite_requested() -> void:
 
 func _on_lobby_resource_opened(resource: String) -> void:
 	var resources: Array[String] = [resource]
-	var request_id := "open-%s-%d" % [
-		resource,
-		Time.get_ticks_usec(),
-	]
-	if not backend_net.subscribe_resources(resources, request_id):
+	if not backend_net.subscribe_resources(resources):
 		show_error("Couldn't load this content. Please reopen it to try again.")
 
 
 func _on_lobby_resource_closed(resource: String) -> void:
 	var resources: Array[String] = [resource]
-	var request_id := "close-%s-%d" % [
-		resource,
-		Time.get_ticks_usec(),
-	]
-	backend_net.unsubscribe_resources(resources, request_id)
+	backend_net.unsubscribe_resources(resources)
 
 
 func _on_gameover_continue_pressed() -> void:

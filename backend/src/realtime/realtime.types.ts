@@ -33,14 +33,12 @@ export type ClientMessage =
   | {
       event: 'authenticate';
       data: {
-        requestId: string;
         accessToken: string;
       };
     }
   | {
       event: 'subscribe' | 'unsubscribe';
       data: {
-        requestId: string;
         resources: ResourceName[];
       };
     };
@@ -48,21 +46,17 @@ export type ClientMessage =
 export type ServerMessage =
   | {
       event: 'authenticated';
-      data: {
-        requestId: string;
-      };
+      data: Record<string, never>;
     }
   | {
       event: 'subscribed';
       data: {
-        requestId: string;
         snapshots: Partial<Resources>;
       };
     }
   | {
       event: 'unsubscribed';
       data: {
-        requestId: string;
         resources: ResourceName[];
       };
     }
@@ -70,7 +64,6 @@ export type ServerMessage =
   | {
       event: 'error';
       data: {
-        requestId: string | null;
         message: string;
       };
     };

@@ -17,7 +17,6 @@ export class RealtimeFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost): void {
     const context = host.switchToWs();
     const client = context.getClient<WebSocket>();
-    const payload = context.getData<unknown>();
 
     let message = 'An unexpected error occurred';
 
@@ -38,10 +37,7 @@ export class RealtimeFilter implements ExceptionFilter {
 
     const response: ServerMessage = {
       event: 'error',
-      data: {
-        requestId: this.getRequestId(payload),
-        message,
-      },
+      data: { message },
     };
 
     if (client.readyState !== WebSocket.OPEN) return;
@@ -60,23 +56,5 @@ export class RealtimeFilter implements ExceptionFilter {
     } catch {
       client.terminate();
     }
-  }
-
-  private getRequestId(payload: unknown): string | null {
-    if (
-      typeof payload !== 'object' ||
-      payload === null ||
-      !('requestId' in payload)
-    ) {
-      return null;
-    }
-
-    const requestId = payload.requestId;
-
-    return typeof requestId === 'string' &&
-      requestId.length > 0 &&
-      requestId.length <= 100
-      ? requestId
-      : null;
   }
 }
