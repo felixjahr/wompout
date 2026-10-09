@@ -20,8 +20,8 @@ enum AuthResult {
 	SERVER_UNAVAILABLE,
 }
 
-const HTTP_BASE_URL := "http://127.0.0.1:3000"
-const WEBSOCKET_URL := "ws://127.0.0.1:3000/ws"
+const HTTP_BASE_URL := "https://api.wompout.com"
+const WEBSOCKET_URL := "wss://api.wompout.com/ws"
 
 const HTTP_TIMEOUT_SECONDS := 10.0
 const WEBSOCKET_TIMEOUT_SECONDS := 8.0

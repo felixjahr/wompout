@@ -11740,7 +11740,6 @@ region_rect = Rect2(0, 96, 88, 48)
 metadata/_edit_lock_ = true
 
 [node name="LeftLowerArm" type="Sprite2D" parent="Sprite/LowerTorso/UpperTorso/LeftShoulder/LeftUpperArm" unique_id=761920105]
-show_behind_parent = true
 position = Vector2(40, 0)
 scale = Vector2(0.9999997, 0.9999997)
 texture = ExtResource("12_bb5te")
@@ -11772,7 +11771,6 @@ region_rect = Rect2(0, 0, 88, 48)
 metadata/_edit_lock_ = true
 
 [node name="RightLowerArm" type="Sprite2D" parent="Sprite/LowerTorso/UpperTorso/RightShoulder/RightUpperArm" unique_id=1266056477]
-show_behind_parent = true
 position = Vector2(40, 0)
 texture = ExtResource("12_bb5te")
 offset = Vector2(20, 0)
@@ -11792,7 +11790,7 @@ position = Vector2(40, 0)
 
 [node name="WeaponSprite" type="Sprite2D" parent="Sprite/LowerTorso/UpperTorso/RightShoulder/RightUpperArm/RightLowerArm/WeaponPivot" unique_id=1595704138]
 position = Vector2(23.959507, -4.6291533)
-texture = ExtResource("6_xgd6i")
+texture = ExtResource("3_ibifu")
 metadata/_edit_lock_ = true
 
 [node name="WeaponEffect" type="Sprite2D" parent="Sprite/LowerTorso/UpperTorso/RightShoulder/RightUpperArm/RightLowerArm/WeaponPivot" unique_id=1295638280]

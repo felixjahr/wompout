@@ -19,8 +19,6 @@ services:
     build:
       context: ./backend
     restart: always
-    ports:
-      - "3000:3000"
     env_file:
       - .env
     environment:
@@ -30,5 +28,20 @@ services:
     depends_on:
       - postgres
 
+  caddy:
+    image: caddy:2
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - backend
+
 volumes:
   postgres_data:
+  caddy_data:
+  caddy_config:
