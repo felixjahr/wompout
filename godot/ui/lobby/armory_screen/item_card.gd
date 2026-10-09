@@ -1,4 +1,4 @@
-extends ShrinkButton
+extends AnimatedButton
 
 @onready var item_texture_rect := %ItemTextureRect
 

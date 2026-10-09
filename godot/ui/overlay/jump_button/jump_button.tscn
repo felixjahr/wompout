@@ -7,6 +7,8 @@
 [node name="JumpButton" type="Control" unique_id=673379120]
 layout_mode = 3
 anchors_preset = 0
+offset_right = 200.0
+offset_bottom = 200.0
 script = ExtResource("1_k61u5")
 texture_pressed = ExtResource("2_fnr6x")
 

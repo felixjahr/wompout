@@ -1,10 +1,10 @@
-extends LobbyPanel
+extends AnimatedPanel
 
 signal add_friends_button_pressed
 signal player_invited(playerId: String)
 signal closed
 
-const PlayerEntry := preload("res://ui/lobby//player_entry/player_entry.tscn")
+const PlayerEntry := preload("res://ui/shared/player_entry/player_entry.tscn")
 
 @onready var online_container := %OnlineContainer
 @onready var offline_container := %OfflineContainer

@@ -117,6 +117,7 @@ func apply_hit(damage: int, attacker_player_id := "", effect_id := "", effect_po
 	health -= damage * damage_multiplier
 	var event := HitEventSnapshot.new()
 	event.victim_player_id = participant_id
+	event.attacker_player_id = attacker_player_id
 	event.effect_id = effect_id
 	event.effect_position = effect_position
 	logic.report_event(event)

@@ -4,6 +4,7 @@ import { PlayerLoadout } from '../players/players.types';
 export interface LobbyPlayer {
   id: string;
   displayName: string;
+  trophies: number;
   ready: boolean;
   loadout: PlayerLoadout;
 }
@@ -17,8 +18,11 @@ export interface LobbyInvite {
 
 export interface LobbyInviteSnapshot {
   inviteId: string;
-  sourcePlayerId: string;
-  sourceDisplayName: string;
+  sourcePlayer: {
+    id: string;
+    displayName: string;
+    trophies: number;
+  };
 }
 
 export interface Lobby {

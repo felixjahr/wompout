@@ -3,7 +3,7 @@ class_name Joystick
 
 signal released(direction: Vector2)
 
-const DEADZONE_SIZE: float = 10
+const DEADZONE_SIZE: float = 30
 const CLAMPZONE_SIZE: float = 120
 
 @export var tip_pressed: Texture2D
@@ -66,7 +66,7 @@ func _update_output(touch_position: Vector2) -> void:
 		output = vector.normalized()
 	else:
 		if is_outside_deadzone:
-			Input.vibrate_handheld(30)
+			Input.vibrate_handheld(20)
 		is_outside_deadzone = false
 		output = Vector2.ZERO
 

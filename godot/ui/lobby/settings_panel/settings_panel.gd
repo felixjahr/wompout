@@ -1,4 +1,4 @@
-extends LobbyPanel
+extends AnimatedPanel
 
 signal logout_requested
 signal start_link_requested(email: String, on_completed: Callable)

@@ -1,8 +1,8 @@
-extends LobbyPanel
+extends AnimatedPanel
 
 signal closed
 
-const PlayerEntry := preload("res://ui/lobby//player_entry/player_entry.tscn")
+const PlayerEntry := preload("res://ui/shared/player_entry/player_entry.tscn")
 
 @onready var player_entry_container := %PlayerEntryContainer
 

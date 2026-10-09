@@ -2,11 +2,11 @@
 
 [ext_resource type="Script" uid="uid://dl705b8jfsfkc" path="res://ui/lobby/armory_screen/armory_screen.gd" id="1_ajc3h"]
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="2_i86d6"]
-[ext_resource type="Script" uid="uid://db3luxn6g70v7" path="res://ui/lobby/lobby_panel.gd" id="3_yt16h"]
-[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/close_button.tscn" id="4_lr8ns"]
-[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="5_agi0w"]
+[ext_resource type="Script" uid="uid://db3luxn6g70v7" path="res://ui/shared/animated_panel/animated_panel.gd" id="3_yt16h"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/shared/close_button/close_button.tscn" id="4_lr8ns"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="5_agi0w"]
 [ext_resource type="PackedScene" uid="uid://cuu0quwq1d46k" path="res://ui/lobby/armory_screen/item_entry.tscn" id="5_s4758"]
-[ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/lobby/platform/platform.tscn" id="7_f5oej"]
+[ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/shared/platform/platform.tscn" id="7_f5oej"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7p47"]
 bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
@@ -358,4 +358,5 @@ grow_horizontal = 1
 size_flags_horizontal = 1
 metadata/_edit_use_anchors_ = true
 
+[connection signal="hidden" from="ArmoryPanel" to="." method="_on_armory_panel_hidden"]
 [connection signal="pressed" from="ArmoryPanel/CloseButton" to="." method="_on_close_button_pressed"]

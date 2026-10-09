@@ -1,11 +1,10 @@
 [gd_scene format=3 uid="uid://blcpf8cku6m65"]
 
-[ext_resource type="PackedScene" uid="uid://bm0hcarc33bl4" path="res://ui/lobby/player_entry/player_entry.tscn" id="1_4vh4t"]
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_mxp8a"]
-[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/grey_button.png" id="2_mxp8a"]
+[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/shared/animated_button/grey_button.png" id="2_mxp8a"]
 [ext_resource type="Script" uid="uid://dy7d7klb78k1b" path="res://ui/lobby/friends_panel/friends_panel.gd" id="2_r4evk"]
-[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="5_4yd2w"]
-[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/close_button.tscn" id="10_ypg3x"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="5_4yd2w"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/shared/close_button/close_button.tscn" id="10_ypg3x"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7p47"]
 bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
@@ -22,11 +21,12 @@ texture_margin_right = 64.0
 texture_margin_bottom = 64.0
 
 [node name="FriendsPanel" type="Panel" unique_id=1844430048]
-custom_minimum_size = Vector2(1080, 0)
+custom_minimum_size = Vector2(1176, 0)
 anchors_preset = 11
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -1176.0
 grow_horizontal = 0
 grow_vertical = 2
 theme = ExtResource("1_mxp8a")
@@ -43,7 +43,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/margin_left = 64
 theme_override_constants/margin_top = 64
-theme_override_constants/margin_right = 64
+theme_override_constants/margin_right = 160
 theme_override_constants/margin_bottom = 64
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1954097641]
@@ -84,15 +84,6 @@ unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="PlayerEntry" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/OnlineContainer" unique_id=37441086 instance=ExtResource("1_4vh4t")]
-layout_mode = 2
-
-[node name="PlayerEntry2" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/OnlineContainer" unique_id=914818965 instance=ExtResource("1_4vh4t")]
-layout_mode = 2
-
-[node name="PlayerEntry3" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer/OnlineContainer" unique_id=260561602 instance=ExtResource("1_4vh4t")]
-layout_mode = 2
-
 [node name="OfflineLabel" type="Label" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer" unique_id=22693622]
 unique_name_in_owner = true
 layout_mode = 2
@@ -110,21 +101,6 @@ theme_override_constants/margin_left = 16
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_constants/separation = 8
-
-[node name="PlayerEntry" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/OfflineContainer" unique_id=1394677650 instance=ExtResource("1_4vh4t")]
-layout_mode = 2
-
-[node name="PlayerEntry2" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/OfflineContainer" unique_id=1368919333 instance=ExtResource("1_4vh4t")]
-layout_mode = 2
-
-[node name="PlayerEntry3" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/OfflineContainer" unique_id=1173378065 instance=ExtResource("1_4vh4t")]
-layout_mode = 2
-
-[node name="PlayerEntry4" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/OfflineContainer" unique_id=435130305 instance=ExtResource("1_4vh4t")]
-layout_mode = 2
-
-[node name="PlayerEntry5" parent="MarginContainer/VBoxContainer/ScrollContainer/VBoxContainer/MarginContainer2/OfflineContainer" unique_id=754634683 instance=ExtResource("1_4vh4t")]
-layout_mode = 2
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=810681454]
 layout_mode = 2

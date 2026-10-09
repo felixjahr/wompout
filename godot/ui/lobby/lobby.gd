@@ -20,6 +20,9 @@ const PLAY_BUTTON_PANEL_TEXTURES := {
 	"pressed": preload("res://ui/lobby/play_button_pressed.png"),
 }
 
+var pending_lobby_invites := []
+var local_player_id: String
+
 @onready var play_button := %PlayButton
 @onready var play_button_panel := %PlayButtonPanel
 @onready var play_button_label := %PlayButtonLabel
@@ -39,6 +42,7 @@ const PLAY_BUTTON_PANEL_TEXTURES := {
 @onready var rankings_panel := %RankingsPanel
 @onready var armory_screen := %ArmoryScreen
 @onready var settings_panel := %SettingsPanel
+@onready var invite_popup := %InvitePopup
 
 @onready var platform_area := %PlatformArea
 
@@ -50,29 +54,19 @@ const PLAY_BUTTON_PANEL_TEXTURES := {
 ]
 
 
-func _ready() -> void:
-	# DEBUG
-	main_panel.show()
-	friends_panel.hide()
-	rankings_panel.hide()
-	game_mode_panel.hide()
-	platform_area.show()
-	armory_screen.show()
-	armory_screen.armory_panel.hide()
-	armory_screen.platform.hide()
-	settings_panel.hide()
-
-
-func render_lobby(lobby: Dictionary, player: Dictionary, lobby_invites: Array) -> void:
-	var local_lobby_player: Dictionary
-	for lobby_player in lobby["players"]:
-		if lobby_player["id"] == player["id"]:
-			local_lobby_player = lobby_player
-			break
-	
+func render_player(player: Dictionary) -> void:
 	name_label.text = player["displayName"]
 	trophies_label.text = str(int(player["trophies"]))
-	
+	armory_screen.render_armory(player)
+	settings_panel.render_settings(player)
+
+
+func render_lobby(lobby: Dictionary) -> void:
+	var local_lobby_player: Dictionary
+	for lobby_player in lobby["players"]:
+		if lobby_player["id"] == local_player_id:
+			local_lobby_player = lobby_player
+			break
 	play_button.disabled = lobby["status"] != "open"
 	play_button.set_pressed_no_signal(local_lobby_player["ready"])
 	var play_button_panel_stylebox: StyleBoxTexture = play_button_panel.get_theme_stylebox("panel")
@@ -81,14 +75,12 @@ func render_lobby(lobby: Dictionary, player: Dictionary, lobby_invites: Array) -
 		play_button_label.text = "PLAY"
 	else:
 		play_button_label.text = "READY"
-	
 	var mode := Data.MODES[lobby["modeId"]]
 	game_mode_label.text = mode.display_name
 	ranked_label.text = "RANKED" if mode.ranked else "UNRANKED"
 	var ranked_label_color := Color("dcb742") if mode.ranked else Color("3d70ff")
 	ranked_label.add_theme_color_override("font_color", ranked_label_color)
 	game_mode_texture_rect.texture = mode.icon_texture
-	
 	for platform in platforms:
 		platform.hide()
 	platforms[0].render_platform(local_lobby_player, local_lobby_player["ready"], true)
@@ -100,13 +92,11 @@ func render_lobby(lobby: Dictionary, player: Dictionary, lobby_invites: Array) -
 		platforms[next_platform_index].render_platform(lobby_player, lobby_player["ready"], false)
 		platforms[next_platform_index].show()
 		next_platform_index += 1
-	
-	armory_screen.render_armory(player)
-	settings_panel.render_settings(player)
-	
-	# DEBUG
-	for invite in lobby_invites:
-		accept_invite_requested.emit(invite["inviteId"])
+
+
+func render_lobby_invites(lobby_invites: Array) -> void:
+	pending_lobby_invites.append_array(lobby_invites)
+	_try_show_lobby_invites()
 
 
 func render_friends(friends: Dictionary) -> void:
@@ -120,6 +110,11 @@ func render_rankings(rankings: Dictionary) -> void:
 func render_shop(shop: Dictionary) -> void:
 	print(shop)
 
+
+func _try_show_lobby_invites() -> void:
+	if pending_lobby_invites.size() > 0 and not invite_popup.visible:
+		invite_popup.show_invite(pending_lobby_invites.pop_front())
+ 
 
 func _on_chest_button_pressed() -> void:
 	pass # Replace with function body.
@@ -210,5 +205,13 @@ func _on_settings_panel_verify_link_requested(email: String, code: String, on_co
 	verify_link_requested.emit(email, code, on_completed)
 
 
-func _on_button_5_pressed() -> void:
-	get_parent().get_parent()._on_native_url_received(DisplayServer.clipboard_get())
+func _on_invite_popup_accept_invite_requested(invite_id: String) -> void:
+	accept_invite_requested.emit(invite_id)
+
+
+func _on_invite_popup_decline_invite_requested(invite_id: String) -> void:
+	decline_invite_requested.emit(invite_id)
+
+
+func _on_invite_popup_hidden() -> void:
+	_try_show_lobby_invites()

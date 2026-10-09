@@ -2,20 +2,8 @@
 
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_4jy3w"]
 [ext_resource type="Script" uid="uid://b1jxunsijk3i7" path="res://ui/auth/verify.gd" id="2_4jy3w"]
-[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="2_pd6us"]
-[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/grey_button.png" id="4_yxxya"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6cuo5"]
-bg_color = Color(0, 0, 0, 0.2509804)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0, 0, 0, 1)
-corner_radius_top_left = 64
-corner_radius_top_right = 64
-corner_radius_bottom_right = 64
-corner_radius_bottom_left = 64
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="2_pd6us"]
+[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/shared/animated_button/grey_button.png" id="4_yxxya"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nfdwk"]
 texture = ExtResource("4_yxxya")
@@ -40,7 +28,7 @@ size_flags_horizontal = 4
 theme_override_constants/separation = 16
 
 [node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=267743244]
-custom_minimum_size = Vector2(0, 280)
+custom_minimum_size = Vector2(0, 312)
 layout_mode = 2
 theme_override_constants/separation = 128
 
@@ -54,12 +42,9 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 4
-theme_override_font_sizes/font_size = 96
-theme_override_styles/normal = SubResource("StyleBoxFlat_6cuo5")
-theme_override_styles/read_only = SubResource("StyleBoxFlat_6cuo5")
-theme_override_styles/focus = SubResource("StyleBoxFlat_6cuo5")
-max_length = 24
+max_length = 6
 virtual_keyboard_type = 2
+caret_blink = true
 
 [node name="BackButton" parent="VBoxContainer" unique_id=1325445516 instance=ExtResource("2_pd6us")]
 custom_minimum_size = Vector2(0, 140)

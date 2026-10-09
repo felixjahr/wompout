@@ -2,10 +2,10 @@
 
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_j1ll3"]
 [ext_resource type="Script" uid="uid://bvacvlq2mm6ji" path="res://ui/lobby/settings_panel/settings_panel.gd" id="1_t4xwa"]
-[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/close_button.tscn" id="2_t4xwa"]
-[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="3_6l7n7"]
-[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/blue_button.png" id="4_7p8ig"]
-[ext_resource type="Texture2D" uid="uid://bn3qa22fvp7cj" path="res://ui/red_button.png" id="4_aa5g5"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/shared/close_button/close_button.tscn" id="2_t4xwa"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="3_6l7n7"]
+[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/shared/animated_button/blue_button.png" id="4_7p8ig"]
+[ext_resource type="Texture2D" uid="uid://bn3qa22fvp7cj" path="res://ui/shared/animated_button/red_button.png" id="4_aa5g5"]
 [ext_resource type="PackedScene" uid="uid://bn3xxnax340p1" path="res://ui/auth/link.tscn" id="6_2bnec"]
 [ext_resource type="PackedScene" uid="uid://yjsk4cs8sv3m" path="res://ui/auth/verify.tscn" id="7_7e3w3"]
 

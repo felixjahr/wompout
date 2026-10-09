@@ -3,9 +3,9 @@
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_theme"]
 [ext_resource type="Script" uid="uid://cg7fvrl7mftc3" path="res://ui/gameover/gameover.gd" id="2_script"]
 [ext_resource type="Texture2D" uid="uid://tlfdvftpu2ag" path="res://ui/lobby/trophy.png" id="3_7ba4x"]
-[ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/lobby/platform/platform.tscn" id="3_iaqe1"]
-[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="5_ob546"]
-[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/grey_button.png" id="6_nxtgo"]
+[ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/shared/platform/platform.tscn" id="3_iaqe1"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="5_ob546"]
+[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/shared/animated_button/grey_button.png" id="6_nxtgo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vigs4"]
 bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)

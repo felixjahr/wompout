@@ -2,56 +2,35 @@
 
 [ext_resource type="FontFile" uid="uid://oa5dfbx7gq6k" path="res://ui/fira_sans.ttf" id="1_rqugq"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ml8bw"]
-bg_color = Color(0, 0, 0, 0.35686275)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_f78qo"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_er5qh"]
-bg_color = Color(0, 0, 0, 0.09019608)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1nwmw"]
-bg_color = Color(0, 0, 0, 0.60784316)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vu5tu"]
-bg_color = Color(0, 0, 0, 0.15686275)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o2r72"]
-bg_color = Color(0, 0, 0, 0.60784316)
-corner_radius_top_left = 25
-corner_radius_top_right = 25
-corner_radius_bottom_right = 25
-corner_radius_bottom_left = 25
-expand_margin_left = 64.0
-expand_margin_right = 64.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rqugq"]
+content_margin_left = 64.0
+content_margin_top = 16.0
+content_margin_right = 64.0
+content_margin_bottom = 16.0
+bg_color = Color(0, 0, 0, 0.2509804)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 64
+corner_radius_top_right = 64
+corner_radius_bottom_right = 64
+corner_radius_bottom_left = 64
 
 [resource]
 default_font = ExtResource("1_rqugq")
 default_font_size = 64
-Button/styles/hover = SubResource("StyleBoxFlat_ml8bw")
-Button/styles/hover_pressed = SubResource("StyleBoxFlat_er5qh")
-Button/styles/normal = SubResource("StyleBoxFlat_1nwmw")
-Button/styles/pressed = SubResource("StyleBoxFlat_vu5tu")
 Label/colors/font_shadow_color = Color(0, 0, 0, 1)
 Label/constants/outline_size = 16
 Label/constants/shadow_offset_x = 0
 Label/constants/shadow_offset_y = 4
 Label/constants/shadow_outline_size = 16
-LineEdit/font_sizes/font_size = 128
-LineEdit/fonts/font = ExtResource("1_rqugq")
-LineEdit/styles/focus = SubResource("StyleBoxFlat_o2r72")
-LineEdit/styles/normal = SubResource("StyleBoxFlat_o2r72")
+LineEdit/constants/caret_width = 4
+LineEdit/constants/outline_size = 16
+LineEdit/font_sizes/font_size = 96
+LineEdit/styles/focus = SubResource("StyleBoxEmpty_f78qo")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_rqugq")
+LineEdit/styles/read_only = SubResource("StyleBoxFlat_rqugq")

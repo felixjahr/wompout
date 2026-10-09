@@ -131,7 +131,12 @@ export class FriendsService implements OnModuleInit {
     });
 
     if (!invite || invite.expiresAt <= new Date()) {
-      response.status(410).send('This Wompout invite link has expired.');
+      response.status(410).type('html').send(`
+        <!doctype html>
+        <script>
+          alert("This invite is invalid or has expired. Ask your friend for a new link.");
+        </script>
+      `);
       return;
     }
 

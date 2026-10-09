@@ -1,3 +1,6 @@
 api.wompout.com {
     reverse_proxy backend:3000
 }
+link.wompout.com {
+    reverse_proxy backend:3000
+}

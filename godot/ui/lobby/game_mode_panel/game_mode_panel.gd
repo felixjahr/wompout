@@ -1,4 +1,4 @@
-extends LobbyPanel
+extends AnimatedPanel
 
 signal game_mode_selected(mode_id: String)
 signal closed

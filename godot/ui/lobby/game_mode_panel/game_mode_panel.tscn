@@ -3,7 +3,7 @@
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_5ecad"]
 [ext_resource type="Script" uid="uid://bj06gr2c7rek0" path="res://ui/lobby/game_mode_panel/game_mode_panel.gd" id="2_as43x"]
 [ext_resource type="PackedScene" uid="uid://6r5j3okf8at7" path="res://ui/lobby/game_mode_panel/game_mode_entry.tscn" id="3_as43x"]
-[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/close_button.tscn" id="4_c71qv"]
+[ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/shared/close_button/close_button.tscn" id="4_c71qv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1etha"]
 bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
@@ -25,7 +25,6 @@ corner_radius_bottom_right = 64
 corner_radius_bottom_left = 64
 
 [node name="GameModePanel" type="Panel" unique_id=318218996]
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -64,8 +63,8 @@ vertical_scroll_mode = 0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 64
-theme_override_constants/margin_right = 64
+theme_override_constants/margin_left = 160
+theme_override_constants/margin_right = 160
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer" unique_id=126803518]
 layout_mode = 2

@@ -1,4 +1,4 @@
-extends ShrinkButton
+extends AnimatedButton
 
 var scale_tween: Tween
 

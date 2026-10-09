@@ -50,9 +50,13 @@ var game: Node
 @onready var ui_container := $UIContainer
 @onready var game_container := $AspectRatioContainer/SubViewportContainer/GameContainer
 @onready var error_popup := %ErrorPopup
+@onready var share := %Share
+@onready var deeplink := %Deeplink
 
 
 func _ready() -> void:
+	if OS.has_feature("ios") or OS.has_feature("android"):
+		deeplink.initialize()
 	_enter_state()
 
 
@@ -87,8 +91,11 @@ func _enter_state(data = null) -> void:
 			ui.verify_login_requested.connect(_on_auth_verify_login_requested)
 		ClientState.LOBBY:
 			ui = Lobby.instantiate()
+			ui.local_player_id = player["id"]
 			ui_container.add_child(ui)
-			ui.render_lobby(lobby, player, lobby_invites)
+			ui.render_player(player)
+			ui.render_lobby(lobby)
+			ui.render_lobby_invites(lobby_invites)
 			ui.logout_requested.connect(_on_lobby_logout_requested)
 			ui.start_link_requested.connect(_on_lobby_start_link_requested)
 			ui.verify_link_requested.connect(_on_lobby_verify_link_requested)
@@ -234,7 +241,6 @@ func _apply_match_state() -> void:
 
 
 func _on_backend_net_subscribed(request_id: String, snapshots: Dictionary) -> void:
-	ui.set_progress(100.0)
 	if snapshots.has("friends"):
 		_on_backend_net_friends_updated(snapshots["friends"])
 	if snapshots.has("rankings"):
@@ -249,7 +255,8 @@ func _on_backend_net_subscribed(request_id: String, snapshots: Dictionary) -> vo
 	for resource in STARTUP_RESOURCES:
 		if not snapshots.has(resource):
 			return
-
+	
+	ui.set_progress(100.0)
 	player = snapshots["player"]
 	lobby = snapshots["lobby"]
 	lobby_invites = snapshots["lobbyInvites"]
@@ -267,7 +274,7 @@ func _on_backend_net_error(_request_id: String, message: String) -> void:
 func _on_backend_net_player_updated(snapshot: Dictionary) -> void:
 	player = snapshot
 	if state == ClientState.LOBBY:
-		ui.render_lobby(lobby, player, lobby_invites)
+		ui.render_player(player)
 
 
 func _on_backend_net_lobby_updated(snapshot: Dictionary) -> void:
@@ -278,13 +285,13 @@ func _on_backend_net_lobby_updated(snapshot: Dictionary) -> void:
 		ClientState.LOBBY, ClientState.MATCHMAKING:
 			_apply_match_state()
 			if state == ClientState.LOBBY:
-				ui.render_lobby(lobby, player, lobby_invites)
+				ui.render_lobby(lobby)
 
 
 func _on_backend_net_lobby_invites_updated(snapshot: Array) -> void:
 	lobby_invites = snapshot
 	if state == ClientState.LOBBY:
-		ui.render_lobby(lobby, player, lobby_invites)
+		ui.render_lobby_invites(lobby_invites)
 
 
 func _on_backend_net_match_updated(snapshot: Variant) -> void:
@@ -327,18 +334,18 @@ func _on_game_net_connection_failed() -> void:
 	_change_state(ClientState.LOADING)
 
 
-func _on_native_url_received(url: String) -> void:
-	var prefix := "https://link.wompout.com/friends/invite/"
-	if not url.begins_with(prefix):
+func _on_deeplink_deeplink_received(url: DeeplinkUrl) -> void:
+	if url.get_scheme() != "https" or url.get_host() != "link.wompout.com":
 		return
-
-	var token := url.substr(prefix.length()).split("?")[0].split("#")[0]
+	var path := url.get_path()
+	var prefix := "/friends/invite/"
+	if not path.begins_with(prefix):
+		return
+	var token := path.trim_prefix(prefix)
 	if token.is_empty() or token.contains("/"):
 		return
-
 	if not pending_friend_invites.has(token):
 		pending_friend_invites.append(token)
-
 	_try_redeem_friend_invites()
 
 
@@ -348,7 +355,7 @@ func _try_redeem_friend_invites() -> void:
 			return
 
 		var token: String = pending_friend_invites.pop_front()
-		var response: Dictionary = await backend_net.redeem_friend_invite(token)
+		var response: Dictionary = await backend_net.friends_redeem_invite(token)
 
 		if not response.get("ok", false):
 			push_error("Couldn't accept invite. Open the link again to retry.")
@@ -466,7 +473,8 @@ func _on_lobby_create_invite_requested() -> void:
 	if not response.get("ok", false):
 		show_error("Couldn't create an invite link. Please try again.")
 		return
-	DisplayServer.clipboard_set(response["data"]["invite_url"])
+	var message: String = "Click this link to add as friend in Wompout!\n" + response["data"]["invite_url"]
+	share.share_text("Invite Friend", "", message)
 
 
 func _on_lobby_resource_opened(resource: String) -> void:

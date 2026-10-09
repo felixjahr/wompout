@@ -1,0 +1,183 @@
+[gd_scene format=3 uid="uid://b7pvaovaw5fjk"]
+
+[ext_resource type="Script" uid="uid://ctqx34nfsxskq" path="res://ui/lobby/invite_popup/invite_popup.gd" id="1_rjvm2"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="2_rjvm2"]
+[ext_resource type="PackedScene" uid="uid://bm0hcarc33bl4" path="res://ui/shared/player_entry/player_entry.tscn" id="3_0tlo8"]
+[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/shared/animated_button/blue_button.png" id="3_aldqo"]
+[ext_resource type="Texture2D" uid="uid://bn3qa22fvp7cj" path="res://ui/shared/animated_button/red_button.png" id="3_hmrvt"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0tlo8"]
+bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 96
+corner_radius_top_right = 96
+corner_radius_bottom_right = 96
+corner_radius_bottom_left = 96
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_0tlo8"]
+texture = ExtResource("3_hmrvt")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_nw3d4"]
+texture = ExtResource("3_aldqo")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[node name="InvitePopup" type="ColorRect" unique_id=164607304]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.49803922)
+script = ExtResource("1_rjvm2")
+
+[node name="AnimatedButton" parent="." unique_id=604162406 instance=ExtResource("2_rjvm2")]
+custom_minimum_size = Vector2(1152, 656)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -328.0
+offset_right = 576.0
+offset_bottom = 328.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="AnimatedButton" unique_id=649637066]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_0tlo8")
+
+[node name="MarginContainer" type="MarginContainer" parent="AnimatedButton/Panel" unique_id=919338337]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 64
+theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
+theme_override_constants/margin_bottom = 64
+
+[node name="VBoxContainer" type="VBoxContainer" parent="AnimatedButton/Panel/MarginContainer" unique_id=1836634583]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Label" type="Label" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer" unique_id=1783550092]
+custom_minimum_size = Vector2(0, 96)
+custom_maximum_size = Vector2(1024, 292)
+layout_mode = 2
+size_flags_vertical = 1
+text = "TEAM INVITE"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="DescriptionLabel" type="Label" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer" unique_id=230217224]
+unique_name_in_owner = true
+custom_maximum_size = Vector2(1024, 292)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 48
+text = "PLAYERNAME wants to team up with you!"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+clip_text = true
+
+[node name="PlayerEntry" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer" unique_id=214853896 instance=ExtResource("3_0tlo8")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer" unique_id=667877636]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+theme_override_constants/separation = 64
+
+[node name="RejectButton" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1551788466 instance=ExtResource("2_rjvm2")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer/HBoxContainer/RejectButton" unique_id=812041256]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_0tlo8")
+
+[node name="MarginContainer" type="MarginContainer" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer/HBoxContainer/RejectButton/Panel" unique_id=885351801]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer/HBoxContainer/RejectButton/Panel/MarginContainer" unique_id=1331178585]
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "REJECT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AcceptButton" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer/HBoxContainer" unique_id=1468078522 instance=ExtResource("2_rjvm2")]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Panel" type="Panel" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer/HBoxContainer/AcceptButton" unique_id=2017763892]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_nw3d4")
+
+[node name="MarginContainer" type="MarginContainer" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer/HBoxContainer/AcceptButton/Panel" unique_id=1006366844]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="AnimatedButton/Panel/MarginContainer/VBoxContainer/HBoxContainer/AcceptButton/Panel/MarginContainer" unique_id=1776624758]
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "ACCEPT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="AnimatedButton/Panel/MarginContainer/VBoxContainer/HBoxContainer/RejectButton" to="." method="_on_reject_button_pressed"]
+[connection signal="pressed" from="AnimatedButton/Panel/MarginContainer/VBoxContainer/HBoxContainer/AcceptButton" to="." method="_on_accept_button_pressed"]

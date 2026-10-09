@@ -82,6 +82,8 @@ func apply_snapshot(snapshot: ParticipantSnapshot) -> void:
 
 
 func apply_hit() -> void:
+	if local:
+		Input.vibrate_handheld(70)
 	var hit_tween = get_tree().create_tween()
 	hit_tween.tween_property(sprite.material, "shader_parameter/flash_amount", 1.0, 0.1)
 	hit_tween.parallel().tween_property(sprite.material, "shader_parameter/reveal_amount", 1.0, 0.1)

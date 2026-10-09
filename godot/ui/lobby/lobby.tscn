@@ -6,19 +6,20 @@
 [ext_resource type="Texture2D" uid="uid://dopkl0qredctd" path="res://ui/lobby/background_field.png" id="3_thpmu"]
 [ext_resource type="Texture2D" uid="uid://tlfdvftpu2ag" path="res://ui/lobby/trophy.png" id="4_qskbg"]
 [ext_resource type="Texture2D" uid="uid://bdsnepagp0cwu" path="res://ui/lobby/shop_icon.png" id="5_gs2u0"]
-[ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/lobby/platform/platform.tscn" id="6_afxux"]
-[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shrink_button.tscn" id="7_6w0v2"]
+[ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/shared/platform/platform.tscn" id="6_afxux"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="7_6w0v2"]
 [ext_resource type="Texture2D" uid="uid://dxmrnkbaucmlp" path="res://ui/lobby/armory_icon.png" id="8_rxu4d"]
 [ext_resource type="Texture2D" uid="uid://dnsd163tlmiej" path="res://ui/lobby/friends_icon.png" id="9_3b0ks"]
 [ext_resource type="Texture2D" uid="uid://v51uwy5ckexq" path="res://ui/lobby/ranks_icon.png" id="9_rxu4d"]
-[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/blue_button.png" id="17_qnp4y"]
+[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/shared/animated_button/blue_button.png" id="17_qnp4y"]
 [ext_resource type="PackedScene" uid="uid://ceqje6b6jfyi" path="res://ui/lobby/rankings_panel/rankings_panel.tscn" id="19_jcpg8"]
 [ext_resource type="PackedScene" uid="uid://db4f1f5h8xqao" path="res://ui/lobby/armory_screen/armory_screen.tscn" id="20_x2gyi"]
 [ext_resource type="Texture2D" uid="uid://flbrn7g6884s" path="res://ui/lobby/chest.png" id="21_ncut8"]
 [ext_resource type="PackedScene" uid="uid://b4cxj2jy5kyas" path="res://ui/lobby/settings_panel/settings_panel.tscn" id="21_vdu1l"]
 [ext_resource type="Texture2D" uid="uid://c702bonrrav1o" path="res://ui/lobby/chest_progress_bar.png" id="22_eslaf"]
 [ext_resource type="PackedScene" uid="uid://blcpf8cku6m65" path="res://ui/lobby/friends_panel/friends_panel.tscn" id="23_1etha"]
-[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/grey_button.png" id="23_wofsp"]
+[ext_resource type="PackedScene" uid="uid://b7pvaovaw5fjk" path="res://ui/lobby/invite_popup/invite_popup.tscn" id="23_lky5g"]
+[ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/shared/animated_button/grey_button.png" id="23_wofsp"]
 [ext_resource type="PackedScene" uid="uid://8csnlk72lj5e" path="res://ui/lobby/game_mode_panel/game_mode_panel.tscn" id="24_lky5g"]
 [ext_resource type="Texture2D" uid="uid://bdgfgtjc7tlp" path="res://data/modes/womp/solo_womp_ranked_icon.png" id="26_s74wb"]
 [ext_resource type="Texture2D" uid="uid://bkcupf0hrdv6a" path="res://ui/lobby/play_button_normal.png" id="27_j7rwa"]
@@ -118,14 +119,17 @@ layout_mode = 2
 
 [node name="Platform2" parent="PlatformArea/HBoxContainer" unique_id=1402220953 instance=ExtResource("6_afxux")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="Platform3" parent="PlatformArea/HBoxContainer" unique_id=896417452 instance=ExtResource("6_afxux")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="Platform4" parent="PlatformArea/HBoxContainer" unique_id=1653210786 instance=ExtResource("6_afxux")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 
 [node name="MainPanel" type="VBoxContainer" parent="." unique_id=633513508]
@@ -148,7 +152,7 @@ layout_mode = 2
 theme_override_constants/separation = 32
 
 [node name="SettingsButton" parent="MainPanel/MarginContainer/HBoxContainer" unique_id=604162406 instance=ExtResource("7_6w0v2")]
-custom_minimum_size = Vector2(512, 0)
+custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
 
 [node name="Panel" type="Panel" parent="MainPanel/MarginContainer/HBoxContainer/SettingsButton" unique_id=1936065060]
@@ -609,11 +613,13 @@ layout_mode = 1
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+offset_left = 0.0
 
 [node name="GameModePanel" parent="." unique_id=318218996 instance=ExtResource("24_lky5g")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1
+anchors_preset = 15
 
 [node name="SettingsPanel" parent="." unique_id=1036722574 instance=ExtResource("21_vdu1l")]
 unique_name_in_owner = true
@@ -625,14 +631,10 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
-[node name="Button5" type="Button" parent="." unique_id=890367105]
+[node name="InvitePopup" parent="." unique_id=164607304 instance=ExtResource("23_lky5g")]
+unique_name_in_owner = true
 visible = false
-layout_mode = 0
-offset_left = 1514.0
-offset_top = 178.0
-offset_right = 2108.0
-offset_bottom = 255.0
-text = "redeem"
+layout_mode = 1
 
 [connection signal="pressed" from="MainPanel/MarginContainer/HBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer/ShopButton" to="." method="_on_shop_button_pressed"]
@@ -646,12 +648,6 @@ text = "redeem"
 [connection signal="closed" from="FriendsPanel" to="." method="_on_friends_panel_closed"]
 [connection signal="player_invited" from="FriendsPanel" to="." method="_on_friends_panel_player_invited"]
 [connection signal="closed" from="RankingsPanel" to="." method="_on_rankings_panel_closed"]
-[connection signal="closed" from="GameModePanel" to="." method="_on_game_mode_panel_closed"]
-[connection signal="game_mode_selected" from="GameModePanel" to="." method="_on_game_mode_panel_game_mode_selected"]
-[connection signal="closed" from="SettingsPanel" to="." method="_on_settings_panel_closed"]
-[connection signal="logout_requested" from="SettingsPanel" to="." method="_on_settings_panel_logout_requested"]
-[connection signal="start_link_requested" from="SettingsPanel" to="." method="_on_settings_panel_start_link_requested"]
-[connection signal="verify_link_requested" from="SettingsPanel" to="." method="_on_settings_panel_verify_link_requested"]
-[connection signal="closed" from="ArmoryScreen" to="." method="_on_armory_screen_closed"]
-[connection signal="loadout_updated" from="ArmoryScreen" to="." method="_on_armory_screen_loadout_updated"]
-[connection signal="pressed" from="Button5" to="." method="_on_button_5_pressed"]
+[connection signal="accept_invite_requested" from="InvitePopup" to="." method="_on_invite_popup_accept_invite_requested"]
+[connection signal="decline_invite_requested" from="InvitePopup" to="." method="_on_invite_popup_decline_invite_requested"]
+[connection signal="hidden" from="InvitePopup" to="." method="_on_invite_popup_hidden"]

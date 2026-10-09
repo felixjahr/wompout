@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://mrx73yralrmc"]
 
 [ext_resource type="Script" uid="uid://b0isbw7omtyso" path="res://client/client_controller.gd" id="1_ti1oh"]
-[ext_resource type="PackedScene" uid="uid://cnkgxg3kerd75" path="res://ui/error_popup/error_popup.tscn" id="2_sjp5b"]
+[ext_resource type="PackedScene" uid="uid://cnkgxg3kerd75" path="res://ui/shared/error_popup/error_popup.tscn" id="2_sjp5b"]
 [ext_resource type="Script" uid="uid://c4shlg6lbs66t" path="res://client/client_backend_net.gd" id="3_7kp2r"]
 [ext_resource type="Script" uid="uid://dbadsd2pwibq5" path="res://client/client_game_net.gd" id="3_mgmel"]
+[ext_resource type="Script" uid="uid://cxeb13b4axocx" path="res://addons/SharePlugin/Share.gd" id="5_sjp5b"]
+[ext_resource type="Script" uid="uid://nmwe7in37ut8" path="res://addons/DeeplinkPlugin/Deeplink.gd" id="6_miugc"]
 
 [node name="Controller" type="Node" unique_id=63357991]
 script = ExtResource("1_ti1oh")
@@ -15,6 +17,7 @@ layer = 10
 
 [node name="ErrorPopup" parent="PopupContainer" unique_id=128908540 instance=ExtResource("2_sjp5b")]
 unique_name_in_owner = true
+visible = false
 
 [node name="Net" type="Node" parent="." unique_id=1471941793]
 
@@ -49,6 +52,18 @@ handle_input_locally = false
 size = Vector2i(1920, 1080)
 render_target_update_mode = 4
 
+[node name="Share" type="Node" parent="." unique_id=1220996393]
+unique_name_in_owner = true
+script = ExtResource("5_sjp5b")
+metadata/_custom_type_script = "uid://cxeb13b4axocx"
+
+[node name="Deeplink" type="Node" parent="." unique_id=1545103651]
+unique_name_in_owner = true
+script = ExtResource("6_miugc")
+host = "link.wompout.com"
+path_prefix = "/friends/invite"
+metadata/_custom_type_script = "uid://nmwe7in37ut8"
+
 [connection signal="error" from="Net/BackendNet" to="." method="_on_backend_net_error"]
 [connection signal="friends_updated" from="Net/BackendNet" to="." method="_on_backend_net_friends_updated"]
 [connection signal="lobby_invites_updated" from="Net/BackendNet" to="." method="_on_backend_net_lobby_invites_updated"]
@@ -61,3 +76,4 @@ render_target_update_mode = 4
 [connection signal="websocket_disconnected" from="Net/BackendNet" to="." method="_on_backend_net_websocket_disconnected"]
 [connection signal="connection_failed" from="Net/GameNet" to="." method="_on_game_net_connection_failed"]
 [connection signal="init_received" from="Net/GameNet" to="." method="_on_game_net_init_received"]
+[connection signal="deeplink_received" from="Deeplink" to="." method="_on_deeplink_deeplink_received"]

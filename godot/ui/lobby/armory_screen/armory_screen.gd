@@ -35,6 +35,7 @@ func render_armory(player: Dictionary) -> void:
 func show_armory() -> void:
 	armory_panel.animate_panel(true)
 	platform.show()
+	show()
 	_on_category_button_pressed("melee", melee_button)
 
 
@@ -43,7 +44,7 @@ func hide_armory() -> void:
 	platform.hide()
 
 
-func _on_category_button_pressed(category_id: String, tab_button: ShrinkButton) -> void:
+func _on_category_button_pressed(category_id: String, tab_button: AnimatedButton) -> void:
 	for child in tab_button_container.get_children():
 		var tab_button_panel_stylebox: StyleBoxFlat = child.get_child(0).get_theme_stylebox("panel").duplicate()
 		tab_button_panel_stylebox.bg_color = Color("3d70ff") if child == tab_button else Color("1d222b")
@@ -62,9 +63,13 @@ func _on_category_button_pressed(category_id: String, tab_button: ShrinkButton) 
 
 
 func _on_item_equipped(category_id: String, item_id: String) -> void:
-	player["loadout"][category_id] = item_id
-	loadout_updated.emit(player["lodout"])
+	player["loadout"][category_id + "Id"] = item_id
+	loadout_updated.emit(player["loadout"])
 
 
 func _on_close_button_pressed() -> void:
 	closed.emit()
+
+
+func _on_armory_panel_hidden() -> void:
+	hide()

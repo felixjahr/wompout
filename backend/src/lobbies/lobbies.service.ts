@@ -90,6 +90,10 @@ export class LobbiesService implements OnModuleInit {
         this.handleMatchClosed(playerIds);
       },
     });
+
+    this.playersService.publicProfileChanged$.subscribe((playerId) => {
+      void this.refreshLobbyPlayerTrophies(playerId).catch(console.error);
+    });
   }
 
   invitePlayer(playerId: string, request: InvitePlayerRequestDto): void {
@@ -409,6 +413,7 @@ export class LobbiesService implements OnModuleInit {
     const lobbyPlayer: LobbyPlayer = {
       id: player.id,
       displayName: player.displayName,
+      trophies: player.trophies,
       ready: false,
       loadout: { ...player.loadout },
     };
@@ -556,11 +561,35 @@ export class LobbiesService implements OnModuleInit {
       return [
         {
           inviteId: invite.id,
-          sourcePlayerId: invite.sourcePlayerId,
-          sourceDisplayName: sourcePlayer.displayName,
+          sourcePlayer: {
+            id: sourcePlayer.id,
+            displayName: sourcePlayer.displayName,
+            trophies: sourcePlayer.trophies,
+          },
         },
       ];
     });
+  }
+
+  private async refreshLobbyPlayerTrophies(playerId: string): Promise<void> {
+    const player = await this.playersService.getPlayer(playerId);
+
+    const lobby = this.getLobbyForPlayer(playerId);
+    const lobbyPlayer = lobby?.players.find((entry) => entry.id === playerId);
+
+    if (!lobby || !lobbyPlayer) return;
+
+    lobbyPlayer.trophies = player.trophies;
+    this.publishLobby(lobby);
+
+    const recipients = new Set<string>();
+
+    for (const inviteId of this.inviteIdsBySourcePlayerId.get(playerId) ?? []) {
+      const invite = this.invites.get(inviteId);
+      if (invite) recipients.add(invite.invitedPlayerId);
+    }
+
+    this.publishInvites(recipients);
   }
 
   private publishLobby(lobby: Lobby): void {

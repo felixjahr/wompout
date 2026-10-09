@@ -264,6 +264,8 @@ func _apply_entity_snapshots(entities: Dictionary, entity_snapshots: Array, get_
 
 func _apply_event(event: EventSnapshot) -> void:
 	if event is HitEventSnapshot:
+		if event.attacker_player_id == local_player_id and event.victim_player_id != local_player_id:
+			Input.vibrate_handheld(35)
 		if not players.has(event.victim_player_id):
 			return
 		players[event.victim_player_id].apply_hit()
