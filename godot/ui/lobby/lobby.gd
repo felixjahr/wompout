@@ -11,6 +11,7 @@ signal update_mode_requested(mode_id: String)
 signal update_ready_requested(ready: bool)
 signal update_loadout_requested(loadout: Dictionary)
 signal create_invite_requested
+signal open_chest_requested(on_completed: Callable)
 
 signal resource_opened(resource: String)
 signal resource_closed(resource: String)
@@ -27,22 +28,31 @@ var local_player_id: String
 @onready var play_button_panel := %PlayButtonPanel
 @onready var play_button_label := %PlayButtonLabel
 
+@onready var leave_button := %LeaveButton
+
 @onready var add_friends_button: Button = %FriendsPanel.add_friends_button
 
 @onready var name_label := %NameLabel
 @onready var trophies_label := %TrophiesLabel
+@onready var coins_label := %CoinsLabel
+@onready var gems_label := %GemsLabel
 
 @onready var game_mode_label := %GameModeLabel
 @onready var ranked_label := %RankedLabel
 @onready var game_mode_texture_rect := %GameModeTextureRect
 
-@onready var main_panel := %MainPanel
+@onready var upper_bar := %UpperBar
+@onready var side_buttons := %SideButtons
+@onready var lower_bar := %LowerBar
 @onready var game_mode_panel := %GameModePanel
 @onready var friends_panel := %FriendsPanel
 @onready var rankings_panel := %RankingsPanel
 @onready var armory_screen := %ArmoryScreen
 @onready var settings_panel := %SettingsPanel
 @onready var invite_popup := %InvitePopup
+@onready var chest_opening := %ChestOpening
+@onready var chest_progress_bar := %ChestProgressBar
+@onready var chest_label := %ChestLabel
 
 @onready var platform_area := %PlatformArea
 
@@ -57,6 +67,17 @@ var local_player_id: String
 func render_player(player: Dictionary) -> void:
 	name_label.text = player["displayName"]
 	trophies_label.text = str(int(player["trophies"]))
+	coins_label.text = str(int(player["coins"]))
+	gems_label.text = str(int(player["gems"]))
+	var required_chest_progress := int(player["chestProgress"]["requiredProgress"])
+	var chest_progress := int(player["chestProgress"]["progress"])
+	if int(player["chestProgress"]["readyChests"]) == 0:
+		chest_progress_bar.max_value = required_chest_progress
+		chest_progress_bar.value = chest_progress
+		chest_label.text = str(chest_progress) + "/" + str(required_chest_progress)
+	else:
+		chest_progress_bar.value = chest_progress_bar.max_value
+		chest_label.text = "READY"
 	armory_screen.render_armory(player)
 	settings_panel.render_settings(player)
 
@@ -73,12 +94,14 @@ func render_lobby(lobby: Dictionary) -> void:
 	play_button_panel_stylebox.texture = PLAY_BUTTON_PANEL_TEXTURES["pressed" if local_lobby_player["ready"] else "normal"]
 	if lobby["players"].size() == 1:
 		play_button_label.text = "PLAY"
+		leave_button.hide()
 	else:
 		play_button_label.text = "READY"
+		leave_button.show()
 	var mode := Data.MODES[lobby["modeId"]]
 	game_mode_label.text = mode.display_name
 	ranked_label.text = "RANKED" if mode.ranked else "UNRANKED"
-	var ranked_label_color := Color("dcb742") if mode.ranked else Color("3d70ff")
+	var ranked_label_color := Color("f5b51b") if mode.ranked else Color("3d70ff")
 	ranked_label.add_theme_color_override("font_color", ranked_label_color)
 	game_mode_texture_rect.texture = mode.icon_texture
 	for platform in platforms:
@@ -117,7 +140,12 @@ func _try_show_lobby_invites() -> void:
  
 
 func _on_chest_button_pressed() -> void:
-	pass # Replace with function body.
+	open_chest_requested.emit(_on_open_chest_completed)
+
+
+func _on_open_chest_completed(response: Dictionary) -> void:
+	if response["ok"]:
+		chest_opening.show_chest_opening(response["data"])
 
 
 func _on_game_mode_button_pressed() -> void:
@@ -135,6 +163,10 @@ func _on_game_mode_panel_game_mode_selected(mode_id: String) -> void:
 
 func _on_play_button_toggled(toggled_on: bool) -> void:
 	update_ready_requested.emit(toggled_on)
+
+
+func _on_leave_button_pressed() -> void:
+	leave_lobby_requested.emit()
 
 
 func _on_friends_button_pressed() -> void:
@@ -170,13 +202,17 @@ func _on_shop_button_pressed() -> void:
 
 
 func _on_armory_button_pressed() -> void:
-	main_panel.hide()
+	upper_bar.hide()
+	side_buttons.hide()
+	lower_bar.hide()
 	platform_area.hide()
 	armory_screen.show_armory()
 
 
 func _on_armory_screen_closed() -> void:
-	main_panel.show()
+	upper_bar.show()
+	side_buttons.show()
+	lower_bar.show()
 	platform_area.show()
 	armory_screen.hide_armory()
 

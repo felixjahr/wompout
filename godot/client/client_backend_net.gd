@@ -197,6 +197,12 @@ func matches_acknowledge_match(game_id: String) -> Dictionary:
 	)
 
 
+func players_open_chest() -> Dictionary:
+	return await _authenticated_request(
+		"/players/open"
+	)
+
+
 func _authenticated_request(path: String, body: Variant = null, method := HTTPClient.METHOD_POST) -> Dictionary:
 	var token := await _get_valid_access_token()
 	if token.is_empty():

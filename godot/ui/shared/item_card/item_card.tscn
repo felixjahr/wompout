@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cnlqm0mhmwdm2"]
 
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_c8lpr"]
-[ext_resource type="Texture2D" uid="uid://dkv680i7p1wa6" path="res://data/items/weapons/ranged/rifle/rifle_card.png" id="2_8uffi"]
-[ext_resource type="Script" uid="uid://cdsxvqc5aek6g" path="res://ui/lobby/armory_screen/item_card.gd" id="2_c8lpr"]
+[ext_resource type="Script" uid="uid://cdsxvqc5aek6g" path="res://ui/shared/item_card/item_card.gd" id="2_c8lpr"]
+[ext_resource type="Texture2D" uid="uid://dwsprtmbe2l8t" path="res://data/items/styles/red/red.png" id="3_efvhx"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w6jkh"]
 
@@ -56,6 +56,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_8uffi")
+texture = ExtResource("3_efvhx")
 expand_mode = 1
 stretch_mode = 5

@@ -8,13 +8,6 @@ datasource db {
   provider = "postgresql"
 }
 
-enum ItemType {
-  RANGED
-  MELEE
-  ARMOUR
-  ABILITY
-}
-
 model Player {
   id          String   @id @default(uuid()) @db.Uuid
   displayName String
@@ -71,9 +64,15 @@ model SignupVerificationCode {
 }
 
 model PlayerProgression {
-  playerId        String @id @db.Uuid
-  trophies        Int    @default(0)
-  highestTrophies Int    @default(0)
+  playerId                String    @id @db.Uuid
+  trophies                Int       @default(0)
+  highestTrophies         Int       @default(0)
+  coins                   Int       @default(0)
+  gems                    Int       @default(0)
+  chestProgress           Int       @default(0)
+  introChestsOpened       Int       @default(0)
+  dailyBonusWinsRemaining Int       @default(0)
+  nextDailyBonusAt        DateTime?
 
   player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
@@ -86,19 +85,19 @@ model PlayerLoadout {
   meleeId   String
   armourId  String
   abilityId String
+  styleId   String
 
   player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 }
 
 model PlayerItem {
   playerId   String   @db.Uuid
-  itemType   ItemType
   itemId     String
   unlockedAt DateTime @default(now())
 
   player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 
-  @@id([playerId, itemType, itemId])
+  @@id([playerId, itemId])
 }
 
 model Friendship {

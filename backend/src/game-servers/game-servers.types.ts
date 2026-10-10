@@ -1,25 +1,17 @@
+import { PlayerLoadout } from '../players/players.types';
+
 export interface GameBot {
   id: string;
   displayName: string;
   teamId: number;
-  loadout: {
-    rangedId: string;
-    meleeId: string;
-    armourId: string;
-    abilityId: string;
-  };
+  loadout: PlayerLoadout;
 }
 
 export interface GamePlayer {
   id: string;
   displayName: string;
   teamId: number;
-  loadout: {
-    rangedId: string;
-    meleeId: string;
-    armourId: string;
-    abilityId: string;
-  };
+  loadout: PlayerLoadout;
 }
 
 export interface GameSpec {

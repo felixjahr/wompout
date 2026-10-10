@@ -1,14 +1,10 @@
 import { MODES } from '../config/modes.config';
+import { PlayerLoadout } from '../players/players.types';
 
 export interface MatchmakingPlayer {
   id: string;
   displayName: string;
-  loadout: {
-    rangedId: string;
-    meleeId: string;
-    armourId: string;
-    abilityId: string;
-  };
+  loadout: PlayerLoadout;
 }
 
 export interface MatchmakingTicket {

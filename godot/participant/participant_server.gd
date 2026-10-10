@@ -27,6 +27,8 @@ var ranged_id: String
 var ranged_ammunition: int
 var ranged_recharge_time := 0.0
 
+var style_id: String
+
 var attack_time_left := 0.0
 var burst_time_left := 0.0
 var burst_bullet_amount: int

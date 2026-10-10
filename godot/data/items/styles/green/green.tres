@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="Style" format=3 uid="uid://dxu2ulyacklf8"]
+
+[ext_resource type="Script" uid="uid://cx8s7b0nea6nq" path="res://data/items/styles/style.gd" id="1_3inec"]
+[ext_resource type="Texture2D" uid="uid://28n3lrr870e7" path="res://data/items/styles/green/green.png" id="1_27ty0"]
+
+[resource]
+script = ExtResource("1_3inec")
+color = Color(0.09803922, 0.72156864, 0.24313726, 1)
+card_texture = ExtResource("1_27ty0")
+metadata/_custom_type_script = "uid://cx8s7b0nea6nq"

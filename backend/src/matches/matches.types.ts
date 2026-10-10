@@ -1,14 +1,11 @@
+import { PlayerLoadout } from '../players/players.types';
+
 export interface MatchResult {
   participantId: string;
   displayName: string;
   teamId: number;
   placement: number;
-  loadout: {
-    rangedId: string;
-    meleeId: string;
-    armourId: string;
-    abilityId: string;
-  };
+  loadout: PlayerLoadout;
 }
 
 interface MatchBase {

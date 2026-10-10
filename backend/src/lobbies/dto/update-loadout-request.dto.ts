@@ -21,4 +21,9 @@ export class UpdateLoadoutRequestDto implements PlayerLoadout {
   @IsNotEmpty()
   @MaxLength(100)
   abilityId!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  styleId!: string;
 }

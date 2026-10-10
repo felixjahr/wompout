@@ -81,6 +81,7 @@ static func _write_player(peer: StreamPeerBuffer, snapshot: ParticipantSnapshot)
 	peer.put_float(snapshot.ranged_recharge_time)
 	peer.put_u8(_encode_id(snapshot.armour_id, Data.ARMOUR_IDS))
 	peer.put_u8(_encode_id(snapshot.ability_id, Data.ABILITY_IDS))
+	peer.put_u8(_encode_id(snapshot.style_id, Data.STYLE_IDS))
 	peer.put_u32(maxi(snapshot.last_ability + 1, 0))
 	peer.put_u16(clampi(snapshot.ability_charge, 0, 65535))
 
@@ -108,6 +109,7 @@ static func _read_player(peer: StreamPeerBuffer) -> ParticipantSnapshot:
 	snapshot.ranged_recharge_time = peer.get_float()
 	snapshot.armour_id = _decode_id(int(peer.get_u8()), Data.ARMOUR_IDS)
 	snapshot.ability_id = _decode_id(int(peer.get_u8()), Data.ABILITY_IDS)
+	snapshot.style_id = _decode_id(int(peer.get_u8()), Data.STYLE_IDS)
 	snapshot.last_ability = int(peer.get_u32()) - 1
 	snapshot.ability_charge = int(peer.get_u16())
 	return snapshot

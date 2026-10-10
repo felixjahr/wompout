@@ -1,8 +1,0 @@
-[gd_resource type="Resource" script_class="Style" format=3 uid="uid://d1qn1cosnt2jy"]
-
-[ext_resource type="Script" uid="uid://cx8s7b0nea6nq" path="res://data/items/styles/style.gd" id="1_e783i"]
-
-[resource]
-script = ExtResource("1_e783i")
-color = Color(0.7764706, 0, 0, 1)
-metadata/_custom_type_script = "uid://cx8s7b0nea6nq"

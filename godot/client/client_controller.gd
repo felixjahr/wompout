@@ -106,6 +106,7 @@ func _enter_state(data = null) -> void:
 			ui.update_ready_requested.connect(_on_lobby_update_ready_requested)
 			ui.update_loadout_requested.connect(_on_lobby_update_loadout_requested)
 			ui.create_invite_requested.connect(_on_lobby_create_invite_requested)
+			ui.open_chest_requested.connect(_on_lobby_open_chest_requested)
 			ui.resource_opened.connect(_on_lobby_resource_opened)
 			ui.resource_closed.connect(_on_lobby_resource_closed)
 		ClientState.MATCHMAKING:
@@ -363,7 +364,7 @@ func _on_auth_create_guest_requested(displayName: String) -> void:
 
 func _on_auth_start_signup_requested(displayName: String, email: String, on_completed: Callable) -> void:
 	var response: Dictionary = await backend_net.auth_start_signup(displayName, email)
-	on_completed.call(response["ok"])
+	on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't send your verification code. Please try again.")
 
@@ -378,7 +379,7 @@ func _on_auth_verify_signup_requested(email: String, code: String) -> void:
 
 func _on_auth_start_login_requested(email: String, on_completed: Callable) -> void:
 	var response: Dictionary = await backend_net.auth_start_login(email)
-	on_completed.call(response["ok"])
+	on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't send your login code. Please try again.")
 		return
@@ -404,7 +405,7 @@ func _on_lobby_logout_requested() -> void:
 
 func _on_lobby_start_link_requested(email: String, on_completed: Callable) -> void:
 	var response: Dictionary = await backend_net.auth_start_link(email)
-	on_completed.call(response["ok"])
+	on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't send your verification code. Please try again.")
 		return
@@ -412,7 +413,7 @@ func _on_lobby_start_link_requested(email: String, on_completed: Callable) -> vo
 
 func _on_lobby_verify_link_requested(email: String, code: String, on_completed: Callable) -> void:
 	var response: Dictionary = await backend_net.auth_verify_link(email, code)
-	on_completed.call(response["ok"])
+	on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't link your email. Check your code or request a new one.")
 		return
@@ -466,7 +467,17 @@ func _on_lobby_create_invite_requested() -> void:
 		show_error("Couldn't create an invite link. Please try again.")
 		return
 	var message: String = "Click this link to add as friend in Wompout!\n" + response["data"]["invite_url"]
-	share.share_text("Invite Friend", "", message)
+	if OS.has_feature("ios") or OS.has_feature("android"):
+		share.share_text("Invite Friend", "", message)
+	else:
+		DisplayServer.clipboard_set(message)
+
+
+func _on_lobby_open_chest_requested(on_completed: Callable) -> void:
+	var response: Dictionary = await backend_net.players_open_chest()
+	on_completed.call(response)
+	if not response.get("ok", false):
+		show_error("Couldn't open chest. Please try again.")
 
 
 func _on_lobby_resource_opened(resource: String) -> void:

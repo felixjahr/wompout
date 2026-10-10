@@ -41,10 +41,10 @@ func render_gameover(data: Dictionary, player_id: String) -> void:
 	var title_label_color: Color
 	if teams.size() == 2:
 		title_label.text = "VICTORY" if own_placement == 1 else "DEFEAT"
-		title_label_color = Color("dcb742") if own_placement == 1 else Color("c21b16")
+		title_label_color = Color("f5b51b") if own_placement == 1 else Color("c21b16")
 	else:
 		title_label.text = "YOU ARE #" + str(own_placement)
-		title_label_color = Color("dcb742") if own_placement == 1 else Color.WHITE
+		title_label_color = Color("f5b51b") if own_placement == 1 else Color.WHITE
 	title_label.add_theme_color_override("font_color", title_label_color)
 	
 	var show_enemies := teams.size() == 2

@@ -8,8 +8,10 @@
 [ext_resource type="Texture2D" uid="uid://bdsnepagp0cwu" path="res://ui/lobby/shop_icon.png" id="5_gs2u0"]
 [ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/shared/platform/platform.tscn" id="6_afxux"]
 [ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="7_6w0v2"]
+[ext_resource type="Texture2D" uid="uid://ceakiwl7ehb55" path="res://ui/lobby/coin.png" id="8_6w0v2"]
 [ext_resource type="Texture2D" uid="uid://dxmrnkbaucmlp" path="res://ui/lobby/armory_icon.png" id="8_rxu4d"]
 [ext_resource type="Texture2D" uid="uid://dnsd163tlmiej" path="res://ui/lobby/friends_icon.png" id="9_3b0ks"]
+[ext_resource type="Texture2D" uid="uid://pi4ntwa1b18f" path="res://ui/lobby/gem.png" id="9_c1dcu"]
 [ext_resource type="Texture2D" uid="uid://v51uwy5ckexq" path="res://ui/lobby/ranks_icon.png" id="9_rxu4d"]
 [ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/shared/animated_button/blue_button.png" id="17_qnp4y"]
 [ext_resource type="PackedScene" uid="uid://ceqje6b6jfyi" path="res://ui/lobby/rankings_panel/rankings_panel.tscn" id="19_jcpg8"]
@@ -20,9 +22,21 @@
 [ext_resource type="PackedScene" uid="uid://blcpf8cku6m65" path="res://ui/lobby/friends_panel/friends_panel.tscn" id="23_1etha"]
 [ext_resource type="PackedScene" uid="uid://b7pvaovaw5fjk" path="res://ui/lobby/invite_popup/invite_popup.tscn" id="23_lky5g"]
 [ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/shared/animated_button/grey_button.png" id="23_wofsp"]
+[ext_resource type="Texture2D" uid="uid://bn3qa22fvp7cj" path="res://ui/shared/animated_button/red_button.png" id="24_6w0v2"]
 [ext_resource type="PackedScene" uid="uid://8csnlk72lj5e" path="res://ui/lobby/game_mode_panel/game_mode_panel.tscn" id="24_lky5g"]
 [ext_resource type="Texture2D" uid="uid://bdgfgtjc7tlp" path="res://data/modes/womp/solo_womp_ranked_icon.png" id="26_s74wb"]
 [ext_resource type="Texture2D" uid="uid://bkcupf0hrdv6a" path="res://ui/lobby/play_button_normal.png" id="27_j7rwa"]
+[ext_resource type="PackedScene" uid="uid://b1c4iswomi1dv" path="res://ui/lobby/chest_opening/chest_opening.tscn" id="27_pjrra"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w6jkh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_itc4g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s221t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pgqxl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4fh3e"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_gs2u0"]
 texture = ExtResource("3_thpmu")
@@ -38,6 +52,13 @@ content_margin_top = 0.0
 content_margin_right = 32.0
 content_margin_bottom = 0.0
 texture = ExtResource("3_thpmu")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_c1dcu"]
+texture = ExtResource("24_6w0v2")
 texture_margin_left = 64.0
 texture_margin_top = 64.0
 texture_margin_right = 64.0
@@ -107,6 +128,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/margin_left = 576
 theme_override_constants/margin_right = 576
 
@@ -132,7 +154,7 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 2
 
-[node name="MainPanel" type="VBoxContainer" parent="." unique_id=633513508]
+[node name="UpperBar" type="MarginContainer" parent="." unique_id=77748690]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -141,21 +163,26 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel" unique_id=77748690]
-layout_mode = 2
 theme_override_constants/margin_top = 64
+theme_override_constants/margin_right = 64
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer" unique_id=337710260]
-custom_minimum_size = Vector2(0, 160)
+[node name="HBoxContainer" type="HBoxContainer" parent="UpperBar" unique_id=337710260]
+custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
-theme_override_constants/separation = 32
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/separation = 16
 
-[node name="SettingsButton" parent="MainPanel/MarginContainer/HBoxContainer" unique_id=604162406 instance=ExtResource("7_6w0v2")]
+[node name="SettingsButton" parent="UpperBar/HBoxContainer" unique_id=604162406 instance=ExtResource("7_6w0v2")]
 custom_minimum_size = Vector2(640, 0)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
 
-[node name="Panel" type="Panel" parent="MainPanel/MarginContainer/HBoxContainer/SettingsButton" unique_id=1936065060]
+[node name="Panel" type="Panel" parent="UpperBar/HBoxContainer/SettingsButton" unique_id=1936065060]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -165,7 +192,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_gs2u0")
 
-[node name="NameLabel" type="Label" parent="MainPanel/MarginContainer/HBoxContainer/SettingsButton/Panel" unique_id=1630511819]
+[node name="NameLabel" type="Label" parent="UpperBar/HBoxContainer/SettingsButton/Panel" unique_id=1630511819]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -178,11 +205,16 @@ horizontal_alignment = 1
 vertical_alignment = 1
 clip_text = true
 
-[node name="TrophiesButton" parent="MainPanel/MarginContainer/HBoxContainer" unique_id=1875832770 instance=ExtResource("7_6w0v2")]
+[node name="TrophiesButton" parent="UpperBar/HBoxContainer" unique_id=1875832770 instance=ExtResource("7_6w0v2")]
 custom_minimum_size = Vector2(352, 0)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
 
-[node name="Panel" type="Panel" parent="MainPanel/MarginContainer/HBoxContainer/TrophiesButton" unique_id=1062057464]
+[node name="Panel" type="Panel" parent="UpperBar/HBoxContainer/TrophiesButton" unique_id=1062057464]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -192,7 +224,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_qskbg")
 
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer/HBoxContainer/TrophiesButton/Panel" unique_id=1530802618]
+[node name="MarginContainer" type="MarginContainer" parent="UpperBar/HBoxContainer/TrophiesButton/Panel" unique_id=1530802618]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -202,16 +234,16 @@ grow_vertical = 2
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_right = 32
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer/HBoxContainer/TrophiesButton/Panel/MarginContainer" unique_id=173019588]
+[node name="HBoxContainer" type="HBoxContainer" parent="UpperBar/HBoxContainer/TrophiesButton/Panel/MarginContainer" unique_id=173019588]
 custom_minimum_size = Vector2(288, 0)
 layout_mode = 2
 
-[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer/HBoxContainer/TrophiesButton/Panel/MarginContainer/HBoxContainer" unique_id=369905435]
+[node name="TextureRect" type="TextureRect" parent="UpperBar/HBoxContainer/TrophiesButton/Panel/MarginContainer/HBoxContainer" unique_id=369905435]
 layout_mode = 2
 texture = ExtResource("4_qskbg")
 stretch_mode = 3
 
-[node name="TrophiesLabel" type="Label" parent="MainPanel/MarginContainer/HBoxContainer/TrophiesButton/Panel/MarginContainer/HBoxContainer" unique_id=1422623453]
+[node name="TrophiesLabel" type="Label" parent="UpperBar/HBoxContainer/TrophiesButton/Panel/MarginContainer/HBoxContainer" unique_id=1422623453]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
@@ -219,25 +251,181 @@ text = "420"
 horizontal_alignment = 1
 clip_text = true
 
-[node name="MarginContainer2" type="MarginContainer" parent="MainPanel" unique_id=1057611549]
+[node name="VBoxContainer" type="VBoxContainer" parent="UpperBar" unique_id=228013510]
 layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_constants/separation = 16
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UpperBar/VBoxContainer" unique_id=996606295]
+custom_minimum_size = Vector2(0, 140)
+layout_mode = 2
+theme_override_constants/separation = 16
+alignment = 2
+
+[node name="CoinsButton" parent="UpperBar/VBoxContainer/HBoxContainer2" unique_id=1400473608 instance=ExtResource("7_6w0v2")]
+custom_minimum_size = Vector2(480, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
+
+[node name="Panel" type="Panel" parent="UpperBar/VBoxContainer/HBoxContainer2/CoinsButton" unique_id=1650130423]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_qskbg")
+
+[node name="MarginContainer" type="MarginContainer" parent="UpperBar/VBoxContainer/HBoxContainer2/CoinsButton/Panel" unique_id=22693152]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UpperBar/VBoxContainer/HBoxContainer2/CoinsButton/Panel/MarginContainer" unique_id=1213679251]
+custom_minimum_size = Vector2(288, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="UpperBar/VBoxContainer/HBoxContainer2/CoinsButton/Panel/MarginContainer/HBoxContainer" unique_id=1651255804]
+layout_mode = 2
+texture = ExtResource("8_6w0v2")
+stretch_mode = 3
+
+[node name="CoinsLabel" type="Label" parent="UpperBar/VBoxContainer/HBoxContainer2/CoinsButton/Panel/MarginContainer/HBoxContainer" unique_id=751141088]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "420"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="GemsButton" parent="UpperBar/VBoxContainer/HBoxContainer2" unique_id=786920616 instance=ExtResource("7_6w0v2")]
+custom_minimum_size = Vector2(352, 0)
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
+
+[node name="Panel" type="Panel" parent="UpperBar/VBoxContainer/HBoxContainer2/GemsButton" unique_id=396077857]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_qskbg")
+
+[node name="MarginContainer" type="MarginContainer" parent="UpperBar/VBoxContainer/HBoxContainer2/GemsButton/Panel" unique_id=1644173194]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UpperBar/VBoxContainer/HBoxContainer2/GemsButton/Panel/MarginContainer" unique_id=249450293]
+custom_minimum_size = Vector2(288, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="UpperBar/VBoxContainer/HBoxContainer2/GemsButton/Panel/MarginContainer/HBoxContainer" unique_id=1743126119]
+layout_mode = 2
+texture = ExtResource("9_c1dcu")
+stretch_mode = 3
+
+[node name="GemsLabel" type="Label" parent="UpperBar/VBoxContainer/HBoxContainer2/GemsButton/Panel/MarginContainer/HBoxContainer" unique_id=1311039234]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "420"
+horizontal_alignment = 1
+clip_text = true
+
+[node name="LeaveButton" parent="UpperBar/VBoxContainer" unique_id=1447308324 instance=ExtResource("7_6w0v2")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(352, 140)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
+
+[node name="Panel" type="Panel" parent="UpperBar/VBoxContainer/LeaveButton" unique_id=10467304]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_c1dcu")
+
+[node name="MarginContainer" type="MarginContainer" parent="UpperBar/VBoxContainer/LeaveButton/Panel" unique_id=194254559]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="UpperBar/VBoxContainer/LeaveButton/Panel/MarginContainer" unique_id=694216667]
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "LEAVE"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SideButtons" type="MarginContainer" parent="." unique_id=1057611549]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_vertical = 3
 mouse_filter = 2
 theme_override_constants/margin_left = 160
 theme_override_constants/margin_right = 160
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/MarginContainer2" unique_id=414075869]
+[node name="VBoxContainer" type="VBoxContainer" parent="SideButtons" unique_id=414075869]
 custom_minimum_size = Vector2(374, 0)
 layout_mode = 2
 size_flags_horizontal = 0
+mouse_filter = 2
 theme_override_constants/separation = 32
 alignment = 1
 
-[node name="ShopButton" parent="MainPanel/MarginContainer2/VBoxContainer" unique_id=112804911 instance=ExtResource("7_6w0v2")]
+[node name="ShopButton" parent="SideButtons/VBoxContainer" unique_id=112804911 instance=ExtResource("7_6w0v2")]
 custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
 
-[node name="Panel" type="Panel" parent="MainPanel/MarginContainer2/VBoxContainer/ShopButton" unique_id=477525434]
+[node name="Panel" type="Panel" parent="SideButtons/VBoxContainer/ShopButton" unique_id=477525434]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -247,7 +435,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_dom2f")
 
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer2/VBoxContainer/ShopButton/Panel" unique_id=1556160986]
+[node name="MarginContainer" type="MarginContainer" parent="SideButtons/VBoxContainer/ShopButton/Panel" unique_id=1556160986]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -260,18 +448,18 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer2/VBoxContainer/ShopButton/Panel/MarginContainer" unique_id=798788904]
+[node name="HBoxContainer" type="HBoxContainer" parent="SideButtons/VBoxContainer/ShopButton/Panel/MarginContainer" unique_id=798788904]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = -64
 
-[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer2/VBoxContainer/ShopButton/Panel/MarginContainer/HBoxContainer" unique_id=137345355]
+[node name="TextureRect" type="TextureRect" parent="SideButtons/VBoxContainer/ShopButton/Panel/MarginContainer/HBoxContainer" unique_id=137345355]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("5_gs2u0")
 stretch_mode = 3
 
-[node name="Label" type="Label" parent="MainPanel/MarginContainer2/VBoxContainer/ShopButton/Panel/MarginContainer/HBoxContainer" unique_id=1783371213]
+[node name="Label" type="Label" parent="SideButtons/VBoxContainer/ShopButton/Panel/MarginContainer/HBoxContainer" unique_id=1783371213]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/shadow_offset_y = 3
@@ -282,11 +470,16 @@ text = "SHOP"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="ArmoryButton" parent="MainPanel/MarginContainer2/VBoxContainer" unique_id=2013824488 instance=ExtResource("7_6w0v2")]
+[node name="ArmoryButton" parent="SideButtons/VBoxContainer" unique_id=2013824488 instance=ExtResource("7_6w0v2")]
 custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
 
-[node name="Panel" type="Panel" parent="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton" unique_id=2101240803]
+[node name="Panel" type="Panel" parent="SideButtons/VBoxContainer/ArmoryButton" unique_id=2101240803]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -296,7 +489,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_dom2f")
 
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton/Panel" unique_id=2071100103]
+[node name="MarginContainer" type="MarginContainer" parent="SideButtons/VBoxContainer/ArmoryButton/Panel" unique_id=2071100103]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -309,18 +502,18 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton/Panel/MarginContainer" unique_id=166863183]
+[node name="HBoxContainer" type="HBoxContainer" parent="SideButtons/VBoxContainer/ArmoryButton/Panel/MarginContainer" unique_id=166863183]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = -64
 
-[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton/Panel/MarginContainer/HBoxContainer" unique_id=1481472016]
+[node name="TextureRect" type="TextureRect" parent="SideButtons/VBoxContainer/ArmoryButton/Panel/MarginContainer/HBoxContainer" unique_id=1481472016]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("8_rxu4d")
 stretch_mode = 3
 
-[node name="Label" type="Label" parent="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton/Panel/MarginContainer/HBoxContainer" unique_id=1618322723]
+[node name="Label" type="Label" parent="SideButtons/VBoxContainer/ArmoryButton/Panel/MarginContainer/HBoxContainer" unique_id=1618322723]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/shadow_offset_y = 3
@@ -331,18 +524,24 @@ text = "ARMORY"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBoxContainer2" type="VBoxContainer" parent="MainPanel/MarginContainer2" unique_id=1957001238]
+[node name="VBoxContainer2" type="VBoxContainer" parent="SideButtons" unique_id=1957001238]
 custom_minimum_size = Vector2(374, 0)
 layout_mode = 2
 size_flags_horizontal = 8
+mouse_filter = 2
 theme_override_constants/separation = 32
 alignment = 1
 
-[node name="FriendsButton" parent="MainPanel/MarginContainer2/VBoxContainer2" unique_id=1207622048 instance=ExtResource("7_6w0v2")]
+[node name="FriendsButton" parent="SideButtons/VBoxContainer2" unique_id=1207622048 instance=ExtResource("7_6w0v2")]
 custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
 
-[node name="Panel" type="Panel" parent="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton" unique_id=956139092]
+[node name="Panel" type="Panel" parent="SideButtons/VBoxContainer2/FriendsButton" unique_id=956139092]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -352,7 +551,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_dom2f")
 
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton/Panel" unique_id=266623471]
+[node name="MarginContainer" type="MarginContainer" parent="SideButtons/VBoxContainer2/FriendsButton/Panel" unique_id=266623471]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -365,18 +564,18 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton/Panel/MarginContainer" unique_id=1023334043]
+[node name="HBoxContainer" type="HBoxContainer" parent="SideButtons/VBoxContainer2/FriendsButton/Panel/MarginContainer" unique_id=1023334043]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = -64
 
-[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton/Panel/MarginContainer/HBoxContainer" unique_id=273217745]
+[node name="TextureRect" type="TextureRect" parent="SideButtons/VBoxContainer2/FriendsButton/Panel/MarginContainer/HBoxContainer" unique_id=273217745]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("9_3b0ks")
 stretch_mode = 3
 
-[node name="Label" type="Label" parent="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton/Panel/MarginContainer/HBoxContainer" unique_id=1071395985]
+[node name="Label" type="Label" parent="SideButtons/VBoxContainer2/FriendsButton/Panel/MarginContainer/HBoxContainer" unique_id=1071395985]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/shadow_offset_y = 3
@@ -387,11 +586,16 @@ text = "FRIENDS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="RankingsButton" parent="MainPanel/MarginContainer2/VBoxContainer2" unique_id=1911595775 instance=ExtResource("7_6w0v2")]
+[node name="RankingsButton" parent="SideButtons/VBoxContainer2" unique_id=1911595775 instance=ExtResource("7_6w0v2")]
 custom_minimum_size = Vector2(0, 140)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
 
-[node name="Panel" type="Panel" parent="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton" unique_id=1528772718]
+[node name="Panel" type="Panel" parent="SideButtons/VBoxContainer2/RankingsButton" unique_id=1528772718]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -401,7 +605,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_dom2f")
 
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton/Panel" unique_id=1923081896]
+[node name="MarginContainer" type="MarginContainer" parent="SideButtons/VBoxContainer2/RankingsButton/Panel" unique_id=1923081896]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -414,18 +618,18 @@ theme_override_constants/margin_top = 8
 theme_override_constants/margin_right = 8
 theme_override_constants/margin_bottom = 8
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton/Panel/MarginContainer" unique_id=650945012]
+[node name="HBoxContainer" type="HBoxContainer" parent="SideButtons/VBoxContainer2/RankingsButton/Panel/MarginContainer" unique_id=650945012]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = -64
 
-[node name="TextureRect" type="TextureRect" parent="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton/Panel/MarginContainer/HBoxContainer" unique_id=399353313]
+[node name="TextureRect" type="TextureRect" parent="SideButtons/VBoxContainer2/RankingsButton/Panel/MarginContainer/HBoxContainer" unique_id=399353313]
 layout_mode = 2
 mouse_filter = 2
 texture = ExtResource("9_rxu4d")
 stretch_mode = 3
 
-[node name="Label" type="Label" parent="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton/Panel/MarginContainer/HBoxContainer" unique_id=2032083313]
+[node name="Label" type="Label" parent="SideButtons/VBoxContainer2/RankingsButton/Panel/MarginContainer/HBoxContainer" unique_id=2032083313]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/shadow_offset_y = 3
@@ -436,21 +640,35 @@ text = "RANKS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="HBoxContainer3" type="HBoxContainer" parent="MainPanel" unique_id=720583998]
-layout_mode = 2
+[node name="LowerBar" type="HBoxContainer" parent="." unique_id=720583998]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
 theme_override_constants/separation = 32
 
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel/HBoxContainer3" unique_id=384726693]
+[node name="MarginContainer" type="MarginContainer" parent="LowerBar" unique_id=384726693]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 8
 size_flags_stretch_ratio = 1.2
 theme_override_constants/margin_left = 32
 theme_override_constants/margin_bottom = 32
 
-[node name="ChestButton" parent="MainPanel/HBoxContainer3/MarginContainer" unique_id=1352913184 instance=ExtResource("7_6w0v2")]
+[node name="ChestButton" parent="LowerBar/MarginContainer" unique_id=1352913184 instance=ExtResource("7_6w0v2")]
+custom_minimum_size = Vector2(0, 256)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
 
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton" unique_id=1386081020]
+[node name="MarginContainer" type="MarginContainer" parent="LowerBar/MarginContainer/ChestButton" unique_id=1386081020]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -460,24 +678,25 @@ grow_vertical = 2
 theme_override_constants/margin_left = 176
 theme_override_constants/margin_bottom = 64
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton/MarginContainer" unique_id=879942363]
+[node name="HBoxContainer" type="HBoxContainer" parent="LowerBar/MarginContainer/ChestButton/MarginContainer" unique_id=879942363]
 layout_mode = 2
 theme_override_constants/separation = 150
 
-[node name="TextureRect" type="TextureRect" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton/MarginContainer/HBoxContainer" unique_id=653861874]
+[node name="TextureRect" type="TextureRect" parent="LowerBar/MarginContainer/ChestButton/MarginContainer/HBoxContainer" unique_id=653861874]
 layout_mode = 2
 texture = ExtResource("21_ncut8")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton/MarginContainer/HBoxContainer" unique_id=24347859]
+[node name="MarginContainer" type="MarginContainer" parent="LowerBar/MarginContainer/ChestButton/MarginContainer/HBoxContainer" unique_id=24347859]
 show_behind_parent = true
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 
-[node name="ProgressBar" type="ProgressBar" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton/MarginContainer/HBoxContainer/MarginContainer" unique_id=1258706789]
+[node name="ChestProgressBar" type="ProgressBar" parent="LowerBar/MarginContainer/ChestButton/MarginContainer/HBoxContainer/MarginContainer" unique_id=1258706789]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 1
@@ -489,23 +708,29 @@ step = 1.0
 value = 1.0
 show_percentage = false
 
-[node name="Label" type="Label" parent="MainPanel/HBoxContainer3/MarginContainer/ChestButton/MarginContainer/HBoxContainer/MarginContainer" unique_id=1559589483]
+[node name="ChestLabel" type="Label" parent="LowerBar/MarginContainer/ChestButton/MarginContainer/HBoxContainer/MarginContainer" unique_id=1559589483]
+unique_name_in_owner = true
 layout_mode = 2
 text = "1/3"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="MarginContainer2" type="MarginContainer" parent="MainPanel/HBoxContainer3" unique_id=1207862044]
+[node name="MarginContainer2" type="MarginContainer" parent="LowerBar" unique_id=1207862044]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
 theme_override_constants/margin_bottom = 96
 
-[node name="GameModeButton" parent="MainPanel/HBoxContainer3/MarginContainer2" unique_id=432938554 instance=ExtResource("7_6w0v2")]
+[node name="GameModeButton" parent="LowerBar/MarginContainer2" unique_id=432938554 instance=ExtResource("7_6w0v2")]
 custom_minimum_size = Vector2(0, 160)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
 
-[node name="Panel" type="Panel" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton" unique_id=296882766]
+[node name="Panel" type="Panel" parent="LowerBar/MarginContainer2/GameModeButton" unique_id=296882766]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -515,7 +740,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_l7lr6")
 
-[node name="MarginContainer" type="MarginContainer" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel" unique_id=1106747335]
+[node name="MarginContainer" type="MarginContainer" parent="LowerBar/MarginContainer2/GameModeButton/Panel" unique_id=1106747335]
 layout_mode = 0
 offset_right = 730.0
 offset_bottom = 160.0
@@ -525,12 +750,12 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 24
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel/MarginContainer" unique_id=298442232]
+[node name="HBoxContainer" type="HBoxContainer" parent="LowerBar/MarginContainer2/GameModeButton/Panel/MarginContainer" unique_id=298442232]
 layout_mode = 2
 mouse_filter = 2
 theme_override_constants/separation = 96
 
-[node name="GameModeTextureRect" type="TextureRect" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer" unique_id=901940831]
+[node name="GameModeTextureRect" type="TextureRect" parent="LowerBar/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer" unique_id=901940831]
 unique_name_in_owner = true
 layout_mode = 2
 mouse_filter = 2
@@ -538,20 +763,20 @@ texture = ExtResource("26_s74wb")
 expand_mode = 1
 stretch_mode = 3
 
-[node name="VBoxContainer" type="VBoxContainer" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer" unique_id=1221341127]
+[node name="VBoxContainer" type="VBoxContainer" parent="LowerBar/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer" unique_id=1221341127]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_constants/separation = -10
 alignment = 1
 
-[node name="GameModeLabel" type="Label" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=581274904]
+[node name="GameModeLabel" type="Label" parent="LowerBar/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=581274904]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 text = "SUPERWOMP"
 
-[node name="RankedLabel" type="Label" parent="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1551199013]
+[node name="RankedLabel" type="Label" parent="LowerBar/MarginContainer2/GameModeButton/Panel/MarginContainer/HBoxContainer/VBoxContainer" unique_id=1551199013]
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.23921569, 0.4392157, 1, 1)
@@ -562,7 +787,7 @@ theme_override_font_sizes/font_size = 32
 text = "RANKED"
 vertical_alignment = 2
 
-[node name="MarginContainer3" type="MarginContainer" parent="MainPanel/HBoxContainer3" unique_id=815703450]
+[node name="MarginContainer3" type="MarginContainer" parent="LowerBar" unique_id=815703450]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 8
@@ -570,13 +795,18 @@ mouse_filter = 2
 theme_override_constants/margin_right = 64
 theme_override_constants/margin_bottom = 64
 
-[node name="PlayButton" parent="MainPanel/HBoxContainer3/MarginContainer3" unique_id=738369133 instance=ExtResource("7_6w0v2")]
+[node name="PlayButton" parent="LowerBar/MarginContainer3" unique_id=738369133 instance=ExtResource("7_6w0v2")]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 224)
 layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
 toggle_mode = true
 
-[node name="PlayButtonPanel" type="Panel" parent="MainPanel/HBoxContainer3/MarginContainer3/PlayButton" unique_id=1947473841]
+[node name="PlayButtonPanel" type="Panel" parent="LowerBar/MarginContainer3/PlayButton" unique_id=1947473841]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -587,7 +817,7 @@ grow_vertical = 2
 mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_3sly6")
 
-[node name="PlayButtonLabel" type="Label" parent="MainPanel/HBoxContainer3/MarginContainer3/PlayButton/PlayButtonPanel" unique_id=186575185]
+[node name="PlayButtonLabel" type="Label" parent="LowerBar/MarginContainer3/PlayButton/PlayButtonPanel" unique_id=186575185]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
@@ -636,18 +866,37 @@ unique_name_in_owner = true
 visible = false
 layout_mode = 1
 
-[connection signal="pressed" from="MainPanel/MarginContainer/HBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
-[connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer/ShopButton" to="." method="_on_shop_button_pressed"]
-[connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer/ArmoryButton" to="." method="_on_armory_button_pressed"]
-[connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer2/FriendsButton" to="." method="_on_friends_button_pressed"]
-[connection signal="pressed" from="MainPanel/MarginContainer2/VBoxContainer2/RankingsButton" to="." method="_on_rankings_button_pressed"]
-[connection signal="pressed" from="MainPanel/HBoxContainer3/MarginContainer/ChestButton" to="." method="_on_chest_button_pressed"]
-[connection signal="pressed" from="MainPanel/HBoxContainer3/MarginContainer2/GameModeButton" to="." method="_on_game_mode_button_pressed"]
-[connection signal="toggled" from="MainPanel/HBoxContainer3/MarginContainer3/PlayButton" to="." method="_on_play_button_toggled"]
+[node name="ChestOpening" parent="." unique_id=1840069824 instance=ExtResource("27_pjrra")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+anchors_preset = 0
+anchor_right = 0.0
+anchor_bottom = 0.0
+grow_horizontal = 1
+grow_vertical = 1
+
+[connection signal="pressed" from="UpperBar/HBoxContainer/SettingsButton" to="." method="_on_settings_button_pressed"]
+[connection signal="pressed" from="UpperBar/VBoxContainer/LeaveButton" to="." method="_on_leave_button_pressed"]
+[connection signal="pressed" from="SideButtons/VBoxContainer/ShopButton" to="." method="_on_shop_button_pressed"]
+[connection signal="pressed" from="SideButtons/VBoxContainer/ArmoryButton" to="." method="_on_armory_button_pressed"]
+[connection signal="pressed" from="SideButtons/VBoxContainer2/FriendsButton" to="." method="_on_friends_button_pressed"]
+[connection signal="pressed" from="SideButtons/VBoxContainer2/RankingsButton" to="." method="_on_rankings_button_pressed"]
+[connection signal="pressed" from="LowerBar/MarginContainer/ChestButton" to="." method="_on_chest_button_pressed"]
+[connection signal="pressed" from="LowerBar/MarginContainer2/GameModeButton" to="." method="_on_game_mode_button_pressed"]
+[connection signal="toggled" from="LowerBar/MarginContainer3/PlayButton" to="." method="_on_play_button_toggled"]
 [connection signal="add_friends_button_pressed" from="FriendsPanel" to="." method="_on_friends_panel_add_friends_button_pressed"]
 [connection signal="closed" from="FriendsPanel" to="." method="_on_friends_panel_closed"]
 [connection signal="player_invited" from="FriendsPanel" to="." method="_on_friends_panel_player_invited"]
 [connection signal="closed" from="RankingsPanel" to="." method="_on_rankings_panel_closed"]
+[connection signal="closed" from="GameModePanel" to="." method="_on_game_mode_panel_closed"]
+[connection signal="game_mode_selected" from="GameModePanel" to="." method="_on_game_mode_panel_game_mode_selected"]
+[connection signal="closed" from="SettingsPanel" to="." method="_on_settings_panel_closed"]
+[connection signal="logout_requested" from="SettingsPanel" to="." method="_on_settings_panel_logout_requested"]
+[connection signal="start_link_requested" from="SettingsPanel" to="." method="_on_settings_panel_start_link_requested"]
+[connection signal="verify_link_requested" from="SettingsPanel" to="." method="_on_settings_panel_verify_link_requested"]
+[connection signal="closed" from="ArmoryScreen" to="." method="_on_armory_screen_closed"]
+[connection signal="loadout_updated" from="ArmoryScreen" to="." method="_on_armory_screen_loadout_updated"]
 [connection signal="accept_invite_requested" from="InvitePopup" to="." method="_on_invite_popup_accept_invite_requested"]
 [connection signal="decline_invite_requested" from="InvitePopup" to="." method="_on_invite_popup_decline_invite_requested"]
 [connection signal="hidden" from="InvitePopup" to="." method="_on_invite_popup_hidden"]

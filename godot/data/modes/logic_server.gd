@@ -94,6 +94,7 @@ func respawn_participant(participant_id: String, spawn_position: Vector2, hearts
 		"rangedId": participant.ranged_id,
 		"armourId": participant.armour_id,
 		"abilityId": participant.ability_id,
+		"styleId": participant.style_id,
 	}
 	var ability_charge: int = participant.ability_charge
 	participant_container.remove_child(participant)
@@ -184,6 +185,7 @@ func _create_participant(participant_id: String, loadout: Dictionary, spawn_posi
 	participant.ranged_id = loadout["rangedId"]
 	participant.armour_id = loadout["armourId"]
 	participant.ability_id = loadout["abilityId"]
+	participant.style_id = loadout["styleId"]
 	participant.hearts = hearts
 	participant.ability_charge = ability_charge
 	participant.global_position = spawn_position
@@ -262,6 +264,7 @@ func _build_participant_snapshot(participant_id: String) -> ParticipantSnapshot:
 	participant_snapshot.ranged_id = participant.ranged_id
 	participant_snapshot.ranged_ammunition = participant.ranged_ammunition
 	participant_snapshot.ranged_recharge_time = participant.ranged_recharge_time
+	participant_snapshot.style_id = participant.style_id
 	participant_snapshot.last_ability = participant.last_ability
 	participant_snapshot.ability_charge = participant.ability_charge
 	return participant_snapshot

@@ -232,6 +232,7 @@ func _interpolate_player_snapshot(older: ParticipantSnapshot, newer: Participant
 		snapshot.ranged_recharge_time = lerpf(older.ranged_recharge_time, newer.ranged_recharge_time, alpha)
 	else:
 		snapshot.ranged_recharge_time = newer.ranged_recharge_time
+	snapshot.style_id = newer.style_id
 	snapshot.last_ability = newer.last_ability
 	snapshot.ability_charge = newer.ability_charge
 	return snapshot

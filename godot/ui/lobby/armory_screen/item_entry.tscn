@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dgchdpvh25gfe" path="res://ui/lobby/armory_screen/item_entry.gd" id="1_f08fj"]
 [ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="2_tq80x"]
-[ext_resource type="PackedScene" uid="uid://cnlqm0mhmwdm2" path="res://ui/lobby/armory_screen/item_card.tscn" id="2_vdelg"]
+[ext_resource type="PackedScene" uid="uid://cnlqm0mhmwdm2" path="res://ui/shared/item_card/item_card.tscn" id="2_vdelg"]
 [ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/shared/animated_button/blue_button.png" id="4_38ypp"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q8m82"]
@@ -85,6 +85,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="pressed" from="ItemCard" to="." method="_on_item_card_pressed"]
+[connection signal="visibility_changed" from="ItemCard/Panel/EquipPopup" to="." method="_on_equip_popup_visibility_changed"]
 [connection signal="pressed" from="ItemCard/Panel/EquipPopup/EquipButton" to="." method="_on_equip_button_pressed"]
 
 [editable path="ItemCard"]

@@ -30,3 +30,5 @@ var last_ability: int
 var ability_charge: int
 
 var armour_id: String
+
+var style_id: String

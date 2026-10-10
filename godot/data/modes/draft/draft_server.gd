@@ -157,7 +157,9 @@ func _enter_fight() -> void:
 	var second_id: String = remaining_ids[1]
 
 	for participant_id in remaining_ids:
-		loadouts[participant_id] = {}
+		loadouts[participant_id] = {
+			"styleId": super._get_loadout(participant_id)["styleId"],
+		}
 
 	for participant_id in remaining_ids:
 		var other_id := (

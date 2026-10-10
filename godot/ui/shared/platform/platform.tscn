@@ -17,7 +17,7 @@
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4fh3e"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_deuci"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ht1id"]
 resource_local_to_scene = true
 bg_color = Color(0.27450982, 0.8352941, 0.22745098, 1)
 corner_radius_top_left = 14
@@ -25,7 +25,7 @@ corner_radius_top_right = 14
 corner_radius_bottom_right = 14
 corner_radius_bottom_left = 14
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ky1j6"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_18g8b"]
 resource_local_to_scene = true
 bg_color = Color(0.84705883, 0.38039216, 0.11764706, 1)
 corner_radius_top_left = 2
@@ -33,7 +33,7 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5o5wd"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n255b"]
 resource_local_to_scene = true
 bg_color = Color(0.84705883, 0.38039216, 0.11764706, 1)
 corner_radius_top_left = 2
@@ -41,7 +41,7 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rbre5"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_esrov"]
 resource_local_to_scene = true
 bg_color = Color(0.84705883, 0.38039216, 0.11764706, 1)
 corner_radius_top_left = 2
@@ -49,7 +49,7 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_poepv"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_j1ly6"]
 resource_local_to_scene = true
 bg_color = Color(0.84705883, 0.38039216, 0.11764706, 1)
 corner_radius_top_left = 2
@@ -57,7 +57,7 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dkemw"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_721i1"]
 resource_local_to_scene = true
 bg_color = Color(0.84705883, 0.38039216, 0.11764706, 1)
 corner_radius_top_left = 2
@@ -65,12 +65,23 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_eu5sx"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1k8xl"]
 resource_local_to_scene = true
 shader = ExtResource("5_jhax7")
 shader_parameter/flash_amount = 0.0
 shader_parameter/invisibility_amount = 0.0
 shader_parameter/reveal_amount = 0.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_a833i"]
+bg_color = Color(0, 0, 0, 0.49803922)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+expand_margin_left = 32.0
+expand_margin_top = 16.0
+expand_margin_right = 32.0
+expand_margin_bottom = 16.0
 
 [node name="Platform" type="Button" unique_id=1079005344]
 anchors_preset = 15
@@ -120,25 +131,25 @@ scale = Vector2(1.5, 1.5)
 visible = false
 
 [node name="HealthBar" parent="Control/Node2D/PlayerClient/Status/VBoxContainer" index="1" unique_id=868168642]
-theme_override_styles/fill = SubResource("StyleBoxFlat_deuci")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ht1id")
 
 [node name="WeaponAmmunitionBarSegment" parent="Control/Node2D/PlayerClient/Status/VBoxContainer/MarginContainer/VBoxContainer/RangedAmmunitionBar" parent_id_path=PackedInt32Array(1793409614, 1868968135) index="0" unique_id=497963735]
-theme_override_styles/fill = SubResource("StyleBoxFlat_ky1j6")
+theme_override_styles/fill = SubResource("StyleBoxFlat_18g8b")
 
 [node name="WeaponAmmunitionBarSegment2" parent="Control/Node2D/PlayerClient/Status/VBoxContainer/MarginContainer/VBoxContainer/RangedAmmunitionBar" parent_id_path=PackedInt32Array(1793409614, 1868968135) index="1" unique_id=54695042]
-theme_override_styles/fill = SubResource("StyleBoxFlat_5o5wd")
+theme_override_styles/fill = SubResource("StyleBoxFlat_n255b")
 
 [node name="WeaponAmmunitionBarSegment3" parent="Control/Node2D/PlayerClient/Status/VBoxContainer/MarginContainer/VBoxContainer/RangedAmmunitionBar" parent_id_path=PackedInt32Array(1793409614, 1868968135) index="2" unique_id=635004617]
-theme_override_styles/fill = SubResource("StyleBoxFlat_rbre5")
+theme_override_styles/fill = SubResource("StyleBoxFlat_esrov")
 
 [node name="WeaponAmmunitionBarSegment4" parent="Control/Node2D/PlayerClient/Status/VBoxContainer/MarginContainer/VBoxContainer/MeleeAmmunitionBar" parent_id_path=PackedInt32Array(1793409614, 628645159) index="0" unique_id=1594060933]
-theme_override_styles/fill = SubResource("StyleBoxFlat_poepv")
+theme_override_styles/fill = SubResource("StyleBoxFlat_j1ly6")
 
 [node name="WeaponAmmunitionBarSegment5" parent="Control/Node2D/PlayerClient/Status/VBoxContainer/MarginContainer/VBoxContainer/MeleeAmmunitionBar" parent_id_path=PackedInt32Array(1793409614, 628645159) index="1" unique_id=1309301700]
-theme_override_styles/fill = SubResource("StyleBoxFlat_dkemw")
+theme_override_styles/fill = SubResource("StyleBoxFlat_721i1")
 
 [node name="Sprite" parent="Control/Node2D/PlayerClient" index="3" unique_id=672538185]
-material = SubResource("ShaderMaterial_eu5sx")
+material = SubResource("ShaderMaterial_1k8xl")
 
 [node name="ReadyLabel" type="Label" parent="Control" unique_id=455423110]
 unique_name_in_owner = true
@@ -149,14 +160,19 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -95.0
-offset_top = 93.5
-offset_right = 95.0
-offset_bottom = 170.5
+offset_left = -71.0
+offset_top = 52.0
+offset_right = 71.0
+offset_bottom = 110.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_colors/font_color = Color(0.23921569, 0.4392157, 1, 1)
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+theme_override_styles/normal = SubResource("StyleBoxFlat_a833i")
 text = "READY"
 horizontal_alignment = 1
+vertical_alignment = 1
 
 [editable path="Control/Node2D/PlayerClient"]

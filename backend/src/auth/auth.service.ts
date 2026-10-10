@@ -45,7 +45,6 @@ export class AuthService {
         },
         items: {
           create: DEFAULT_ITEMS.map((item) => ({
-            itemType: item.itemType,
             itemId: item.itemId,
           })),
         },
@@ -134,7 +133,6 @@ export class AuthService {
             },
             items: {
               create: DEFAULT_ITEMS.map((item) => ({
-                itemType: item.itemType,
                 itemId: item.itemId,
               })),
             },

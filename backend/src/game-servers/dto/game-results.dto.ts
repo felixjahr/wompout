@@ -28,6 +28,10 @@ export class MatchLoadoutDto {
   @IsString()
   @IsNotEmpty()
   abilityId!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  styleId!: string;
 }
 
 export class ParticipantResultDto {

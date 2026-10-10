@@ -21,8 +21,8 @@ func _on_signup_start_signup_requested(displayName: String, email: String) -> vo
 	start_signup_requested.emit(displayName, email, _on_start_signup_completed)
 
 
-func _on_start_signup_completed(success: bool) -> void:
-	if success:
+func _on_start_signup_completed(response: Dictionary) -> void:
+	if response["ok"]:
 		signup.hide()
 		verify.show_verify()
 
@@ -44,8 +44,8 @@ func _on_login_start_login_requested(email: String) -> void:
 	start_login_requested.emit(email, _on_start_login_completed)
 
 
-func _on_start_login_completed(success: bool) -> void:
-	if success:
+func _on_start_login_completed(response: Dictionary) -> void:
+	if response["ok"]:
 		login.hide()
 		verify.show_verify()
 

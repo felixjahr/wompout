@@ -16,7 +16,7 @@ size_flags_horizontal = 8
 size_flags_vertical = 0
 amount = 0.7
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1122937323]
+[node name="TextureRect" type="TextureRect" parent="." index="0" unique_id=1122937323]
 layout_mode = 1
 anchors_preset = 1
 anchor_left = 1.0

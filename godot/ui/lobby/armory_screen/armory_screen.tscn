@@ -346,7 +346,9 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="CloseButton" parent="ArmoryPanel" unique_id=150685673 instance=ExtResource("4_lr8ns")]
+custom_minimum_size = Vector2(224, 172)
 layout_mode = 1
+offset_bottom = 160.0
 
 [node name="Platform" parent="." unique_id=1447817100 instance=ExtResource("7_f5oej")]
 unique_name_in_owner = true

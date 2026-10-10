@@ -8,9 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { createHash, randomBytes, timingSafeEqual } from 'node:crypto';
 import { spawn } from 'node:child_process';
 import { GameResultsDto } from './dto/game-results.dto';
-import { RealtimeService } from '../realtime/realtime.service';
 import { Subject } from 'rxjs';
-import { PrismaService } from '../prisma/prisma.service';
 import { PlayersService } from '../players/players.service';
 import { MODES } from '../config/modes.config';
 import { MatchesService } from '../matches/matches.service';
@@ -32,8 +30,6 @@ export class GameServersService {
 
   constructor(
     private readonly configService: ConfigService,
-    private readonly realtimeService: RealtimeService,
-    private readonly prismaService: PrismaService,
     private readonly playersService: PlayersService,
     private readonly matchesService: MatchesService,
   ) {
@@ -155,7 +151,7 @@ export class GameServersService {
 
       const operation = Promise.resolve().then(async () => {
         const trophyChange = mode.ranked
-          ? await this.playersService.updateTrophies(
+          ? await this.playersService.recordMatchResult(
               player.id,
               mode.trophyChanges[ownResult.placement - 1],
             )

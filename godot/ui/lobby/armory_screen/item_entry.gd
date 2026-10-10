@@ -9,10 +9,12 @@ signal item_equipped
 func render_item_entry(category_id: String, item_id: String, loadout: Dictionary):
 	item_card.render_item_card(category_id, item_id)
 	equip_popup.hide()
+	var item_card_panel_stylebox: StyleBoxFlat = item_card.get_child(0).get_theme_stylebox("panel").duplicate()
 	if loadout[category_id + "Id"] == item_id:
-		var item_card_panel_stylebox: StyleBoxFlat = item_card.get_child(0).get_theme_stylebox("panel").duplicate()
 		item_card_panel_stylebox.bg_color = Color("3d70ff")
-		item_card.get_child(0).add_theme_stylebox_override("panel", item_card_panel_stylebox)
+	else:
+		item_card_panel_stylebox.bg_color = Color("151a21")
+	item_card.get_child(0).add_theme_stylebox_override("panel", item_card_panel_stylebox)
 
 
 func _input(event: InputEvent) -> void:
@@ -31,3 +33,7 @@ func _on_equip_button_pressed() -> void:
 
 func _on_item_card_pressed() -> void:
 	equip_popup.visible = !equip_popup.visible
+
+
+func _on_equip_popup_visibility_changed() -> void:
+	z_index = 1 if equip_popup.visible else 0

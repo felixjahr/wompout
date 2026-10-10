@@ -3,11 +3,13 @@ export const DEFAULT_LOADOUT = {
   meleeId: 'sword',
   armourId: 'light_armour',
   abilityId: 'dash',
+  styleId: 'red',
 } as const;
 
 export const DEFAULT_ITEMS = [
-  { itemType: 'RANGED', itemId: 'gun' },
-  { itemType: 'MELEE', itemId: 'sword' },
-  { itemType: 'ARMOUR', itemId: 'light_armour' },
-  { itemType: 'ABILITY', itemId: 'dash' },
+  { itemId: 'gun' },
+  { itemId: 'sword' },
+  { itemId: 'light_armour' },
+  { itemId: 'dash' },
+  { itemId: 'red' },
 ] as const;

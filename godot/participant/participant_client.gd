@@ -6,7 +6,7 @@ const LOCAL_TEAM_COLOR := Color("#1ca638")
 const ENEMY_TEAM_COLORS := [
 	Color("#a61c1c"),
 	Color("#246bd1"),
-	Color("#d9b522"),
+	Color("#f5b51b"),
 ]
 const AIM_COLOR := Color("#99999980")
 const AIM_NO_AMMUNITION_COLOR := Color("#ff000080")
@@ -23,6 +23,7 @@ var last_ability := -1
 var armour_id: String
 var melee_id: String
 var ranged_id: String
+var style_id: String
 
 @onready var status := $Status
 @onready var name_label := $Status/NameLabel
@@ -37,7 +38,7 @@ var ranged_id: String
 @onready var animation_player := $AnimationPlayer
 @onready var right_shoulder := $Sprite/LowerTorso/UpperTorso/RightShoulder
 @onready var left_shoulder := $Sprite/LowerTorso/UpperTorso/LeftShoulder
-@onready var armour_sprites := [
+@onready var armour_sprites: Array[Sprite2D] = [
 	$Sprite/LowerTorso/UpperTorso/LeftShoulder/LeftUpperArm/ArmourLeftUpperArm,
 	$Sprite/LowerTorso/UpperTorso/LeftShoulder/LeftUpperArm/LeftLowerArm/ArmourLeftLowerArm,
 	$Sprite/LowerTorso/LeftUpperLeg/ArmourLeftUpperLeg,
@@ -49,6 +50,19 @@ var ranged_id: String
 	$Sprite/LowerTorso/UpperTorso/RightShoulder/RightUpperArm/ArmourRightUpperArm,
 	$Sprite/LowerTorso/UpperTorso/RightShoulder/RightUpperArm/RightLowerArm/ArmourRightLowerArm,
 	$Sprite/LowerTorso/UpperTorso/Head/ArmourHead,
+]
+@onready var body_sprites: Array[Sprite2D] = [
+	$Sprite/LowerTorso,
+	$Sprite/LowerTorso/LeftUpperLeg,
+	$Sprite/LowerTorso/LeftUpperLeg/LeftLowerLeg,
+	$Sprite/LowerTorso/RightUpperLeg,
+	$Sprite/LowerTorso/RightUpperLeg/RightLowerLeg,
+	$Sprite/LowerTorso/UpperTorso,
+	$Sprite/LowerTorso/UpperTorso/Head,
+	$Sprite/LowerTorso/UpperTorso/LeftShoulder/LeftUpperArm,
+	$Sprite/LowerTorso/UpperTorso/LeftShoulder/LeftUpperArm/LeftLowerArm,
+	$Sprite/LowerTorso/UpperTorso/RightShoulder/RightUpperArm,
+	$Sprite/LowerTorso/UpperTorso/RightShoulder/RightUpperArm/RightLowerArm,
 ]
 
 
@@ -75,6 +89,7 @@ func apply_snapshot(snapshot: ParticipantSnapshot) -> void:
 	_update_ability_state(snapshot)
 	_update_armour(snapshot)
 	_update_weapons(snapshot)
+	_update_style(snapshot)
 	_update_ammunition_bars(snapshot)
 	_update_facing(snapshot)
 	_update_animation_player(snapshot)
@@ -135,6 +150,14 @@ func _update_weapons(snapshot: ParticipantSnapshot) -> void:
 	if snapshot.ranged_id != ranged_id:
 		ranged_id = snapshot.ranged_id
 		_setup_ammunition_bar(ranged_ammunition_bar, Data.RANGED[ranged_id].max_ammunition)
+
+
+func _update_style(snapshot: ParticipantSnapshot) -> void:
+	if snapshot.style_id == style_id:
+		return
+	for body_sprite in body_sprites:
+		body_sprite.self_modulate = Data.STYLE[snapshot.style_id].color
+	style_id = snapshot.style_id
 
 
 func _setup_ammunition_bar(ammunition_bar: HBoxContainer, max_ammunition: int) -> void:

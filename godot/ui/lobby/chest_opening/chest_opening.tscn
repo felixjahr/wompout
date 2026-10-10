@@ -1,0 +1,277 @@
+[gd_scene format=3 uid="uid://b1c4iswomi1dv"]
+
+[ext_resource type="Texture2D" uid="uid://bx5iaq65mhmy0" path="res://ui/loading/loading.png" id="1_83env"]
+[ext_resource type="Script" uid="uid://dp2pc3rreaik8" path="res://ui/lobby/chest_opening/chest_opening.gd" id="2_16jj3"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="2_wy3nk"]
+[ext_resource type="Texture2D" uid="uid://flbrn7g6884s" path="res://ui/lobby/chest.png" id="3_12hw2"]
+[ext_resource type="PackedScene" uid="uid://cnlqm0mhmwdm2" path="res://ui/shared/item_card/item_card.tscn" id="3_d1cnt"]
+[ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="3_hdtbl"]
+[ext_resource type="Texture2D" uid="uid://ceakiwl7ehb55" path="res://ui/lobby/coin.png" id="6_lodu0"]
+[ext_resource type="Texture2D" uid="uid://cjtlu5mshu276" path="res://ui/shared/animated_button/yellow_button.png" id="6_mnpip"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_w6jkh"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_itc4g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_s221t"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_pgqxl"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_4fh3e"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hdtbl"]
+bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0.6784314, 0.67058825, 0.67058825, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_lodu0"]
+resource_local_to_scene = true
+particle_flag_disable_z = true
+angle_min = -180.0
+angle_max = 180.0
+direction = Vector3(0, -1, 0)
+spread = 65.0
+initial_velocity_min = 650.0
+initial_velocity_max = 1000.0
+angular_velocity_min = -300.0
+angular_velocity_max = 300.0
+gravity = Vector3(0, 1100, 0)
+scale_min = 0.16
+scale_max = 0.28
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lodu0"]
+texture = ExtResource("6_mnpip")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
+[node name="ChestOpening" type="TextureRect" unique_id=1840069824]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_83env")
+stretch_mode = 6
+script = ExtResource("2_16jj3")
+
+[node name="Chest" type="Button" parent="." unique_id=1102227921]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_hdtbl")
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
+
+[node name="TextureRect" type="TextureRect" parent="Chest" unique_id=1517556737]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -192.0
+offset_right = 192.0
+offset_bottom = 192.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_12hw2")
+
+[node name="ItemCard" parent="." unique_id=604162406 instance=ExtResource("3_d1cnt")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = -152.0
+offset_right = 112.0
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ItemCard" unique_id=105694978]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = -200.0
+offset_top = -250.0
+offset_right = 200.0
+offset_bottom = -92.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="ItemCard/VBoxContainer" unique_id=1635174490]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.70980394, 0.105882354, 1)
+text = "NEW ITEM UNLOCKED:"
+horizontal_alignment = 1
+
+[node name="ItemLabel" type="Label" parent="ItemCard/VBoxContainer" unique_id=1509831708]
+unique_name_in_owner = true
+layout_mode = 2
+text = "GUN"
+horizontal_alignment = 1
+
+[node name="CurrencyCard" parent="." unique_id=1004417901 instance=ExtResource("2_wy3nk")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(268.8, 364.8)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -112.0
+offset_top = -152.0
+offset_right = 112.0
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
+
+[node name="Panel" type="Panel" parent="CurrencyCard" unique_id=163606587]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_hdtbl")
+
+[node name="MarginContainer" type="MarginContainer" parent="CurrencyCard/Panel" unique_id=1842072574]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CurrencyCard/Panel/MarginContainer" unique_id=87381950]
+layout_mode = 2
+
+[node name="CurrencyTextureRect" type="TextureRect" parent="CurrencyCard/Panel/MarginContainer/VBoxContainer" unique_id=1751057769]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+texture = ExtResource("6_lodu0")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CurrencyLabel" type="Label" parent="CurrencyCard/Panel/MarginContainer/VBoxContainer" unique_id=1350146040]
+unique_name_in_owner = true
+layout_mode = 2
+text = "COINS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="CurrencyAmountLabel" type="Label" parent="CurrencyCard/Panel/MarginContainer/VBoxContainer" unique_id=1967023132]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9607843, 0.70980394, 0.105882354, 1)
+text = "+10000"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Control" type="Control" parent="CurrencyCard" unique_id=1564372837]
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="CurrencyBurst" type="GPUParticles2D" parent="CurrencyCard/Control" unique_id=1981766163]
+unique_name_in_owner = true
+emitting = false
+amount = 500
+texture = ExtResource("6_lodu0")
+lifetime = 2.4
+one_shot = true
+explosiveness = 0.65
+visibility_rect = Rect2(-1800, -1800, 3600, 5000)
+process_material = SubResource("ParticleProcessMaterial_lodu0")
+
+[node name="CollectButton" parent="." unique_id=761313388 instance=ExtResource("2_wy3nk")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -240.0
+offset_top = -236.0
+offset_right = 240.0
+offset_bottom = -96.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 8
+theme_override_styles/normal = SubResource("StyleBoxEmpty_w6jkh")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_itc4g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_s221t")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_pgqxl")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_4fh3e")
+
+[node name="Panel" type="Panel" parent="CollectButton" unique_id=1908183729]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_lodu0")
+
+[node name="MarginContainer" type="MarginContainer" parent="CollectButton/Panel" unique_id=1213967964]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Label" type="Label" parent="CollectButton/Panel/MarginContainer" unique_id=111351088]
+layout_mode = 2
+theme_override_constants/shadow_offset_y = 3
+theme_override_constants/outline_size = 12
+theme_override_constants/shadow_outline_size = 12
+theme_override_font_sizes/font_size = 48
+text = "COLLECT"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="Chest" to="." method="_on_chest_pressed"]
+[connection signal="pressed" from="CollectButton" to="." method="_on_collect_button_pressed"]

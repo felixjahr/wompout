@@ -46,8 +46,8 @@ func _on_link_start_link_requested(email: String) -> void:
 	start_link_requested.emit(email, _on_start_link_completed)
 
 
-func _on_start_link_completed(success: bool) -> void:
-	if success:
+func _on_start_link_completed(response: Dictionary) -> void:
+	if response["ok"]:
 		link.hide()
 		verify.show_verify()
 
@@ -61,8 +61,8 @@ func _on_verify_code_entered(code: String) -> void:
 	verify_link_requested.emit(email, code, _on_verify_link_completed)
 
 
-func _on_verify_link_completed(success: bool) -> void:
-	if success:
+func _on_verify_link_completed(response: Dictionary) -> void:
+	if response["ok"]:
 		verify.hide()
 		main.show()
 

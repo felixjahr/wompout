@@ -6,6 +6,7 @@ signal closed
 const ITEM_ENTRY := preload("res://ui/lobby/armory_screen/item_entry.tscn")
 
 var player: Dictionary
+var current_category_id := "melee"
 
 @onready var armory_panel := %ArmoryPanel
 @onready var item_card_container := %ItemCardContainer
@@ -30,6 +31,21 @@ func _ready() -> void:
 func render_armory(player: Dictionary) -> void:
 	self.player = player
 	platform.render_platform(player, false, true)
+	_render_category(current_category_id)
+
+
+func _render_category(category_id: String) -> void:
+	for child in item_card_container.get_children():
+		child.queue_free()
+	var category_item_ids := Data.CATEGORY_ITEM_IDS[category_id]
+	var category_items := Data.CATEGORIES[category_id]
+	for item_id in category_item_ids:
+		for item in player["items"]:
+			if item["itemId"] == item_id:
+				var new_item_entry := ITEM_ENTRY.instantiate()
+				item_card_container.add_child(new_item_entry)
+				new_item_entry.item_equipped.connect(_on_item_equipped.bind(category_id, item_id))
+				new_item_entry.render_item_entry(category_id, item_id, player["loadout"])
 
 
 func show_armory() -> void:
@@ -49,17 +65,8 @@ func _on_category_button_pressed(category_id: String, tab_button: AnimatedButton
 		var tab_button_panel_stylebox: StyleBoxFlat = child.get_child(0).get_theme_stylebox("panel").duplicate()
 		tab_button_panel_stylebox.bg_color = Color("3d70ff") if child == tab_button else Color("1d222b")
 		child.get_child(0).add_theme_stylebox_override("panel", tab_button_panel_stylebox)
-	for child in item_card_container.get_children():
-		child.queue_free()
-	var category_item_ids := Data.CATEGORY_ITEM_IDS[category_id]
-	var category_items := Data.CATEGORIES[category_id]
-	for item_id in category_item_ids:
-		for item in player["items"]:
-			if item["itemId"] == item_id:
-				var new_item_entry := ITEM_ENTRY.instantiate()
-				item_card_container.add_child(new_item_entry)
-				new_item_entry.item_equipped.connect(_on_item_equipped.bind(category_id, item_id))
-				new_item_entry.render_item_entry(category_id, item_id, player["loadout"])
+	current_category_id = category_id
+	_render_category(category_id)
 
 
 func _on_item_equipped(category_id: String, item_id: String) -> void:
