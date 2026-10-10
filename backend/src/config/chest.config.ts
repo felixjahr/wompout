@@ -1,7 +1,5 @@
 export const INTRO_CHEST_REQUIREMENTS = [1, 2, 2, 3, 3] as const;
-export const REGULAR_CHEST_REQUIREMENT = 5;
-export const DAILY_BONUS_WINS = 3;
-export const DAILY_BONUS_PROGRESS = 2;
+export const REGULAR_CHEST_REQUIREMENT = 4;
 
 export type CurrencyRollConfig = {
   min: number;

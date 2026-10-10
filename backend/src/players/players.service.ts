@@ -15,8 +15,6 @@ import {
   CHEST_REWARDS,
   CHEST_ITEM_GROUPS,
   CurrencyRollConfig,
-  DAILY_BONUS_PROGRESS,
-  DAILY_BONUS_WINS,
   INTRO_CHEST_REQUIREMENTS,
   REGULAR_CHEST_REQUIREMENT,
 } from '../config/chest.config';
@@ -66,26 +64,14 @@ export class PlayersService implements OnModuleInit {
           isIntroChest,
         );
 
-        const now = new Date();
         const introChestsOpened =
           progression.introChestsOpened + (isIntroChest ? 1 : 0);
-
-        const justFinishedIntro =
-          isIntroChest && introChestsOpened === introCount;
-
-        const bonus = justFinishedIntro
-          ? {
-              dailyBonusWinsRemaining: 0,
-              nextDailyBonusAt: this.getNextDailyReset(now),
-            }
-          : this.resolveDailyBonus(progression, now);
 
         await tx.playerProgression.update({
           where: { playerId },
           data: {
             chestProgress: progression.chestProgress - required,
             introChestsOpened,
-            ...bonus,
             coins: {
               increment: reward.type === 'coins' ? reward.amount : 0,
             },
@@ -207,10 +193,7 @@ export class PlayersService implements OnModuleInit {
           where: { playerId },
         });
 
-        const bonus = this.resolveDailyBonus(progression, new Date());
-        const usesBonus = trophyDelta > 0 && bonus.dailyBonusWinsRemaining > 0;
-        const progressGained =
-          trophyDelta > 0 ? (usesBonus ? DAILY_BONUS_PROGRESS : 1) : 0;
+        const progressGained = 1;//trophyDelta > 0 ? 1 : 0;
 
         const trophies = Math.max(0, progression.trophies + trophyDelta);
 
@@ -220,9 +203,6 @@ export class PlayersService implements OnModuleInit {
             trophies,
             highestTrophies: Math.max(progression.highestTrophies, trophies),
             chestProgress: progression.chestProgress + progressGained,
-            dailyBonusWinsRemaining:
-              bonus.dailyBonusWinsRemaining - (usesBonus ? 1 : 0),
-            nextDailyBonusAt: bonus.nextDailyBonusAt,
           },
         });
 
@@ -317,37 +297,10 @@ export class PlayersService implements OnModuleInit {
     return Math.max(min, Math.min(max, Math.round(x)));
   }
 
-  private getNextDailyReset(now: Date): Date {
-    return new Date(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate() + 1),
-    );
-  }
-
-  private resolveDailyBonus(progression: PlayerProgression, now: Date) {
-    const { nextDailyBonusAt, dailyBonusWinsRemaining } = progression;
-
-    if (nextDailyBonusAt === null) {
-      return {
-        dailyBonusWinsRemaining: 0,
-        nextDailyBonusAt: null,
-      };
-    }
-
-    if (now >= nextDailyBonusAt) {
-      return {
-        dailyBonusWinsRemaining: DAILY_BONUS_WINS,
-        nextDailyBonusAt: this.getNextDailyReset(now),
-      };
-    }
-
-    return { dailyBonusWinsRemaining, nextDailyBonusAt };
-  }
-
   private getChestRequirement(introChestsOpened: number): number {
-    return 0;
-    // return (
-    //   INTRO_CHEST_REQUIREMENTS[introChestsOpened] ?? REGULAR_CHEST_REQUIREMENT
-    // );
+    return (
+      INTRO_CHEST_REQUIREMENTS[introChestsOpened] ?? REGULAR_CHEST_REQUIREMENT
+    );
   }
 
   private getReadyChestCount(progression: PlayerProgression): number {
@@ -372,16 +325,11 @@ export class PlayersService implements OnModuleInit {
 
   private buildChestSnapshot(
     progression: PlayerProgression,
-    now: Date,
   ): Player['chestProgress'] {
-    const bonus = this.resolveDailyBonus(progression, now);
-
     return {
       progress: progression.chestProgress,
       requiredProgress: this.getChestRequirement(progression.introChestsOpened),
       readyChests: this.getReadyChestCount(progression),
-      dailyBonusWinsRemaining: bonus.dailyBonusWinsRemaining,
-      nextDailyBonusAt: bonus.nextDailyBonusAt?.toISOString() ?? null,
     };
   }
 
@@ -407,7 +355,7 @@ export class PlayersService implements OnModuleInit {
       highestTrophies: player.progression.highestTrophies,
       coins: player.progression.coins,
       gems: player.progression.gems,
-      chestProgress: this.buildChestSnapshot(player.progression, new Date()),
+      chestProgress: this.buildChestSnapshot(player.progression),
       loadout: {
         rangedId: player.loadout.rangedId,
         meleeId: player.loadout.meleeId,

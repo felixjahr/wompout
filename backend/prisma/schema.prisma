@@ -71,8 +71,6 @@ model PlayerProgression {
   gems                    Int       @default(0)
   chestProgress           Int       @default(0)
   introChestsOpened       Int       @default(0)
-  dailyBonusWinsRemaining Int       @default(0)
-  nextDailyBonusAt        DateTime?
 
   player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
 

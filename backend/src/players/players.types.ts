@@ -10,8 +10,6 @@ export interface Player {
     progress: number;
     requiredProgress: number;
     readyChests: number;
-    dailyBonusWinsRemaining: number;
-    nextDailyBonusAt: string | null;
   };
   loadout: PlayerLoadout;
   items: {
