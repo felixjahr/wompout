@@ -276,9 +276,6 @@ func _apply_event(event: EventSnapshot) -> void:
 		if not players.has(event.victim_player_id):
 			return
 		players[event.victim_player_id].apply_hit()
-		match event.effect_id:
-			"bullet":
-				pass
 	if event is ExplosionEventSnapshot:
 		var explosion := Explosion.instantiate()
 		add_child(explosion)

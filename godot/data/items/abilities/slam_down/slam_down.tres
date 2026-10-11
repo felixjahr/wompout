@@ -5,9 +5,9 @@
 
 [resource]
 script = ExtResource("1_fwrht")
-speed = 5000
-damage = 20
-knockback = 1000
-recharge_time = 2.0
+speed = 3000
+damage = 30
+knockback = 1600
+charge = 60
 card_texture = ExtResource("1_6hj73")
 metadata/_custom_type_script = "uid://cdtuft4aheii2"

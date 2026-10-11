@@ -1,10 +1,10 @@
 extends CharacterBody2D
 
 const SPEED := 500.0
-const ACCELERATION := 1500.0
-const FRICTION := 1200.0
-const GRAVITY := 1500.0
-const JUMP_FORCE := -1200.0
+const ACCELERATION := 4000.0
+const FRICTION := 5000.0
+const GRAVITY := 1800.0
+const JUMP_FORCE := -1300.0
 const JUMPING_GRACE := 0.3
 
 var participant_id: String
@@ -65,7 +65,7 @@ func tick(delta: float, input: ParticipantInput) -> void:
 	_apply_horizontal_movement(delta, input.direction)
 	_apply_vertical_movement(delta, input.jumping)
 	
-	if input.ability and ability_charge >= Data.ABILITY[ability_id].charge:
+	if input.ability and not ability_active and ability_charge >= Data.ABILITY[ability_id].charge:
 		ability_charge = 0
 		match ability_id:
 			"double_jump":
@@ -112,7 +112,7 @@ func apply_knockback(position: Vector2, knockback: float) -> void:
 	velocity = position.direction_to(global_position) * knockback * knockback_multiplier
 
 
-func apply_hit(damage: int, attacker_player_id := "", effect_id := "", effect_position := Vector2.ZERO) -> void:
+func apply_hit(damage: int, attacker_player_id := "") -> void:
 	if dead:
 		return
 	var damage_multiplier := Data.ARMOUR[armour_id].damage_multiplier
@@ -120,8 +120,6 @@ func apply_hit(damage: int, attacker_player_id := "", effect_id := "", effect_po
 	var event := HitEventSnapshot.new()
 	event.victim_player_id = participant_id
 	event.attacker_player_id = attacker_player_id
-	event.effect_id = effect_id
-	event.effect_position = effect_position
 	logic.report_event(event)
 	if attacker_player_id != "":
 		logic.report_damage_dealt(attacker_player_id, damage * damage_multiplier)
@@ -277,6 +275,7 @@ func _update_facing() -> void:
 
 func _ability_double_jump() -> void:
 	last_ability = logic.tick
+	jumping_grace_time_left = 0.0
 	var armour_jump_multiplier := Data.ARMOUR[armour_id].jump_multiplier
 	var dash_jump_multiplier: float = Data.ABILITY[ability_id].jump_multiplier
 	velocity.y = JUMP_FORCE * armour_jump_multiplier * dash_jump_multiplier
@@ -331,9 +330,7 @@ func _on_hitbox_area_entered(area: Area2D) -> void:
 	var target = area.get_parent()
 	if not logic.can_hit(participant_id, target.participant_id, weapon.friendly_fire):
 		return
-	var effect_id := weapon.effect_id
-	var effect_position: Vector2 = pivot.global_position.lerp(target.pivot.global_position, 0.5)
-	target.apply_hit(weapon.damage, participant_id, effect_id, effect_position)
+	target.apply_hit(weapon.damage, participant_id)
 	target.apply_knockback(pivot.global_position, weapon.knockback)
 
 

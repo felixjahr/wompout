@@ -225,10 +225,11 @@ func _on_net_game_request_received(
 
 
 func _build_state_payload(participant_id: String) -> Dictionary:
+	var payload := super._build_state_payload(participant_id)
 	if state != ModeState.PREPARING:
-		return {}
+		return payload
 	if not draft_options.has(participant_id):
-		return {}
+		return payload
 
 	var elapsed := 0.0
 	if draft_started_at.has(participant_id):
@@ -238,7 +239,7 @@ func _build_state_payload(participant_id: String) -> Dictionary:
 			DRAFT_TIME_LIMIT
 		)
 
-	return {
+	payload.merge({
 		"draft_options": draft_options[participant_id].duplicate(true),
 		"draft_submitted": submitted_drafts.has(participant_id),
 		"draft_picks": draft_picks[participant_id].duplicate(),
@@ -249,4 +250,5 @@ func _build_state_payload(participant_id: String) -> Dictionary:
 		),
 		"draft_time_limit": DRAFT_TIME_LIMIT,
 		"draft_elapsed": elapsed,
-	}
+	})
+	return payload

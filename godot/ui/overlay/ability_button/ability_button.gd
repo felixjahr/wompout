@@ -3,13 +3,17 @@ extends Control
 signal pressed
 
 const TEXTURE_ABILITY := {
-	"dash" : preload("res://ui/overlay/ability_button/ability_dash.png"),
-	"invisibility" : preload("res://ui/overlay/ability_button/ability_invisibility.png"),
+	"dash": preload("res://ui/overlay/ability_button/ability_dash.png"),
+	"invisibility": preload("res://ui/overlay/ability_button/ability_invisibility.png"),
+	"double_jump": preload("res://ui/overlay/ability_button/ability_double_jump.png"),
+	"slam_down": preload("res://ui/overlay/ability_button/ability_slam_down.png"),
 }
 
 const TEXTURE_ABILITY_READY := {
-	"dash" : preload("res://ui/overlay/ability_button/ability_dash_ready.png"),
-	"invisibility" : preload("res://ui/overlay/ability_button/ability_invisibility_ready.png"),
+	"dash": preload("res://ui/overlay/ability_button/ability_dash_ready.png"),
+	"invisibility": preload("res://ui/overlay/ability_button/ability_invisibility_ready.png"),
+	"double_jump": preload("res://ui/overlay/ability_button/ability_double_jump_ready.png"),
+	"slam_down": preload("res://ui/overlay/ability_button/ability_slam_down_ready.png"),
 }
 
 const TEXTURE := preload("res://ui/overlay/ability_button/ability_button.png")

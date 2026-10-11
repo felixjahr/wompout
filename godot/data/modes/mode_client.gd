@@ -14,6 +14,7 @@ var state := ModeState.PREPARING
 var map_id: String
 var participant_names: Dictionary = {}
 var ui: Node
+var fight_end_tick: int
 
 @onready var ui_container := get_node("/root/Controller/UIContainer")
 @onready var game_net := get_node("/root/Controller/Net/GameNet")
@@ -25,6 +26,16 @@ func _ready() -> void:
 	logic.spawn_map(map_id)
 	logic.set_physics_process(false)
 	game_net.connect("state_sync_received", _on_net_state_sync_received)
+
+
+func _process(_delta: float) -> void:
+	if state != ModeState.FIGHT:
+		return
+	if not logic.received_first_snapshot:
+		logic.overlay.set_time(-1)
+		return
+	var ticks_remaining: float = maxf(fight_end_tick - logic.estimated_server_tick, 0.0)
+	logic.overlay.set_time(ceili(ticks_remaining / logic.SIMULATION_TICK_RATE))
 
 
 func _change_state(new_state: ModeState, data = null) -> void:
@@ -39,6 +50,7 @@ func _enter_state(data = null) -> void:
 			logic.set_physics_process(false)
 			_enter_preparing(data)
 		ModeState.FIGHT:
+			fight_end_tick = int(data["fight_end_tick"])
 			var overlay := Overlay.instantiate()
 			logic.overlay = overlay
 			ui_container.add_child(overlay)

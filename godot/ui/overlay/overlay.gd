@@ -13,6 +13,8 @@ var attack_weapon := 0
 @onready var dpad := $Dpad
 @onready var melee_joystick := $MeleeJoystick
 @onready var ranged_joystick := $RangedJoystick
+@onready var time_label := %TimeLabel
+@onready var time_button := %TimeButton
 @onready var logic: Node = get_parent().get_parent().game.logic
 
 
@@ -48,6 +50,15 @@ func apply_snapshot(snapshot: ParticipantSnapshot) -> void:
 	var total_charge = Data.ABILITY[snapshot.ability_id].charge
 	var charge_progress: float = float(snapshot.ability_charge) / float(total_charge)
 	ability_button.set_texture_value(charge_progress * 100.0)
+
+
+func set_time(seconds: int) -> void:
+	if seconds < 0:
+		time_button.hide()
+		return
+	time_button.show()
+	time_label.text = "%d:%02d" % [seconds / 60, seconds % 60]
+
 
 
 func _input(event: InputEvent) -> void:

@@ -1,6 +1,7 @@
 extends Node
 
 signal participant_died(participant_id: String)
+signal simulation_tick_finished
 
 const SIMULATION_TICK_RATE := 30
 const SNAPSHOT_FREQUENCY := 2
@@ -55,6 +56,8 @@ func _physics_process(delta: float) -> void:
 	
 	for bullet in bullets.values():
 		bullet.tick(delta)
+	
+	simulation_tick_finished.emit()
 	
 	if tick % SNAPSHOT_FREQUENCY == 0:
 		game_net.send_snapshot(_build_snapshot(), participant_teams)

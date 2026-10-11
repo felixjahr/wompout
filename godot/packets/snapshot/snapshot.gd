@@ -161,8 +161,6 @@ static func _write_hit_event(peer: StreamPeerBuffer, snapshot: HitEventSnapshot)
 	_write_string(peer, snapshot.event_id)
 	_write_string(peer, snapshot.victim_player_id)
 	_write_string(peer, snapshot.attacker_player_id)
-	_write_string(peer, snapshot.effect_id)
-	_write_quantized_vector2(peer, snapshot.effect_position, POSITION_SCALE)
 
 
 static func _read_hit_event(peer: StreamPeerBuffer) -> HitEventSnapshot:
@@ -170,8 +168,6 @@ static func _read_hit_event(peer: StreamPeerBuffer) -> HitEventSnapshot:
 	snapshot.event_id = _read_string(peer)
 	snapshot.victim_player_id = _read_string(peer)
 	snapshot.attacker_player_id = _read_string(peer)
-	snapshot.effect_id = _read_string(peer)
-	snapshot.effect_position = _read_quantized_vector2(peer, POSITION_SCALE)
 	return snapshot
 
 

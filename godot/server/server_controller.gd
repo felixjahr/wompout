@@ -54,6 +54,7 @@ func _ready() -> void:
 	
 	game = MODES[mode_id].instantiate()
 	game.map_id = map_id
+	game.mode_id = mode_id
 	game.players = config["players"]
 	game.bots = config["bots"]
 	game.results_ready.connect(_on_game_results_ready)

@@ -6,8 +6,9 @@
 
 [resource]
 script = ExtResource("3_ivo1j")
-id = "womp_draft_unranked"
 display_name = "WOMP DRAFT"
+max_lobby_size = 2
+time_limit_seconds = 180
 icon_texture = ExtResource("1_pealf")
 thumbnail_texture = ExtResource("3_dqu32")
 metadata/_custom_type_script = "uid://dun332qh8ony6"

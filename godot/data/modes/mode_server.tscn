@@ -14,3 +14,6 @@ script = ExtResource("2_o1ti2")
 [node name="ParticipantContainer" type="Node2D" parent="Logic" unique_id=1727273762]
 
 [node name="BulletContainer" type="Node2D" parent="Logic" unique_id=469114668]
+
+[connection signal="participant_died" from="Logic" to="." method="_on_logic_participant_died"]
+[connection signal="simulation_tick_finished" from="Logic" to="." method="_on_logic_simulation_tick_finished"]

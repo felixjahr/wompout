@@ -6,9 +6,9 @@
 
 [resource]
 script = ExtResource("3_tmc3s")
-id = "super_womp_unranked"
 display_name = "SUPER WOMP"
 max_lobby_size = 4
+time_limit_seconds = 180
 icon_texture = ExtResource("1_r438l")
 thumbnail_texture = ExtResource("3_r438l")
 metadata/_custom_type_script = "uid://dun332qh8ony6"

@@ -37,6 +37,6 @@ func _explode() -> void:
 		var target = area.get_parent()
 		if not logic.can_hit(owner_id, target.participant_id, projectile.friendly_fire):
 			continue
-		target.apply_hit(projectile.damage, owner_id, projectile.effect_id, global_position)
+		target.apply_hit(projectile.damage, owner_id)
 		target.apply_knockback(global_position, projectile.knockback)
 	logic.despawn_bullet(projectile_id)

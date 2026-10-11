@@ -13,11 +13,13 @@ enum ModeState {
 var state := ModeState.PREPARING
 
 var map_id: String
+var mode_id: String
 var players: Array
 var bots: Array
 
 var remaining_ids: Array[String] = []
 var spawn_positions: Dictionary[String, Vector2] = {}
+var fight_end_tick: int
 
 @onready var game_net := $"../Net/GameNet"
 @onready var logic := $Logic
@@ -37,7 +39,6 @@ func _ready() -> void:
 		remaining_ids.append(participant_id)
 		logic.participant_teams[participant_id] = participant["teamId"]
 	
-	logic.participant_died.connect(_on_participant_died)
 	game_net.game_request_received.connect(_on_net_game_request_received)
 	
 	_enter_state()
@@ -87,6 +88,7 @@ func _enter_state() -> void:
 						_get_loadout(bot["id"]),
 						_get_spawn_position(bot["id"]), 
 						_get_starting_hearts(bot["id"]))
+			fight_end_tick = logic.tick + Data.MODES[mode_id].time_limit_seconds * logic.SIMULATION_TICK_RATE
 			logic.set_physics_process(true)
 		ModeState.GAMEOVER:
 			logic.set_physics_process(false)
@@ -124,6 +126,53 @@ func _on_player_received(_player_id: String) -> void:
 	pass
 
 
+func _on_time_limit_reached() -> void:
+	var teams: Dictionary = {}
+
+	for participant_id in remaining_ids:
+		var team_id: int = int(logic.participant_teams[participant_id])
+
+		if not teams.has(team_id):
+			teams[team_id] = {
+				"team_id": team_id,
+				"hearts": 0,
+				"health": 0,
+			}
+
+		var participant = logic.participants.get(participant_id)
+		if participant == null:
+			continue
+
+		teams[team_id]["hearts"] += participant.hearts
+		teams[team_id]["health"] += maxf(participant.health, 0.0)
+
+	var ranked_teams: Array = teams.values()
+	ranked_teams.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
+		if a["hearts"] != b["hearts"]:
+			return a["hearts"] > b["hearts"]
+		return a["health"] > b["health"]
+	)
+
+	var results: Array[Dictionary] = []
+	var placement := 1
+
+	for i in range(ranked_teams.size()):
+		var team: Dictionary = ranked_teams[i]
+
+		if i > 0:
+			var previous: Dictionary = ranked_teams[i - 1]
+			if (
+				team["hearts"] != previous["hearts"]
+				or team["health"] != previous["health"]
+			):
+				placement = i + 1
+
+		results.append_array(_finish_team(int(team["team_id"]), placement))
+
+	results_ready.emit(results)
+	_change_state(ModeState.GAMEOVER)
+
+
 func _get_loadout(participant_id: String) -> Dictionary:
 	for player in players:
 		if player["id"] == participant_id:
@@ -144,7 +193,7 @@ func _get_starting_hearts(_participant_id: String) -> int:
 	return 3
 
 
-func _on_participant_died(participant_id: String) -> void:
+func _on_logic_participant_died(participant_id: String) -> void:
 	if state != ModeState.FIGHT:
 		return
 	var participant = logic.participants[participant_id]
@@ -181,8 +230,18 @@ func _on_participant_eliminated(participant_id: String) -> void:
 		results_ready.emit(team_results)
 
 
+func _on_logic_simulation_tick_finished() -> void:
+	if state != ModeState.FIGHT:
+		return
+	if logic.tick >= fight_end_tick:
+		_on_time_limit_reached()
+
+
 func _build_state_payload(_participant_id: String) -> Dictionary:
-	return {}
+	var payload: Dictionary = {}
+	if state == ModeState.FIGHT:
+		payload["fight_end_tick"] = fight_end_tick
+	return payload
 
 
 func _on_net_game_request_received(_player_id: String, _game_request: GameRequest) -> void:

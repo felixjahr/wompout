@@ -7,6 +7,28 @@
 [ext_resource type="PackedScene" uid="uid://byesepmn17h43" path="res://ui/overlay/jump_button/jump_button.tscn" id="4_2mrie"]
 [ext_resource type="PackedScene" uid="uid://cu6128d5tdhyp" path="res://ui/overlay/ability_button/ability_button.tscn" id="4_nxmck"]
 [ext_resource type="Texture2D" uid="uid://7eqbpor2e70x" path="res://ui/overlay/joystick/joystick_tip_ranged_pressed.png" id="5_bbjur"]
+[ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="8_1apjw"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_woesm"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_6a27g"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tie1r"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_ffy7f"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_a6ghj"]
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_c8jxg"]
+load_path = "res://.godot/imported/background_field.png-a83434794231c976607f3ec75d72ff60.ctex"
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1apjw"]
+texture = SubResource("CompressedTexture2D_c8jxg")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_bottom = 64.0
+expand_margin_right = 32.0
+region_rect = Rect2(0, 0, 128, 192)
 
 [node name="Overlay" type="Control" unique_id=849933501]
 layout_mode = 3
@@ -111,6 +133,55 @@ offset_bottom = 636.0
 
 [node name="Tip" parent="RangedJoystick/CanvasGroup/Base" index="0" unique_id=1441699964]
 texture = ExtResource("3_d84jb")
+
+[node name="Label" type="Label" parent="." unique_id=554325526]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="TimeButton" parent="." unique_id=604162406 instance=ExtResource("8_1apjw")]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(352, 140)
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -352.0
+offset_top = 64.0
+offset_right = 0.0
+offset_bottom = 204.0
+grow_horizontal = 0
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_styles/normal = SubResource("StyleBoxEmpty_woesm")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_6a27g")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_tie1r")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_ffy7f")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_a6ghj")
+
+[node name="Panel" type="Panel" parent="TimeButton" unique_id=468532708]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_1apjw")
+
+[node name="TimeLabel" type="Label" parent="TimeButton/Panel" unique_id=485810865]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "0:00"
+horizontal_alignment = 1
+vertical_alignment = 1
+clip_text = true
 
 [connection signal="pressed" from="AbilityButton" to="." method="_on_ability_button_pressed"]
 [connection signal="pressed" from="JumpButton" to="." method="_on_jump_button_pressed"]
