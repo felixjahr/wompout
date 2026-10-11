@@ -193,7 +193,7 @@ export class PlayersService implements OnModuleInit {
           where: { playerId },
         });
 
-        const progressGained = 1;//trophyDelta > 0 ? 1 : 0;
+        const progressGained = 1;
 
         const trophies = Math.max(0, progression.trophies + trophyDelta);
 

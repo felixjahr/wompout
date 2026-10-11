@@ -3,25 +3,34 @@
 [ext_resource type="Script" uid="uid://dc58rhvdfubb2" path="res://data/items/weapons/ranged/ranged.gd" id="1_bddi5"]
 [ext_resource type="Script" uid="uid://duuv22b7jqrgp" path="res://data/items/weapons/aim_hint_line.gd" id="1_d6fuu"]
 [ext_resource type="Texture2D" uid="uid://dkv680i7p1wa6" path="res://data/items/weapons/ranged/rifle/rifle_card.png" id="2_d6fuu"]
+[ext_resource type="Script" uid="uid://bmyeu48gcwm6u" path="res://projectile/bullet/bullet.gd" id="3_0uapk"]
+[ext_resource type="Texture2D" uid="uid://r5p0yhlwsjs6" path="res://data/items/weapons/ranged/rifle/rifle_bullet.png" id="4_7mdld"]
 
 [sub_resource type="Resource" id="Resource_6hi41"]
 script = ExtResource("1_d6fuu")
-length = 800.0
+length = 1500.0
 width = 20.0
 offset = Vector2(200, -1)
 metadata/_custom_type_script = "uid://duuv22b7jqrgp"
 
+[sub_resource type="Resource" id="Resource_ta80b"]
+script = ExtResource("3_0uapk")
+speed = 2200
+range = 1500
+damage = 7
+knockback = 50
+texture = ExtResource("4_7mdld")
+metadata/_custom_type_script = "uid://bmyeu48gcwm6u"
+
 [resource]
 script = ExtResource("1_bddi5")
-bullet_range = 1000
-bullet_speed = 3000
-bullet_damage = 3
-bullet_offset = Vector2(200, -1)
-bullet_amount = 5
+projectile_offset = Vector2(200, -1)
+projectile_amount = 3
+projectile = SubResource("Resource_ta80b")
 two_handed = true
-attack_duration = 0.9
-max_ammunition = 3
-reload_time = 3.0
+attack_duration = 0.6
+max_ammunition = 4
+reload_time = 2.0
 aim_hint = SubResource("Resource_6hi41")
 card_texture = ExtResource("2_d6fuu")
 metadata/_custom_type_script = "uid://dc58rhvdfubb2"

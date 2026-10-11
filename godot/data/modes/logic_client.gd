@@ -16,7 +16,7 @@ const INPUT_BUFFER_SIZE := 128
 const SEEN_EVENT_BUFFER_SIZE := 32
 
 const ParticipantClient := preload("res://participant/participant_client.tscn")
-const BulletClient := preload("res://bullet/bullet_client.tscn")
+const Explosion := preload("res://events/explosion/explosion.tscn")
 
 var estimated_server_tick: float
 var tick := 0
@@ -122,13 +122,13 @@ func _render_interpolated_snapshot() -> void:
 		players,
 		render_snapshot.participants,
 		func(player_snapshot): return player_snapshot.participant_id,
-		func(player_id):
+		func(player_snapshot):
+			var player_id: String = player_snapshot.participant_id
 			var player = ParticipantClient.instantiate()
 			player.player_name = str(participant_names.get(player_id, player_id))
 			player.team_id = team_by_participant[player_id]
 			player.local_team_id = render_snapshot.local_team_id
-			if player_id == local_player_id:
-				player.local = true
+			player.local = player_id == local_player_id
 			participant_container.add_child(player)
 			return player
 	)
@@ -137,10 +137,12 @@ func _render_interpolated_snapshot() -> void:
 		bullets,
 		render_snapshot.bullets,
 		func(bullet_snapshot): return bullet_snapshot.bullet_id,
-		func(bullet_id):
-			var bullet = BulletClient.instantiate()
-			bullet_container.add_child(bullet)
-			return bullet
+		func(bullet_snapshot):
+			var projectile: Projectile = Data.RANGED[bullet_snapshot.weapon_id].projectile
+			var new_projectile := projectile.get_client_scene().instantiate()
+			new_projectile.projectile = projectile
+			bullet_container.add_child(new_projectile)
+			return new_projectile
 	)
 	
 	for event in render_snapshot.events:
@@ -244,28 +246,32 @@ func _interpolate_bullet_snapshot(older: BulletSnapshot, newer: BulletSnapshot, 
 	snapshot.position = older.position.lerp(newer.position, alpha)
 	snapshot.speed = newer.speed
 	snapshot.direction = newer.direction
+	snapshot.weapon_id = newer.weapon_id
 	return snapshot
 
 
 func _apply_entity_snapshots(entities: Dictionary, entity_snapshots: Array, get_id: Callable, create_entity: Callable) -> void:
 	var snapshot_ids := entity_snapshots.map(get_id)
+
 	for id in entities.keys():
 		if not snapshot_ids.has(id):
 			entities[id].queue_free()
 			entities.erase(id)
-	for id in snapshot_ids:
-		if not entities.has(id):
-			var entity = create_entity.call(id)
-			entities[id] = entity
-	
+
 	for entity_snapshot in entity_snapshots:
 		var id: String = get_id.call(entity_snapshot)
+
+		if not entities.has(id):
+			entities[id] = create_entity.call(entity_snapshot)
+
 		entities[id].apply_snapshot(entity_snapshot)
 
 
 func _apply_event(event: EventSnapshot) -> void:
 	if event is HitEventSnapshot:
-		if event.attacker_player_id == local_player_id and event.victim_player_id != local_player_id:
+		if event.victim_player_id == local_player_id:
+			Input.vibrate_handheld(70)
+		elif event.attacker_player_id == local_player_id:
 			Input.vibrate_handheld(35)
 		if not players.has(event.victim_player_id):
 			return
@@ -273,6 +279,11 @@ func _apply_event(event: EventSnapshot) -> void:
 		match event.effect_id:
 			"bullet":
 				pass
+	if event is ExplosionEventSnapshot:
+		var explosion := Explosion.instantiate()
+		add_child(explosion)
+		explosion.global_position = event.position
+		explosion.play(event.radius)
 
 
 func _update_camera_target(local_team_id: int) -> void:

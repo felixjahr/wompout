@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://cfxhlh7wu87wq"]
+
+[ext_resource type="PackedScene" uid="uid://csfjic0vjvyoh" path="res://projectile/projectile_client.tscn" id="1_sgi4i"]
+
+[node name="RocketClient" unique_id=1735716448 instance=ExtResource("1_sgi4i")]

@@ -214,27 +214,47 @@ func _start_ranged_attack() -> void:
 		ranged_recharge_time = ranged.reload_time
 	
 	attack_time_left = ranged.attack_duration
-	burst_bullet_amount = ranged.bullet_amount
-	_fire_shot()
+	burst_time_left = 0.0
+	burst_bullet_amount = 0
+	
+	if ranged.simultaneous_projectiles:
+		_fire_spray()
+	else:
+		burst_bullet_amount = ranged.projectile_amount
+		_fire_shot()
+
+
+func _fire_spray() -> void:
+	var ranged: Ranged = Data.RANGED[ranged_id]
+	var count := ranged.projectile_amount
+	var spread := deg_to_rad(ranged.spread_degrees)
+	for i in count:
+		var angle_offset := 0.0
+		if count > 1:
+			angle_offset = lerpf(-spread / 2.0, spread / 2.0, float(i) / float(count - 1))
+		_spawn_ranged_projectile(aim_direction.rotated(angle_offset))
 
 
 func _fire_shot() -> void:
 	var ranged: Ranged = Data.RANGED[ranged_id]
-	var offset: Vector2 = ranged.bullet_offset
+	_spawn_ranged_projectile(aim_direction)
+	burst_bullet_amount -= 1
+	burst_time_left = 0.0
+	if burst_bullet_amount > 0:
+		burst_time_left = ranged.attack_duration / ranged.projectile_amount
+
+
+func _spawn_ranged_projectile(shot_direction: Vector2) -> void:
+	var ranged: Ranged = Data.RANGED[ranged_id]
+	var offset := ranged.projectile_offset
 	offset.y *= facing
-	var bullet_position: Vector2 = pivot.global_position + offset.rotated(aim_direction.angle())
+	var muzzle_position: Vector2 = pivot.global_position + offset.rotated(aim_direction.angle())
 	logic.spawn_bullet(
-		bullet_position,
-		ranged.bullet_speed,
-		ranged.bullet_damage,
-		ranged.friendly_fire,
-		ranged.bullet_range,
-		aim_direction,
+		muzzle_position,
+		ranged_id,
+		shot_direction.normalized(),
 		participant_id,
 	)
-	burst_bullet_amount -= 1
-	if burst_bullet_amount > 0:
-		burst_time_left = ranged.attack_duration / ranged.bullet_amount
 
 
 func _update_facing() -> void:
@@ -307,11 +327,7 @@ func _ability_update_slam_down(delta) -> void:
 func _on_hitbox_area_entered(area: Area2D) -> void:
 	if not attacking:
 		return
-	var weapon: Weapon
-	if current_weapon == 0:
-		weapon = Data.MELEE[melee_id]
-	else:
-		weapon = Data.RANGED[ranged_id]
+	var weapon := Data.MELEE[melee_id]
 	var target = area.get_parent()
 	if not logic.can_hit(participant_id, target.participant_id, weapon.friendly_fire):
 		return

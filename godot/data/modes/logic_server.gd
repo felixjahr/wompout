@@ -8,7 +8,6 @@ const INPUT_BUFFER_SIZE := 128
 const MAX_INPUT_LOOKBACK := 5
 
 const ParticipantServer := preload("res://participant/participant_server.tscn")
-const BulletServer := preload("res://bullet/bullet_server.tscn")
 
 var tick := 0
 
@@ -121,18 +120,17 @@ func despawn_participant(participant_id: String) -> void:
 	participant.queue_free()
 
 
-func spawn_bullet(position: Vector2, speed: int, damage: int, friendly_fire: bool, range: int, direction: Vector2, participant_id: String) -> void:
-	var new_bullet := BulletServer.instantiate()
-	new_bullet.bullet_id = str(bullet_counter)
-	new_bullet.global_position = position
-	new_bullet.speed = speed
-	new_bullet.damage = damage
-	new_bullet.friendly_fire = friendly_fire
-	new_bullet.range = range
-	new_bullet.direction = direction
-	new_bullet.participant_id = participant_id
-	bullet_container.add_child(new_bullet)
-	bullets[new_bullet.bullet_id] = new_bullet
+func spawn_bullet(spawn_position: Vector2, weapon_id: String, direction: Vector2, participant_id: String) -> void:
+	var projectile = Data.RANGED[weapon_id].projectile
+	var new_projectile := projectile.get_server_scene().instantiate()
+	new_projectile.projectile = projectile
+	new_projectile.projectile_id = str(bullet_counter)
+	new_projectile.owner_id = participant_id
+	new_projectile.direction = direction.normalized()
+	new_projectile.weapon_id = weapon_id
+	new_projectile.position = bullet_container.to_local(spawn_position)
+	bullet_container.add_child(new_projectile)
+	bullets[new_projectile.projectile_id] = new_projectile
 	bullet_counter += 1
 
 
@@ -275,8 +273,9 @@ func _build_bullet_snapshot(bullet_id: String) -> BulletSnapshot:
 	var bullet_snapshot := BulletSnapshot.new()
 	bullet_snapshot.bullet_id = bullet_id
 	bullet_snapshot.position = bullet.global_position
-	bullet_snapshot.speed = bullet.speed
+	bullet_snapshot.speed = bullet.projectile.speed
 	bullet_snapshot.direction = bullet.direction
+	bullet_snapshot.weapon_id = bullet.weapon_id
 	return bullet_snapshot
 
 

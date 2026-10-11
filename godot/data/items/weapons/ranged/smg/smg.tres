@@ -1,20 +1,35 @@
 [gd_resource type="Resource" script_class="Ranged" format=3 uid="uid://3pjkegwgmsnc"]
 
+[ext_resource type="Script" uid="uid://duuv22b7jqrgp" path="res://data/items/weapons/aim_hint_line.gd" id="1_dia81"]
 [ext_resource type="Script" uid="uid://dc58rhvdfubb2" path="res://data/items/weapons/ranged/ranged.gd" id="1_wlgih"]
 [ext_resource type="Texture2D" uid="uid://dx0d7fxhqpk6e" path="res://data/items/weapons/ranged/smg/smg_card.png" id="1_yglhu"]
-[ext_resource type="Texture2D" uid="uid://dxmuv4l5ns6e1" path="res://data/items/weapons/ranged/smg/smg.png" id="3_l1ua8"]
+[ext_resource type="Script" uid="uid://bmyeu48gcwm6u" path="res://projectile/bullet/bullet.gd" id="2_l1ua8"]
+[ext_resource type="Texture2D" uid="uid://d3yjj2g5ry7hq" path="res://data/items/weapons/ranged/smg/smg_bullet.png" id="3_dia81"]
+
+[sub_resource type="Resource" id="Resource_lorc3"]
+script = ExtResource("1_dia81")
+length = 900.0
+width = 20.0
+offset = Vector2(117, -7)
+metadata/_custom_type_script = "uid://duuv22b7jqrgp"
+
+[sub_resource type="Resource" id="Resource_0uapk"]
+script = ExtResource("2_l1ua8")
+speed = 1800
+range = 900
+damage = 5
+knockback = 30
+texture = ExtResource("3_dia81")
+metadata/_custom_type_script = "uid://bmyeu48gcwm6u"
 
 [resource]
 script = ExtResource("1_wlgih")
-bullet_speed = 2000
-bullet_damage = 10
-bullet_amount = 1
-attack_duration = 0.2
-aim_animation = "aim_ranged"
-attack_animation = "attack_ranged"
-max_ammunition = 3
-reload_time = 1.0
-sprite_texture = ExtResource("3_l1ua8")
-sprite_offset = Vector2(20, 0)
+projectile_offset = Vector2(117, -7)
+projectile_amount = 5
+projectile = SubResource("Resource_0uapk")
+attack_duration = 1.0
+max_ammunition = 4
+reload_time = 1.8
+aim_hint = SubResource("Resource_lorc3")
 card_texture = ExtResource("1_yglhu")
 metadata/_custom_type_script = "uid://dc58rhvdfubb2"

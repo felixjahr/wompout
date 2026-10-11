@@ -7,20 +7,19 @@
 [sub_resource type="Resource" id="Resource_om5wh"]
 script = ExtResource("1_fjm7s")
 inner_radius = 80.0
-outer_radius = 250.0
+outer_radius = 300.0
 angle_degrees = 90.0
 metadata/_custom_type_script = "uid://kljamft6oa55"
 
 [resource]
 script = ExtResource("2_fjm7s")
-damage = 20
-knockback = 1000
-hitbox_size = Vector2(200, 120)
-moonwalk = true
+damage = 26
+knockback = 800
+hitbox_size = Vector2(300, 200)
 two_handed = true
 attack_duration = 0.6
-max_ammunition = 1
-reload_time = 2.0
+max_ammunition = 3
+reload_time = 1.2
 aim_hint = SubResource("Resource_om5wh")
 card_texture = ExtResource("1_sfh4g")
 metadata/_custom_type_script = "uid://dma0ut8h4lfxi"

@@ -120,6 +120,7 @@ static func _write_bullet(peer: StreamPeerBuffer, snapshot: BulletSnapshot) -> v
 	_write_quantized_vector2(peer, snapshot.position, POSITION_SCALE)
 	peer.put_u16(clampi(snapshot.speed, 0, 65535))
 	_write_quantized_unit_vector2(peer, snapshot.direction)
+	_write_string(peer, snapshot.weapon_id)
 
 
 static func _read_bullet(peer: StreamPeerBuffer) -> BulletSnapshot:
@@ -128,6 +129,7 @@ static func _read_bullet(peer: StreamPeerBuffer) -> BulletSnapshot:
 	snapshot.position = _read_quantized_vector2(peer, POSITION_SCALE)
 	snapshot.speed = int(peer.get_u16())
 	snapshot.direction = _read_quantized_unit_vector2(peer)
+	snapshot.weapon_id = _read_string(peer)
 	return snapshot
 
 
@@ -135,6 +137,10 @@ static func _write_event(peer: StreamPeerBuffer, snapshot: EventSnapshot) -> voi
 	if snapshot is HitEventSnapshot:
 		peer.put_u8(EventSnapshot.TYPE_HIT)
 		_write_hit_event(peer, snapshot as HitEventSnapshot)
+		return
+	if snapshot is ExplosionEventSnapshot:
+		peer.put_u8(EventSnapshot.TYPE_EXPLOSION)
+		_write_explosion_event(peer, snapshot as ExplosionEventSnapshot)
 		return
 	push_error("Unsupported event snapshot type: %s" % snapshot.get_class())
 
@@ -144,6 +150,8 @@ static func _read_event(peer: StreamPeerBuffer) -> EventSnapshot:
 	match event_type:
 		EventSnapshot.TYPE_HIT:
 			return _read_hit_event(peer)
+		EventSnapshot.TYPE_EXPLOSION:
+			return _read_explosion_event(peer)
 		_:
 			push_error("Unsupported event snapshot type id: %s" % event_type)
 			return EventSnapshot.new()
@@ -164,6 +172,20 @@ static func _read_hit_event(peer: StreamPeerBuffer) -> HitEventSnapshot:
 	snapshot.attacker_player_id = _read_string(peer)
 	snapshot.effect_id = _read_string(peer)
 	snapshot.effect_position = _read_quantized_vector2(peer, POSITION_SCALE)
+	return snapshot
+
+
+static func _write_explosion_event(peer: StreamPeerBuffer, snapshot: ExplosionEventSnapshot) -> void:
+	_write_string(peer, snapshot.event_id)
+	_write_quantized_vector2(peer, snapshot.position, POSITION_SCALE)
+	peer.put_float(snapshot.radius)
+
+
+static func _read_explosion_event(peer: StreamPeerBuffer) -> ExplosionEventSnapshot:
+	var snapshot := ExplosionEventSnapshot.new()
+	snapshot.event_id = _read_string(peer)
+	snapshot.position = _read_quantized_vector2(peer, POSITION_SCALE)
+	snapshot.radius = peer.get_float()
 	return snapshot
 
 

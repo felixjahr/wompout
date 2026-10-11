@@ -1,16 +1,25 @@
 [gd_resource type="Resource" script_class="Melee" format=3 uid="uid://b3665creeq8k8"]
 
 [ext_resource type="Script" uid="uid://dma0ut8h4lfxi" path="res://data/items/weapons/melee/melee.gd" id="1_6qiaa"]
+[ext_resource type="Script" uid="uid://kljamft6oa55" path="res://data/items/weapons/aim_hint_cone.gd" id="1_bxwy4"]
 [ext_resource type="Texture2D" uid="uid://cs8arly7vqy0k" path="res://data/items/weapons/melee/axe/axe_card.png" id="1_oq5gf"]
-[ext_resource type="Texture2D" uid="uid://uo0ybeufbna7" path="res://data/items/weapons/melee/axe/axe.png" id="3_bxwy4"]
+
+[sub_resource type="Resource" id="Resource_s0fme"]
+script = ExtResource("1_bxwy4")
+inner_radius = 80.0
+outer_radius = 250.0
+angle_degrees = 110.0
+metadata/_custom_type_script = "uid://kljamft6oa55"
 
 [resource]
 script = ExtResource("1_6qiaa")
-damage = 10
-knockback = 1000
-hitbox_size = Vector2(200, 120)
-moonwalk = true
-attack_duration = 0.2
-sprite_texture = ExtResource("3_bxwy4")
+damage = 19
+knockback = 500
+hitbox_size = Vector2(250, 160)
+two_handed = true
+attack_duration = 0.6
+max_ammunition = 4
+reload_time = 0.65
+aim_hint = SubResource("Resource_s0fme")
 card_texture = ExtResource("1_oq5gf")
 metadata/_custom_type_script = "uid://dma0ut8h4lfxi"

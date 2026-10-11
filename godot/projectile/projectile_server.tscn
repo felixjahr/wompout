@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://0hpq5c6dkbqj"]
 
-[ext_resource type="Script" uid="uid://bj0t666umcug4" path="res://bullet/bullet_server.gd" id="1_4vojq"]
+[ext_resource type="Script" uid="uid://bj0t666umcug4" path="res://projectile/projectile_server.gd" id="1_qsvh0"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xw3j6"]
 size = Vector2(51, 14)
@@ -8,8 +8,8 @@ size = Vector2(51, 14)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4vojq"]
 size = Vector2(51, 14)
 
-[node name="BulletServer" type="Node2D" unique_id=1952645918]
-script = ExtResource("1_4vojq")
+[node name="ProjectileServer" type="Node2D" unique_id=1952645918]
+script = ExtResource("1_qsvh0")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=115947726]
 collision_layer = 0

@@ -97,8 +97,6 @@ func apply_snapshot(snapshot: ParticipantSnapshot) -> void:
 
 
 func apply_hit() -> void:
-	if local:
-		Input.vibrate_handheld(70)
 	var hit_tween = get_tree().create_tween()
 	hit_tween.tween_property(sprite.material, "shader_parameter/flash_amount", 1.0, 0.1)
 	hit_tween.parallel().tween_property(sprite.material, "shader_parameter/reveal_amount", 1.0, 0.1)
@@ -201,23 +199,18 @@ func _update_animation_player(snapshot: ParticipantSnapshot) -> void:
 	
 	if not snapshot.is_on_floor:
 		if snapshot.velocity.y < 0:
-			animation_name += "jump_"
+			animation_name += "jump"
 		else:
-			animation_name += "fall_"
+			animation_name += "fall"
 	elif snapshot.velocity.x != 0:
-		animation_name += "run_"
+		animation_name += "run"
 	else:
-		animation_name += "idle_"
+		animation_name += "idle"
 	
 	if snapshot.attacking:
-		animation_name += "attack_"
+		animation_name += "_attack"
 	elif snapshot.aim_direction != Vector2.ZERO:
-		animation_name += "aim_"
-	
-	if snapshot.current_weapon == 0:
-		animation_name += snapshot.melee_id
-	else:
-		animation_name += snapshot.ranged_id
+		animation_name += "_aim"
 	
 	var current_animation: String = animation_player.current_animation
 	if snapshot.attacking and animation_name != current_animation and current_animation.contains("attack"):

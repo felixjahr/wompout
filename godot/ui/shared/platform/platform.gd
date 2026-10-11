@@ -19,7 +19,7 @@ func render_platform(player: Dictionary, ready := false, local := false) -> void
 		armour_sprite.texture = Data.ARMOUR[armour_id].texture
 	
 	var melee_id := str(loadout["meleeId"])
-	player_client.animation_player.play(melee_id + "/idle_" + melee_id)
+	player_client.animation_player.play(melee_id + "/idle")
 	
 	var style_id := str(loadout["styleId"])
 	for body_sprite in player_client.body_sprites:

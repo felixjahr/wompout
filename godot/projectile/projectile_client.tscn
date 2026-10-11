@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://csfjic0vjvyoh"]
+
+[ext_resource type="Script" uid="uid://dfqpipi3uoood" path="res://projectile/projectile_client.gd" id="1_hvctu"]
+
+[node name="ProjectileClient" type="Node2D" unique_id=1735716448]
+script = ExtResource("1_hvctu")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=591490465]

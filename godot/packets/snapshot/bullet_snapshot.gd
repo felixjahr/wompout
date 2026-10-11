@@ -6,3 +6,4 @@ var bullet_id: String
 var position: Vector2
 var speed: int
 var direction: Vector2
+var weapon_id: String

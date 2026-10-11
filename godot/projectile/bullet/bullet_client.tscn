@@ -1,0 +1,5 @@
+[gd_scene format=3 uid="uid://dx8pamqh3uk17"]
+
+[ext_resource type="PackedScene" uid="uid://csfjic0vjvyoh" path="res://projectile/projectile_client.tscn" id="1_uyv5f"]
+
+[node name="BulletClient" unique_id=1735716448 instance=ExtResource("1_uyv5f")]
