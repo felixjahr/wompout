@@ -13,7 +13,11 @@ func _input(event: InputEvent) -> void:
 	if visible and auto_close:
 		var local_mouse = get_local_mouse_position()
 		if not Rect2(Vector2.ZERO, size).has_point(local_mouse):
-			animate_panel(false)
+			_close()
+
+
+func _close() -> void:
+	animate_panel(false)
 
 
 func animate_panel(opening: bool) -> void:

@@ -29,5 +29,6 @@ export interface Lobby {
   id: string;
   modeId: keyof typeof MODES;
   players: LobbyPlayer[];
+  invitedPlayerIds: string[];
   status: 'open' | 'matchmaking' | 'in-game';
 }

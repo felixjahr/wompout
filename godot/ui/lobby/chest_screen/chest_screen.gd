@@ -16,23 +16,19 @@ var float_tween: Tween
 var hit_tween: Tween
 var home_positions: Dictionary = {}
 
-@onready var chest: Button = %Chest
-@onready var chest_visual: Control = $Chest/TextureRect
-@onready var item_card: AnimatedButton = %ItemCard
+@onready var chest := %Chest
+@onready var chest_visual := $Chest/TextureRect
+@onready var item_card := %ItemCard
 @onready var item_label = %ItemLabel
-@onready var currency_card: AnimatedButton = %CurrencyCard
-@onready var currency_burst: GPUParticles2D = %CurrencyBurst
-@onready var currency_texture_rect: TextureRect = %CurrencyTextureRect
-@onready var currency_label: Label = %CurrencyLabel
-@onready var currency_amount_label: Label = %CurrencyAmountLabel
-@onready var collect_button: AnimatedButton = %CollectButton
+@onready var currency_card := %CurrencyCard
+@onready var currency_burst := %CurrencyBurst
+@onready var currency_texture_rect := %CurrencyTextureRect
+@onready var currency_label := %CurrencyLabel
+@onready var currency_amount_label := %CurrencyAmountLabel
+@onready var collect_button := %CollectButton
 
 
-func _ready() -> void:
-	hide()
-
-
-func show_chest_opening(content: Dictionary) -> void:
+func open(content: Dictionary) -> void:
 	_reset_animation()
 	chest_content = content.duplicate(true)
 	clicks = 0
@@ -48,6 +44,13 @@ func show_chest_opening(content: Dictionary) -> void:
 	entrance.tween_property(chest_visual, "scale", Vector2.ONE, 0.45).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	entrance.tween_property(chest_visual, "modulate:a", 1.0, 0.2)
 	_start_float()
+
+
+func _close() -> void:
+	if phase != Phase.REWARD:
+		return
+	_reset_animation()
+	hide()
 
 
 func _cache_positions() -> void:
@@ -169,13 +172,6 @@ func _emit_currency(currency: String, amount: int) -> void:
 	material.scale_max = lerpf(0.28, 0.18, intensity) if is_coins else 0.40
 	currency_burst.restart()
 	currency_burst.emitting = true
-
-
-func _on_collect_button_pressed() -> void:
-	if phase != Phase.REWARD:
-		return
-	_reset_animation()
-	hide()
 
 
 func _reset_animation() -> void:

@@ -1,8 +1,7 @@
 [gd_scene format=3 uid="uid://8csnlk72lj5e"]
 
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_5ecad"]
-[ext_resource type="Script" uid="uid://bj06gr2c7rek0" path="res://ui/lobby/game_mode_panel/game_mode_panel.gd" id="2_as43x"]
-[ext_resource type="PackedScene" uid="uid://6r5j3okf8at7" path="res://ui/lobby/game_mode_panel/game_mode_entry.tscn" id="3_as43x"]
+[ext_resource type="Script" uid="uid://bj06gr2c7rek0" path="res://ui/lobby/game_mode_screen/game_mode_screen.gd" id="2_as43x"]
 [ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/shared/close_button/close_button.tscn" id="4_c71qv"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1etha"]
@@ -24,7 +23,8 @@ corner_radius_top_right = 64
 corner_radius_bottom_right = 64
 corner_radius_bottom_left = 64
 
-[node name="GameModePanel" type="Panel" unique_id=318218996]
+[node name="GameModeScreen" type="Panel" unique_id=318218996]
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
@@ -102,15 +102,6 @@ size_flags_horizontal = 0
 size_flags_vertical = 3
 theme_override_constants/separation = 32
 
-[node name="GameModeEntry" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer/VBoxContainer/RankedContainer" unique_id=1122889775 instance=ExtResource("3_as43x")]
-layout_mode = 2
-
-[node name="GameModeEntry2" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer/VBoxContainer/RankedContainer" unique_id=919198229 instance=ExtResource("3_as43x")]
-layout_mode = 2
-
-[node name="GameModeEntry3" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer/MarginContainer/VBoxContainer/RankedContainer" unique_id=1899234138 instance=ExtResource("3_as43x")]
-layout_mode = 2
-
 [node name="MarginContainer2" type="MarginContainer" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer" unique_id=1010665595]
 layout_mode = 2
 
@@ -141,16 +132,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 3
 theme_override_constants/separation = 32
 
-[node name="GameModeEntry" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer/UnrankedContainer" unique_id=2054124906 instance=ExtResource("3_as43x")]
-layout_mode = 2
-
-[node name="GameModeEntry2" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer/UnrankedContainer" unique_id=915101449 instance=ExtResource("3_as43x")]
-layout_mode = 2
-
-[node name="GameModeEntry3" parent="MarginContainer/VBoxContainer/ScrollContainer/MarginContainer/HBoxContainer/MarginContainer2/MarginContainer/VBoxContainer/UnrankedContainer" unique_id=918126653 instance=ExtResource("3_as43x")]
-layout_mode = 2
-
 [node name="CloseButton" parent="." unique_id=604162406 instance=ExtResource("4_c71qv")]
 layout_mode = 1
 
-[connection signal="pressed" from="CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="CloseButton" to="." method="_close"]

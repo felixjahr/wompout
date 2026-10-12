@@ -7,6 +7,8 @@
 [ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="5_agi0w"]
 [ext_resource type="PackedScene" uid="uid://cuu0quwq1d46k" path="res://ui/lobby/armory_screen/item_entry.tscn" id="5_s4758"]
 [ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/shared/platform/platform.tscn" id="7_f5oej"]
+[ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/shared/animated_button/blue_button.png" id="8_i86d6"]
+[ext_resource type="PackedScene" uid="uid://cnlqm0mhmwdm2" path="res://ui/shared/item_card/item_card.tscn" id="8_yt16h"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c7p47"]
 bg_color = Color(0.08235294, 0.101960786, 0.12941177, 1)
@@ -39,6 +41,25 @@ corner_radius_bottom_left = 48
 expand_margin_top = 8.0
 expand_margin_bottom = 8.0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yt16h"]
+bg_color = Color(0.36078432, 0.42352942, 0.53333336, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 48
+corner_radius_top_right = 48
+corner_radius_bottom_right = 48
+corner_radius_bottom_left = 48
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_lr8ns"]
+texture = ExtResource("8_i86d6")
+texture_margin_left = 64.0
+texture_margin_top = 64.0
+texture_margin_right = 64.0
+texture_margin_bottom = 64.0
+
 [node name="ArmoryScreen" type="Control" unique_id=809997163]
 layout_mode = 3
 anchors_preset = 15
@@ -52,6 +73,7 @@ script = ExtResource("1_ajc3h")
 
 [node name="ArmoryPanel" type="Panel" parent="." unique_id=830429449]
 unique_name_in_owner = true
+visible = false
 custom_minimum_size = Vector2(1080, 0)
 layout_mode = 1
 anchors_preset = -1
@@ -300,7 +322,7 @@ size_flags_vertical = 3
 theme_override_constants/margin_left = 64
 theme_override_constants/margin_top = 64
 theme_override_constants/margin_right = 64
-theme_override_constants/margin_bottom = 64
+theme_override_constants/margin_bottom = 196
 
 [node name="ItemCardContainer" type="GridContainer" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer" unique_id=1035973348]
 unique_name_in_owner = true
@@ -352,6 +374,7 @@ offset_bottom = 160.0
 
 [node name="Platform" parent="." unique_id=1447817100 instance=ExtResource("7_f5oej")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.5
@@ -360,5 +383,60 @@ grow_horizontal = 1
 size_flags_horizontal = 1
 metadata/_edit_use_anchors_ = true
 
+[node name="EquipPopup" parent="." unique_id=2081406217 instance=ExtResource("5_agi0w")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_right = 288.0
+offset_bottom = 488.0
+
+[node name="Panel" type="Panel" parent="EquipPopup" unique_id=673745958]
+layout_mode = 0
+offset_right = 288.0
+offset_bottom = 488.0
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxFlat_yt16h")
+
+[node name="SelectedItemCard" parent="EquipPopup/Panel" unique_id=2089350822 instance=ExtResource("8_yt16h")]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 256.0
+offset_bottom = 336.0
+mouse_filter = 2
+
+[node name="EquipButton" parent="EquipPopup/Panel" unique_id=2103376119 instance=ExtResource("5_agi0w")]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(256, 128)
+layout_mode = 0
+offset_left = 16.0
+offset_top = 344.0
+offset_right = 272.0
+offset_bottom = 472.0
+
+[node name="Panel" type="Panel" parent="EquipPopup/Panel/EquipButton" unique_id=1317779650]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_lr8ns")
+
+[node name="Label" type="Label" parent="EquipPopup/Panel/EquipButton/Panel" unique_id=741441333]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "EQUIP"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [connection signal="hidden" from="ArmoryPanel" to="." method="_on_armory_panel_hidden"]
-[connection signal="pressed" from="ArmoryPanel/CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="ArmoryPanel/CloseButton" to="." method="_close"]
+[connection signal="pressed" from="EquipPopup" to="." method="_close_equip_popup"]
+[connection signal="pressed" from="EquipPopup/Panel/EquipButton" to="." method="_on_equip_button_pressed"]

@@ -9,15 +9,20 @@ var invite_tween: Tween
 @onready var status_label := %StatusLabel
 @onready var trophies_label := %TrophiesLabel
 @onready var invite_popup := %InvitePopup
+@onready var panel := %Panel
 
 
-func render_player_entry(player: Dictionary, show_status: bool, invitable: bool) -> void:
+func render_player_entry(player: Dictionary, show_status := false, invitable := false, selected := false, invited := false) -> void:
 	invite_popup.hide()
 	status_label.text = ""
 	player_id = ""
 	display_name_label.text = player["displayName"]
 	trophies_label.text = str(int(player["trophies"]))
-	if show_status:
+	if invited:
+		status_label.text = "invited"
+		status_label.add_theme_color_override("font_color", Color("3d70ff"))
+	elif show_status:
+		status_label.add_theme_color_override("font_color", Color.WHITE)
 		match player["status"]:
 			"open":
 				status_label.text = "lobby"
@@ -27,6 +32,12 @@ func render_player_entry(player: Dictionary, show_status: bool, invitable: bool)
 				status_label.text = "offline"
 	if invitable:
 		player_id = player["id"]
+	var panel_stylebox: StyleBoxFlat = panel.get_theme_stylebox("panel").duplicate()
+	if selected:
+		panel_stylebox.bg_color = Color("3d70ff")
+	else:
+		panel_stylebox.bg_color = Color("151a21")
+	panel.add_theme_stylebox_override("panel", panel_stylebox)
 
 
 func _input(event: InputEvent) -> void:

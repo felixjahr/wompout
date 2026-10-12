@@ -2,7 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_mxp8a"]
 [ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/shared/animated_button/grey_button.png" id="2_mxp8a"]
-[ext_resource type="Script" uid="uid://dy7d7klb78k1b" path="res://ui/lobby/friends_panel/friends_panel.gd" id="2_r4evk"]
+[ext_resource type="Script" uid="uid://dy7d7klb78k1b" path="res://ui/lobby/friends_screen/friends_screen.gd" id="2_r4evk"]
 [ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="5_4yd2w"]
 [ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/shared/close_button/close_button.tscn" id="10_ypg3x"]
 
@@ -20,7 +20,7 @@ texture_margin_top = 64.0
 texture_margin_right = 64.0
 texture_margin_bottom = 64.0
 
-[node name="FriendsPanel" type="Panel" unique_id=1844430048]
+[node name="FriendsScreen" type="Panel" unique_id=1844430048]
 custom_minimum_size = Vector2(1176, 0)
 anchors_preset = 11
 anchor_left = 1.0
@@ -180,4 +180,4 @@ vertical_alignment = 1
 layout_mode = 1
 
 [connection signal="pressed" from="MarginContainer/VBoxContainer/HBoxContainer/AddFriendsButton" to="." method="_on_add_friends_button_pressed"]
-[connection signal="pressed" from="CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="CloseButton" to="." method="_close"]

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b1c4iswomi1dv"]
 
 [ext_resource type="Texture2D" uid="uid://bx5iaq65mhmy0" path="res://ui/loading/loading.png" id="1_83env"]
-[ext_resource type="Script" uid="uid://dp2pc3rreaik8" path="res://ui/lobby/chest_opening/chest_opening.gd" id="2_16jj3"]
+[ext_resource type="Script" uid="uid://dp2pc3rreaik8" path="res://ui/lobby/chest_screen/chest_screen.gd" id="2_16jj3"]
 [ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="2_wy3nk"]
 [ext_resource type="Texture2D" uid="uid://flbrn7g6884s" path="res://ui/lobby/chest.png" id="3_12hw2"]
 [ext_resource type="PackedScene" uid="uid://cnlqm0mhmwdm2" path="res://ui/shared/item_card/item_card.tscn" id="3_d1cnt"]
@@ -53,7 +53,7 @@ texture_margin_top = 64.0
 texture_margin_right = 64.0
 texture_margin_bottom = 64.0
 
-[node name="ChestOpening" type="TextureRect" unique_id=1840069824]
+[node name="ChestScreen" type="TextureRect" unique_id=1840069824]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -274,4 +274,4 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="pressed" from="Chest" to="." method="_on_chest_pressed"]
-[connection signal="pressed" from="CollectButton" to="." method="_on_collect_button_pressed"]
+[connection signal="pressed" from="CollectButton" to="." method="_close"]

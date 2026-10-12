@@ -1,16 +1,11 @@
 extends AnimatedPanel
 
-signal logout_requested
-signal start_link_requested(email: String, on_completed: Callable)
-signal verify_link_requested(email: String, code: String, on_completed: Callable)
-signal closed
-
 var email: String
 
+@onready var lobby := get_parent()
 @onready var main := %Main
 @onready var link := %Link
 @onready var verify := %Verify
-
 @onready var email_label := %EmailLabel
 @onready var link_button := %LinkButton
 @onready var link_label := %LinkLabel
@@ -22,7 +17,11 @@ func _ready() -> void:
 	version_label.text = "v" + ProjectSettings.get_setting("application/config/version")
 
 
-func render_settings(player: Dictionary) -> void:
+func open() -> void:
+	animate_panel(true)
+
+
+func update_player(player: Dictionary) -> void:
 	if player["email"] == null:
 		email_label.hide()
 		link_button.show()
@@ -36,6 +35,13 @@ func render_settings(player: Dictionary) -> void:
 		logout_button.show()
 
 
+func _close() -> void:
+	main.show()
+	link.hide()
+	verify.hide()
+	animate_panel(false)
+
+
 func _on_link_button_pressed() -> void:
 	main.hide()
 	link.show_link()
@@ -43,7 +49,7 @@ func _on_link_button_pressed() -> void:
 
 func _on_link_start_link_requested(email: String) -> void:
 	self.email = email
-	start_link_requested.emit(email, _on_start_link_completed)
+	lobby.start_link_requested.emit(email, _on_start_link_completed)
 
 
 func _on_start_link_completed(response: Dictionary) -> void:
@@ -58,7 +64,7 @@ func _on_link_back_pressed() -> void:
 
 
 func _on_verify_code_entered(code: String) -> void:
-	verify_link_requested.emit(email, code, _on_verify_link_completed)
+	lobby.verify_link_requested.emit(email, code, _on_verify_link_completed)
 
 
 func _on_verify_link_completed(response: Dictionary) -> void:
@@ -73,11 +79,4 @@ func _on_verify_back_pressed() -> void:
 
 
 func _on_log_out_button_pressed() -> void:
-	logout_requested.emit()
-
-
-func _on_close_button_pressed() -> void:
-	main.show()
-	link.hide()
-	verify.hide()
-	closed.emit()
+	lobby.logout_requested.emit()

@@ -40,15 +40,11 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	tick += 1
 	
-	var bot_snapshot: Snapshot = null
-	if not bot_controllers.is_empty():
-		bot_snapshot = _build_snapshot()
-	
 	for participant_id in participants.keys():
 		var participant := participants[participant_id]
 		var input: ParticipantInput
 		if bot_controllers.has(participant_id):
-			input = bot_controllers[participant_id].get_input(participant_id, bot_snapshot, delta)
+			input = bot_controllers[participant_id].get_input(delta)
 		else:
 			input = _get_player_input(participant_id)
 		input.tick = tick
@@ -60,7 +56,10 @@ func _physics_process(delta: float) -> void:
 	simulation_tick_finished.emit()
 	
 	if tick % SNAPSHOT_FREQUENCY == 0:
-		game_net.send_snapshot(_build_snapshot(), participant_teams)
+		var snapshot := _build_snapshot()
+		for bot_controller in bot_controllers.values():
+			bot_controller.receive_snapshot(snapshot)
+		game_net.send_snapshot(snapshot, participant_teams)
 
 
 func spawn_map(map_id: String) -> void:
@@ -74,7 +73,10 @@ func spawn_participant(participant_id: String, is_bot: bool, loadout: Dictionary
 		return
 	
 	if is_bot:
-		bot_controllers[participant_id] = BotController.new()
+		var mode := get_parent() as ModeServer
+		var bot := BotController.new()
+		bot.setup(participant_id, mode.map_id, mode.mode_id)
+		bot_controllers[participant_id] = bot
 	else:
 		var input_buffer: Array[ParticipantInput] = []
 		input_buffer.resize(INPUT_BUFFER_SIZE)

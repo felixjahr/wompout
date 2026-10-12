@@ -104,11 +104,12 @@ export class LobbiesService implements OnModuleInit {
       throw new NotFoundException('Lobby not found');
     }
 
-    if (
-      sourcePlayerLobby.status !== 'open' ||
-      invitedPlayerLobby.status !== 'open'
-    ) {
+    if (sourcePlayerLobby.status !== 'open') {
       throw new BadRequestException('Lobby is not open');
+    }
+
+    if (!this.realtimeService.isPlayerConnected(request.invitedPlayerId)) {
+      throw new BadRequestException('Player is offline');
     }
 
     if (sourcePlayerLobby.id === invitedPlayerLobby.id) {
@@ -267,6 +268,12 @@ export class LobbiesService implements OnModuleInit {
     if (lobby.players.every((player) => player.ready)) {
       lobby.status = 'matchmaking';
 
+      const affectedRecipients = new Set<string>();
+      for (const member of lobby.players) {
+        this.deleteInvitesInvolvingSourcePlayer(member.id, affectedRecipients);
+      }
+      this.publishInvites(affectedRecipients);
+
       this.playerLobbyStatusChangedSubject.next(
         lobby.players.map((member) => member.id),
       );
@@ -381,6 +388,7 @@ export class LobbiesService implements OnModuleInit {
       id: randomUUID(),
       modeId: DEFAULT_MODE_ID_BY_LOBBY_SIZE[1],
       players: [],
+      invitedPlayerIds: [],
       status: 'open',
     };
 
@@ -472,6 +480,14 @@ export class LobbiesService implements OnModuleInit {
     );
 
     this.invites.set(invite.id, invite);
+
+    const sourceLobby = this.lobbies.get(invite.sourceLobbyId);
+    if (sourceLobby) {
+      if (!sourceLobby.invitedPlayerIds.includes(invite.invitedPlayerId)) {
+        sourceLobby.invitedPlayerIds.push(invite.invitedPlayerId);
+      }
+      this.publishLobby(sourceLobby);
+    }
   }
 
   private deleteInvite(
@@ -506,6 +522,14 @@ export class LobbiesService implements OnModuleInit {
 
     this.invites.delete(inviteId);
     affectedRecipients.add(invite.invitedPlayerId);
+
+    const sourceLobby = this.lobbies.get(invite.sourceLobbyId);
+    if (sourceLobby) {
+      sourceLobby.invitedPlayerIds = sourceLobby.invitedPlayerIds.filter(
+        (playerId) => playerId !== invite.invitedPlayerId,
+      );
+      this.publishLobby(sourceLobby);
+    }
   }
 
   private deleteInvitesInvolvingSourcePlayer(

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b4cxj2jy5kyas"]
 
 [ext_resource type="Theme" uid="uid://bnnsol31t7ddn" path="res://ui/theme.tres" id="1_j1ll3"]
-[ext_resource type="Script" uid="uid://bvacvlq2mm6ji" path="res://ui/lobby/settings_panel/settings_panel.gd" id="1_t4xwa"]
+[ext_resource type="Script" uid="uid://bvacvlq2mm6ji" path="res://ui/lobby/settings_screen/settings_screen.gd" id="1_t4xwa"]
 [ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/shared/close_button/close_button.tscn" id="2_t4xwa"]
 [ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="3_6l7n7"]
 [ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/shared/animated_button/blue_button.png" id="4_7p8ig"]
@@ -30,7 +30,7 @@ texture_margin_top = 64.0
 texture_margin_right = 64.0
 texture_margin_bottom = 64.0
 
-[node name="SettingsPanel" type="Panel" unique_id=1036722574]
+[node name="SettingsScreen" type="Panel" unique_id=1036722574]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -182,4 +182,4 @@ vertical_alignment = 2
 [connection signal="start_link_requested" from="Link" to="." method="_on_link_start_link_requested"]
 [connection signal="back_pressed" from="Verify" to="." method="_on_verify_back_pressed"]
 [connection signal="code_entered" from="Verify" to="." method="_on_verify_code_entered"]
-[connection signal="pressed" from="CloseButton" to="." method="_on_close_button_pressed"]
+[connection signal="pressed" from="CloseButton" to="." method="_close"]

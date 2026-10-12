@@ -1,19 +1,13 @@
 extends AnimatedPanel
 
-signal game_mode_selected(mode_id: String)
-signal closed
+const GAME_MODE_ENTRY := preload("res://ui/lobby/game_mode_screen/game_mode_entry.tscn")
 
-const GAME_MODE_ENTRY := preload("res://ui/lobby/game_mode_panel/game_mode_entry.tscn")
-
+@onready var lobby := get_parent()
 @onready var ranked_container := %RankedContainer
 @onready var unranked_container := %UnrankedContainer
 
 
 func _ready() -> void:
-	for child in ranked_container.get_children():
-		child.queue_free()
-	for child in unranked_container.get_children():
-		child.queue_free()
 	for mode_id in Data.MODE_IDS:
 		var new_game_mode_entry := GAME_MODE_ENTRY.instantiate()
 		if Data.MODES[mode_id].ranked:
@@ -24,9 +18,14 @@ func _ready() -> void:
 		new_game_mode_entry.pressed.connect(_on_game_mode_entry_pressed.bind(mode_id))
 
 
+func open() -> void:
+	animate_panel(true)
+
+
+func _close() -> void:
+	animate_panel(false)
+
+
 func _on_game_mode_entry_pressed(mode_id: String) -> void:
-	game_mode_selected.emit(mode_id)
-
-
-func _on_close_button_pressed() -> void:
-	closed.emit()
+	lobby.update_mode_requested.emit(mode_id)
+	_close()
