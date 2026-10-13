@@ -1,6 +1,7 @@
 extends AnimatedPanel
 
 var email: String
+var request_pending := false
 
 @onready var lobby := get_parent()
 @onready var main := %Main
@@ -36,6 +37,8 @@ func update_player(player: Dictionary) -> void:
 
 
 func _close() -> void:
+	if request_pending:
+		return
 	main.show()
 	link.hide()
 	verify.hide()
@@ -43,40 +46,61 @@ func _close() -> void:
 
 
 func _on_link_button_pressed() -> void:
+	if request_pending:
+		return
 	main.hide()
 	link.show_link()
 
 
 func _on_link_start_link_requested(email: String) -> void:
+	if request_pending:
+		return
+	request_pending = true
 	self.email = email
 	lobby.start_link_requested.emit(email, _on_start_link_completed)
 
 
 func _on_start_link_completed(response: Dictionary) -> void:
+	request_pending = false
 	if response["ok"]:
 		link.hide()
 		verify.show_verify()
 
 
 func _on_link_back_pressed() -> void:
+	if request_pending:
+		return
 	main.show()
 	link.hide()
 
 
 func _on_verify_code_entered(code: String) -> void:
+	if request_pending:
+		return
+	request_pending = true
 	lobby.verify_link_requested.emit(email, code, _on_verify_link_completed)
 
 
 func _on_verify_link_completed(response: Dictionary) -> void:
+	request_pending = false
 	if response["ok"]:
 		verify.hide()
 		main.show()
 
 
 func _on_verify_back_pressed() -> void:
+	if request_pending:
+		return
 	verify.hide()
 	link.show_link()
 
 
 func _on_log_out_button_pressed() -> void:
-	lobby.logout_requested.emit()
+	if request_pending:
+		return
+	request_pending = true
+	lobby.logout_requested.emit(_on_logout_completed)
+
+
+func _on_logout_completed(response: Dictionary) -> void:
+	request_pending = false

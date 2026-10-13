@@ -5,6 +5,7 @@ const PlayerEntry := preload("res://ui/shared/player_entry/player_entry.tscn")
 var friends: Dictionary
 var lobby: Dictionary
 
+@onready var scroll_container := %ScrollContainer
 @onready var lobby_screen := get_parent()
 @onready var online_container := %OnlineContainer
 @onready var offline_container := %OfflineContainer
@@ -14,6 +15,8 @@ var lobby: Dictionary
 
 
 func open() -> void:
+	scroll_container.scroll_horizontal = 0
+	scroll_container.scroll_vertical = 0
 	lobby_screen.resource_opened.emit("friends")
 	animate_panel(true)
 
@@ -38,7 +41,6 @@ func _update(friends: Dictionary, lobby: Dictionary) -> void:
 	sorted_players.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		return int(a["trophies"]) > int(b["trophies"])
 	)
-	
 	var online_count := 0
 	var offline_count := 0
 	for player in sorted_players:

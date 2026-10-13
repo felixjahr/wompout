@@ -1,7 +1,5 @@
 extends AnimatedButton
 
-var scale_tween: Tween
-
 @onready var game_mode_label := %GameModeLabel
 @onready var ranked_label := %RankedLabel
 @onready var game_mode_texture_rect := %GameModeTextureRect

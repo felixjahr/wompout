@@ -1,3 +1,5 @@
+import type { ShopOffer } from '../config/shop.config';
+
 export interface Shop {
-  empty: string;
+  offers: readonly ShopOffer[];
 }

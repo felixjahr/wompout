@@ -215,7 +215,7 @@ mouse_filter = 2
 [node name="CurrencyBurst" type="GPUParticles2D" parent="CurrencyCard/Control" unique_id=1981766163]
 unique_name_in_owner = true
 emitting = false
-amount = 500
+amount = 10000
 texture = ExtResource("6_lodu0")
 lifetime = 2.4
 one_shot = true

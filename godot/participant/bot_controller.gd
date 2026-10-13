@@ -117,7 +117,7 @@ var _melee_aggression := 0.5
 var _lead := 0.8
 
 
-func setup(participant_id: String, map_id: String, mode_id: String, difficulty: Difficulty = Difficulty.MEDIUM) -> void:
+func setup(participant_id: String, map_id: String, mode_id: String, difficulty: Difficulty = Difficulty.EASY) -> void:
 	_participant_id = participant_id
 	_map_id = map_id
 	_mode_id = mode_id

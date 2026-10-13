@@ -24,6 +24,7 @@
 [ext_resource type="Texture2D" uid="uid://084pf4gojlkg" path="res://ui/shared/animated_button/grey_button.png" id="23_wofsp"]
 [ext_resource type="Texture2D" uid="uid://bn3qa22fvp7cj" path="res://ui/shared/animated_button/red_button.png" id="24_6w0v2"]
 [ext_resource type="PackedScene" uid="uid://8csnlk72lj5e" path="res://ui/lobby/game_mode_screen/game_mode_screen.tscn" id="24_lky5g"]
+[ext_resource type="PackedScene" uid="uid://b42sfyhlkd5ab" path="res://ui/lobby/shop_screen/shop_screen.tscn" id="25_gjdcp"]
 [ext_resource type="Texture2D" uid="uid://bdgfgtjc7tlp" path="res://data/modes/womp/solo_womp_ranked_icon.png" id="26_s74wb"]
 [ext_resource type="Texture2D" uid="uid://bkcupf0hrdv6a" path="res://ui/lobby/play_button_normal.png" id="27_j7rwa"]
 [ext_resource type="PackedScene" uid="uid://b1c4iswomi1dv" path="res://ui/lobby/chest_screen/chest_screen.tscn" id="27_pjrra"]
@@ -857,6 +858,11 @@ grow_horizontal = 1
 grow_vertical = 1
 
 [node name="GameModeScreen" parent="." unique_id=318218996 instance=ExtResource("24_lky5g")]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+
+[node name="ShopScreen" parent="." unique_id=730954501 instance=ExtResource("25_gjdcp")]
 unique_name_in_owner = true
 visible = false
 layout_mode = 1

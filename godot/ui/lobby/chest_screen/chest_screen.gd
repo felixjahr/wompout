@@ -1,6 +1,8 @@
 extends TextureRect
 
 const REQUIRED_CLICKS := 5
+const MAX_CURRENCY_PARTICLES := 500
+const CURRENCY_PARTICLE_LIFETIME := 2.4
 const CURRENCY_TEXTURES := {
 	"coins": preload("res://ui/lobby/coin.png"),
 	"gems": preload("res://ui/lobby/gem.png"),
@@ -14,6 +16,7 @@ var chest_content: Dictionary = {}
 var motion_tweens: Array[Tween] = []
 var float_tween: Tween
 var hit_tween: Tween
+var currency_emission_tween: Tween
 var home_positions: Dictionary = {}
 
 @onready var chest := %Chest
@@ -113,7 +116,7 @@ func _reveal_reward() -> void:
 	if chest_content["type"] == "item":
 		card = item_card
 		var item_id: String = chest_content["itemId"]
-		item_label.text = item_id.to_upper()
+		item_label.text = item_id.to_upper().replace("_", " ")
 		for category_id in Data.CATEGORIES:
 			if Data.CATEGORIES[category_id].has(item_id):
 				item_card.render_item_card(category_id, item_id)
@@ -153,17 +156,22 @@ func _finish_reveal() -> void:
 
 
 func _emit_currency(currency: String, amount: int) -> void:
+	if currency_emission_tween:
+		currency_emission_tween.kill()
+	currency_burst.emitting = false
 	if amount <= 0:
 		return
 	var is_coins := currency == "coins"
 	var minimum := 500.0 if is_coins else 5.0
 	var maximum := 10000.0 if is_coins else 100.0
 	var intensity := clampf((float(amount) - minimum) / (maximum - minimum), 0.0, 1.0)
-	currency_burst.emitting = false
+	var emission_duration := lerpf(2.4 if is_coins else 1.8, 6.0 if is_coins else 3.0, intensity)
 	currency_burst.texture = CURRENCY_TEXTURES[currency]
-	currency_burst.amount = amount
-	currency_burst.lifetime = lerpf(2.4 if is_coins else 1.8, 6.0 if is_coins else 3.0, intensity)
-	currency_burst.explosiveness = lerpf(0.65, 0.05, intensity)
+	# Recycle a bounded pool; reward size controls shower duration, not particle lifetime.
+	currency_burst.amount = mini(amount, MAX_CURRENCY_PARTICLES)
+	currency_burst.lifetime = CURRENCY_PARTICLE_LIFETIME
+	currency_burst.one_shot = false
+	currency_burst.explosiveness = 0.0
 	var material := currency_burst.process_material as ParticleProcessMaterial
 	material.spread = lerpf(65.0, 40.0, intensity)
 	material.initial_velocity_min = lerpf(650.0, 900.0, intensity)
@@ -172,10 +180,15 @@ func _emit_currency(currency: String, amount: int) -> void:
 	material.scale_max = lerpf(0.28, 0.18, intensity) if is_coins else 0.40
 	currency_burst.restart()
 	currency_burst.emitting = true
+	currency_emission_tween = create_tween()
+	currency_emission_tween.tween_interval(emission_duration)
+	currency_emission_tween.tween_callback(func() -> void: currency_burst.emitting = false)
 
 
 func _reset_animation() -> void:
 	phase = Phase.CLOSED
+	if currency_emission_tween:
+		currency_emission_tween.kill()
 	if float_tween:
 		float_tween.kill()
 	if hit_tween:

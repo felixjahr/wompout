@@ -1,6 +1,6 @@
 extends Control
 
-signal logout_requested
+signal logout_requested(on_completed: Callable)
 signal start_link_requested(email: String, on_completed: Callable)
 signal verify_link_requested(email: String, code: String, on_completed: Callable)
 signal invite_player_requested(player_id: String)
@@ -12,6 +12,7 @@ signal update_ready_requested(ready: bool)
 signal update_loadout_requested(loadout: Dictionary)
 signal create_invite_requested
 signal open_chest_requested(on_completed: Callable)
+signal buy_offer_requested(offer_id: String)
 
 signal resource_opened(resource: String)
 signal resource_closed(resource: String)
@@ -58,6 +59,7 @@ var local_player_id: String
 @onready var settings_screen := %SettingsScreen
 @onready var chest_screen := %ChestScreen
 @onready var game_mode_screen := %GameModeScreen
+@onready var shop_screen := %ShopScreen
 @onready var armory_screen := %ArmoryScreen
 @onready var friends_screen := %FriendsScreen
 @onready var rankings_screen := %RankingsScreen
@@ -79,6 +81,7 @@ func update_player(player: Dictionary) -> void:
 		chest_label.text = "READY"
 	
 	settings_screen.update_player(player)
+	shop_screen.update_player(player)
 	armory_screen.update_player(player)
 
 
@@ -144,7 +147,7 @@ func update_rankings(rankings: Dictionary) -> void:
 
 
 func update_shop(shop: Dictionary) -> void:
-	pass
+	shop_screen.update_shop(shop)
 
 
 func _on_invite_popup_hidden() -> void:
@@ -182,7 +185,7 @@ func _on_game_mode_button_pressed() -> void:
 
 
 func _on_shop_button_pressed() -> void:
-	pass
+	shop_screen.open()
 
 
 func _on_armory_button_pressed() -> void:

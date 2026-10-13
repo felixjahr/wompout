@@ -7,6 +7,7 @@ var current_category_id := "melee"
 var selected_category_id := ""
 var selected_item_id := ""
 
+@onready var scroll_container := %ScrollContainer
 @onready var lobby := get_parent()
 @onready var armory_panel := %ArmoryPanel
 @onready var item_card_container := %ItemCardContainer
@@ -40,6 +41,8 @@ func _input(event: InputEvent) -> void:
 
 
 func open() -> void:
+	scroll_container.scroll_horizontal = 0
+	scroll_container.scroll_vertical = 0
 	lobby.platform_area.hide()
 	lobby.upper_bar.hide()
 	lobby.side_buttons.hide()
@@ -106,10 +109,10 @@ func _on_item_card_pressed(category_id: String, item_id: String, item_card: Anim
 
 
 func _on_equip_button_pressed() -> void:
-	player["loadout"][selected_category_id + "Id"] = selected_item_id
-	_render_category(current_category_id)
+	var loadout: Dictionary = player["loadout"].duplicate(true)
+	loadout[selected_category_id + "Id"] = selected_item_id
 	_close_equip_popup()
-	lobby.update_loadout_requested.emit(player["loadout"])
+	lobby.update_loadout_requested.emit(loadout)
 
 
 func _close_equip_popup() -> void:

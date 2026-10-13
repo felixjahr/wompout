@@ -8,7 +8,7 @@ import {
 } from './matchmaking.types';
 import { randomUUID } from 'node:crypto';
 import { GameBot, GamePlayer } from '../game-servers/game-servers.types';
-import { DEFAULT_LOADOUT } from '../config/default-player.config';
+import { createRandomBotLoadout } from '../config/bot-loadout.config';
 import { Subject } from 'rxjs';
 import { BOT_NAMES } from '../config/bot-names.config';
 
@@ -240,7 +240,7 @@ export class MatchmakingService {
           id: randomUUID(),
           displayName: BOT_NAMES[Math.floor(Math.random() * BOT_NAMES.length)],
           teamId,
-          loadout: DEFAULT_LOADOUT,
+          loadout: createRandomBotLoadout(),
         });
       }
     }

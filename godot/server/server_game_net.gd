@@ -7,6 +7,17 @@ signal player_disconnected(player_id: String)
 
 const AUTH_TIMEOUT := 5.0
 const MAX_RESEND_EVENTS := 3
+const INPUT_BATCH_RATE := 60.0
+const INPUT_BATCH_BURST := 30.0
+const GAME_REQUEST_RATE := 5.0
+const GAME_REQUEST_BURST := 10.0
+const AUTH_REQUEST_RATE := 2.0
+const AUTH_REQUEST_BURST := 3.0
+const GAME_TOKEN_LENGTH := 86
+
+var input_budgets: Dictionary = {}
+var request_budgets: Dictionary = {}
+var auth_budgets: Dictionary = {}
 
 var allowed_players: Dictionary = {}
 var player_id_by_pid: Dictionary[int, String] = {}
@@ -107,12 +118,26 @@ func receive_input_batch(input_batch: PackedByteArray) -> void:
 	var pid := multiplayer.get_remote_sender_id()
 	if not player_id_by_pid.has(pid):
 		return
+	if not _consume_budget(input_budgets, pid, INPUT_BATCH_RATE, INPUT_BATCH_BURST):
+		return
+	var batch := ParticipantInputBatch.from_packet(input_batch)
+	if batch == null:
+		return
 	var player_id: String = player_id_by_pid[pid]
-	emit_signal("input_batch_received", player_id, ParticipantInputBatch.from_packet(input_batch))
+	input_batch_received.emit(player_id, batch)
+
 
 @rpc("any_peer", "reliable")
 func receive_game_token(game_token: String) -> void:
 	var pid := multiplayer.get_remote_sender_id()
+	if player_id_by_pid.has(pid):
+		return
+	if not _consume_budget(auth_budgets, pid, AUTH_REQUEST_RATE, AUTH_REQUEST_BURST):
+		return
+	if game_token.length() != GAME_TOKEN_LENGTH:
+		if multiplayer.multiplayer_peer:
+			multiplayer.multiplayer_peer.disconnect_peer(pid)
+		return
 	var token_hash := _hash_token(game_token)
 	if not allowed_players.has(token_hash):
 		if multiplayer.multiplayer_peer:
@@ -141,11 +166,19 @@ func receive_game_request(game_request: Dictionary) -> void:
 	var pid := multiplayer.get_remote_sender_id()
 	if not player_id_by_pid.has(pid):
 		return
+	if not _consume_budget(request_budgets, pid, GAME_REQUEST_RATE, GAME_REQUEST_BURST):
+		return
+	var request := GameRequest.from_dict(game_request)
+	if request == null:
+		return
 	var player_id: String = player_id_by_pid[pid]
-	emit_signal("game_request_received", player_id, GameRequest.from_dict(game_request))
+	game_request_received.emit(player_id, request)
 
 
 func _on_peer_disconnected(pid: int) -> void:
+	input_budgets.erase(pid)
+	request_budgets.erase(pid)
+	auth_budgets.erase(pid)
 	unauthenticated_connected_at.erase(pid)
 	if not player_id_by_pid.has(pid):
 		return
@@ -158,6 +191,26 @@ func _on_peer_disconnected(pid: int) -> void:
 
 func _on_peer_connected(pid: int) -> void:
 	unauthenticated_connected_at[pid] = Time.get_ticks_msec() / 1000.0
+
+
+func _consume_budget(
+	budgets: Dictionary,
+	pid: int,
+	rate: float,
+	capacity: float
+) -> bool:
+	var now := Time.get_ticks_msec() / 1000.0
+	var budget: Dictionary = budgets.get(pid, {
+		"tokens": capacity,
+		"updated_at": now,
+	})
+	var elapsed: float = now - budget["updated_at"]
+	var tokens := minf(capacity, float(budget["tokens"]) + elapsed * rate)
+	var allowed := tokens >= 1.0
+	budget["tokens"] = tokens - 1.0 if allowed else tokens
+	budget["updated_at"] = now
+	budgets[pid] = budget
+	return allowed
 
 
 func _hash_token(token: String) -> String:

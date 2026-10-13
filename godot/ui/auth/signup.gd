@@ -1,6 +1,6 @@
 extends CenterContainer
 
-signal start_signup_requested(displayName: String, email: String)
+signal start_signup_requested(display_name: String, email: String)
 signal login_pressed
 signal guest_pressed
 

@@ -9,9 +9,10 @@ signal lobby_updated(lobby: Dictionary)
 signal lobby_invites_updated(invites: Array)
 signal match_updated(snapshot: Variant)
 signal friends_updated(friends: Dictionary)
-signal rankings_updated(rankings: Array)
+signal rankings_updated(rankings: Dictionary)
 signal shop_updated(shop: Dictionary)
 
+signal session_refresh_finished(result: AuthResult)
 signal websocket_disconnected
 
 enum AuthResult {
@@ -20,8 +21,8 @@ enum AuthResult {
 	SERVER_UNAVAILABLE,
 }
 
-const HTTP_BASE_URL := "http://localhost:3000"
-const WEBSOCKET_URL := "ws://localhost:3000/ws"
+const HTTP_BASE_URL := "https://api.wompout.com"
+const WEBSOCKET_URL := "wss://api.wompout.com/ws"
 
 const HTTP_TIMEOUT_SECONDS := 10.0
 const WEBSOCKET_TIMEOUT_SECONDS := 8.0
@@ -31,7 +32,8 @@ const REFRESH_MARGIN_SECONDS := 30
 
 var access_token := ""
 var refresh_token := ""
-var access_token_expires_at := 0.0
+var session_refresh_at := 0.0
+var session_refresh_pending := false
 
 var socket := WebSocketPeer.new()
 var websocket_authenticated := false
@@ -42,40 +44,51 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	socket.poll()
-	
-	while socket.get_available_packet_count() > 0:
-		_handle_websocket_message(socket.get_packet().get_string_from_utf8())
-	
-	if websocket_authenticated and socket.get_ready_state() == WebSocketPeer.STATE_CLOSED:
-		websocket_authenticated = false
-		set_process(false)
-		emit_signal("websocket_disconnected")
+	var current_socket := socket
+	current_socket.poll()
+
+	while socket == current_socket and current_socket.get_available_packet_count() > 0:
+		var text := current_socket.get_packet().get_string_from_utf8()
+		_handle_websocket_message(_parse_websocket_message(text))
+
+	if socket != current_socket:
+		return
+
+	if current_socket.get_ready_state() == WebSocketPeer.STATE_CLOSED:
+		disconnect_websocket()
+		websocket_disconnected.emit()
+		return
+
+	if websocket_authenticated and not session_refresh_pending:
+		if Time.get_ticks_msec() / 1000.0 >= session_refresh_at:
+			_refresh_session()
 
 
 func authenticate() -> AuthResult:
 	refresh_token = _load_refresh_token()
-	if refresh_token.is_empty():
-		return AuthResult.AUTH_REQUIRED
-	var result := await _refresh_session()
-	if result == AuthResult.AUTH_REQUIRED:
-		clear_session()
-	return result
+	return await _refresh_session()
 
 
-func auth_create_guest(displayName: String) -> Dictionary:
+func clear_session() -> void:
+	access_token = ""
+	refresh_token = ""
+	session_refresh_at = 0.0
+	_save_refresh_token("")
+
+
+func auth_create_guest(display_name: String) -> Dictionary:
 	var response: Dictionary = await _request(
 		"/auth/guest",
-		{"displayName": displayName.strip_edges()}
+		{"displayName": display_name.strip_edges()}
 	)
 	return _handle_token_response(response)
 
 
-func auth_start_signup(displayName: String, email: String) -> Dictionary:
+func auth_start_signup(display_name: String, email: String) -> Dictionary:
 	return await _request(
 		"/auth/signup/start",
 		{
-			"displayName": displayName.strip_edges(),
+			"displayName": display_name.strip_edges(),
 			"email": email.strip_edges().to_lower(),
 		}
 	)
@@ -203,6 +216,185 @@ func players_open_chest() -> Dictionary:
 	)
 
 
+func shop_buy_offer(offer_id: String) -> Dictionary:
+	return await _authenticated_request(
+		"/shop/buy",
+		{"offerId": offer_id}
+	)
+
+
+func connect_websocket() -> bool:
+	disconnect_websocket()
+
+	var current_socket := socket
+	var token := await _get_valid_access_token()
+
+	if socket != current_socket:
+		return false
+	if token.is_empty():
+		return false
+
+	var err := current_socket.connect_to_url(WEBSOCKET_URL)
+	if err != OK:
+		disconnect_websocket()
+		return false
+
+	var deadline := (
+		Time.get_ticks_msec()
+		+ int(WEBSOCKET_TIMEOUT_SECONDS * 1000)
+	)
+
+	while (
+		socket == current_socket
+		and current_socket.get_ready_state() == WebSocketPeer.STATE_CONNECTING
+		and Time.get_ticks_msec() < deadline
+	):
+		current_socket.poll()
+		await get_tree().process_frame
+
+	if socket != current_socket:
+		return false
+
+	if current_socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
+		disconnect_websocket()
+		return false
+
+	if await _authenticate_websocket():
+		return true
+
+	if socket == current_socket:
+		disconnect_websocket()
+
+	return false
+
+
+func disconnect_websocket() -> void:
+	set_process(false)
+	websocket_authenticated = false
+	if socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
+		socket.close()
+	socket = WebSocketPeer.new()
+
+
+func subscribe_resources(resources: Array[String]) -> bool:
+	if not websocket_authenticated:
+		push_error("Couldn't subscribe: WebSocket isn't authenticated or open.")
+		return false
+	var err := socket.send_text(JSON.stringify({
+		"event": "subscribe",
+		"data": {
+			"resources": resources,
+		},
+	}))
+	if err != OK:
+		push_error("Couldn't subscribe to %s: %s" % [str(resources), error_string(err)])
+		return false
+	return true
+
+
+func unsubscribe_resources(resources: Array[String]) -> bool:
+	if not websocket_authenticated:
+		push_error("Couldn't unsubscribe: WebSocket isn't authenticated or open.")
+		return false
+	var err := socket.send_text(JSON.stringify({
+		"event": "unsubscribe",
+		"data": {
+			"resources": resources,
+		},
+	}))
+	if err != OK:
+		push_error("Couldn't unsubscribe from %s: %s" % [str(resources), error_string(err)])
+		return false
+	return true
+
+
+func _get_valid_access_token() -> String:
+	var now := Time.get_ticks_msec() / 1000.0
+	if not session_refresh_pending and not access_token.is_empty() and now < session_refresh_at:
+		return access_token
+	var result := await _refresh_session()
+	return access_token if result == AuthResult.SUCCEEDED else ""
+
+
+func _refresh_session() -> AuthResult:
+	if session_refresh_pending:
+		return await session_refresh_finished
+
+	if refresh_token.is_empty():
+		return AuthResult.AUTH_REQUIRED
+
+	session_refresh_pending = true
+
+	var current_socket := socket
+	var had_connection := websocket_authenticated
+	var previous_refresh_token := refresh_token
+	var result := AuthResult.SERVER_UNAVAILABLE
+
+	var response := await _request(
+		"/sessions/refresh",
+		{"refreshToken": previous_refresh_token}
+	)
+
+	if refresh_token == previous_refresh_token:
+		if response.get("status", 0) == 401:
+			clear_session()
+			result = AuthResult.AUTH_REQUIRED
+		else:
+			response = _handle_token_response(response)
+
+			if response.get("ok", false):
+				result = AuthResult.SUCCEEDED
+
+				if had_connection:
+					if socket != current_socket:
+						result = AuthResult.SERVER_UNAVAILABLE
+					elif not await _authenticate_websocket():
+						result = AuthResult.SERVER_UNAVAILABLE
+
+	if result != AuthResult.SUCCEEDED:
+		if had_connection and socket == current_socket:
+			disconnect_websocket()
+			websocket_disconnected.emit()
+
+	session_refresh_pending = false
+	session_refresh_finished.emit(result)
+	return result
+
+
+func _handle_token_response(response: Dictionary) -> Dictionary:
+	if not response["ok"]:
+		return response
+
+	var data: Variant = response["data"]
+	if not data is Dictionary:
+		push_error("Token response is not a dictionary")
+		response["ok"] = false
+		return response
+	
+	var new_access_token: Variant = data.get("access_token")
+	var new_refresh_token: Variant = data.get("refresh_token")
+	
+	if not new_access_token is String or not new_refresh_token is String:
+		push_error("Token response contains invalid token types")
+		response["ok"] = false
+		return response
+
+	if new_access_token.is_empty() or new_refresh_token.is_empty():
+		push_error("Token response contains empty tokens")
+		response["ok"] = false
+		return response
+	
+	access_token = new_access_token
+	refresh_token = new_refresh_token
+	session_refresh_at = (
+		Time.get_ticks_msec() / 1000.0
+		+ ACCESS_TOKEN_EXPIRATION_SECONDS
+		- REFRESH_MARGIN_SECONDS
+	)
+	_save_refresh_token(refresh_token)
+	return response
+
+
 func _authenticated_request(path: String, body: Variant = null, method := HTTPClient.METHOD_POST) -> Dictionary:
 	var token := await _get_valid_access_token()
 	if token.is_empty():
@@ -255,131 +447,43 @@ func _request(path: String, body: Variant = null, headers: Array[String] = [], m
 	}
 
 
-func _handle_token_response(response: Dictionary) -> Dictionary:
-	if not response["ok"]:
-		return response
+func _authenticate_websocket() -> bool:
+	var current_socket := socket
+	var token := access_token
 
-	var data: Variant = response["data"]
-	if not data is Dictionary:
-		push_error("Token response is not a dictionary")
-		response["ok"] = false
-		return response
-	
-	var new_access_token: Variant = data.get("access_token")
-	var new_refresh_token: Variant = data.get("refresh_token")
-	
-	if not new_access_token is String or not new_refresh_token is String:
-		push_error("Token response contains invalid token types")
-		response["ok"] = false
-		return response
+	set_process(false)
 
-	if new_access_token.is_empty() or new_refresh_token.is_empty():
-		push_error("Token response contains empty tokens")
-		response["ok"] = false
-		return response
-	
-	access_token = new_access_token
-	refresh_token = new_refresh_token
-	access_token_expires_at = (
-		Time.get_ticks_msec() / 1000.0
-		+ ACCESS_TOKEN_EXPIRATION_SECONDS
-		- REFRESH_MARGIN_SECONDS
-	)
-	_save_refresh_token(refresh_token)
-	return response
-
-
-func subscribe_resources(resources: Array[String]) -> bool:
-	if not websocket_authenticated:
-		push_error("Couldn't subscribe: WebSocket isn't authenticated or open.")
-		return false
-	var err := socket.send_text(JSON.stringify({
-		"event": "subscribe",
-		"data": {
-			"resources": resources,
-		},
-	}))
-	if err != OK:
-		push_error("Couldn't subscribe to %s: %s" % [str(resources), error_string(err)])
-		return false
-	return true
-
-
-func unsubscribe_resources(resources: Array[String]) -> bool:
-	if not websocket_authenticated:
-		push_error("Couldn't unsubscribe: WebSocket isn't authenticated or open.")
-		return false
-	var err := socket.send_text(JSON.stringify({
-		"event": "unsubscribe",
-		"data": {
-			"resources": resources,
-		},
-	}))
-	if err != OK:
-		push_error("Couldn't unsubscribe from %s: %s" % [str(resources), error_string(err)])
-		return false
-	return true
-
-
-func connect_websocket() -> bool:
-	disconnect_websocket()
-	socket = WebSocketPeer.new()
-
-	var err := socket.connect_to_url(WEBSOCKET_URL)
-	if err != OK:
-		push_error("Couldn't start WebSocket connection: " + error_string(err))
-		disconnect_websocket()
-		return false
-
-	var timeout := get_tree().create_timer(WEBSOCKET_TIMEOUT_SECONDS)
-
-	while socket.get_ready_state() == WebSocketPeer.STATE_CONNECTING and timeout.time_left > 0.0:
-		socket.poll()
-		await get_tree().process_frame
-
-	if socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
-		if timeout.time_left <= 0.0:
-			push_error("WebSocket connection timed out.")
-		else:
-			push_error("WebSocket connection failed.")
-		disconnect_websocket()
-		return false
-	
-	var token := await _get_valid_access_token()
 	if token.is_empty():
-		push_error("Couldn't authenticate WebSocket: no valid access token.")
-		disconnect_websocket()
+		return false
+	if current_socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 		return false
 
-	err = socket.send_text(JSON.stringify({
+	var err := current_socket.send_text(JSON.stringify({
 		"event": "authenticate",
-		"data": {
-			"accessToken": token,
-		},
+		"data": {"accessToken": token},
 	}))
 
 	if err != OK:
-		push_error("Couldn't send WebSocket authentication: " + error_string(err))
-		disconnect_websocket()
 		return false
 
-	timeout = get_tree().create_timer(WEBSOCKET_TIMEOUT_SECONDS)
+	var deadline := (
+		Time.get_ticks_msec()
+		+ int(WEBSOCKET_TIMEOUT_SECONDS * 1000)
+	)
 
-	while timeout.time_left > 0.0:
-		socket.poll()
+	while (
+		socket == current_socket
+		and access_token == token
+		and Time.get_ticks_msec() < deadline
+	):
+		current_socket.poll()
 
-		if socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
-			push_error("WebSocket disconnected during authentication.")
-			disconnect_websocket()
+		if current_socket.get_ready_state() != WebSocketPeer.STATE_OPEN:
 			return false
 
-		while socket.get_available_packet_count() > 0:
-			var text := socket.get_packet().get_string_from_utf8()
+		while current_socket.get_available_packet_count() > 0:
+			var text := current_socket.get_packet().get_string_from_utf8()
 			var message := _parse_websocket_message(text)
-			var data: Variant = message.get("data", {})
-
-			if not data is Dictionary:
-				continue
 
 			match str(message.get("event", "")):
 				"authenticated":
@@ -387,30 +491,20 @@ func connect_websocket() -> bool:
 					set_process(true)
 					return true
 				"error":
-					push_error("WebSocket authentication failed: " + str(data.get("message", "Unknown error")))
-					disconnect_websocket()
+					_handle_websocket_message(message)
 					return false
+				_:
+					_handle_websocket_message(message)
+
+			if socket != current_socket or access_token != token:
+				return false
 
 		await get_tree().process_frame
 
-	push_error("WebSocket authentication timed out.")
-	disconnect_websocket()
 	return false
 
 
-func disconnect_websocket() -> void:
-	set_process(false)
-	websocket_authenticated = false
-	if socket.get_ready_state() == WebSocketPeer.STATE_OPEN:
-		socket.close()
-	socket = WebSocketPeer.new()
-
-
-func _handle_websocket_message(text: String) -> void:
-	var message := _parse_websocket_message(text)
-	if message.is_empty():
-		return
-	
+func _handle_websocket_message(message: Dictionary) -> void:
 	var data: Variant = message.get("data")
 	if not data is Dictionary:
 		return
@@ -452,7 +546,7 @@ func _handle_resource_snapshot(resource: String, snapshot: Variant) -> void:
 			if snapshot is Dictionary:
 				friends_updated.emit(snapshot)
 		"rankings":
-			if snapshot is Array:
+			if snapshot is Dictionary:
 				rankings_updated.emit(snapshot)
 		"shop":
 			if snapshot is Dictionary:
@@ -461,92 +555,31 @@ func _handle_resource_snapshot(resource: String, snapshot: Variant) -> void:
 
 func _parse_websocket_message(text: String) -> Dictionary:
 	var message: Variant = JSON.parse_string(text)
-
 	if message is Dictionary:
 		return message
-
 	return {}
 
 
-func _refresh_session() -> AuthResult:
-	var response: Dictionary = await _request(
-		"/sessions/refresh",
-		{"refreshToken": refresh_token}
-	)
-	
-	if response.get("status", 0) == 401:
-		return AuthResult.AUTH_REQUIRED
-	
-	if not response.get("ok", false):
-		return AuthResult.SERVER_UNAVAILABLE
-	
-	var data = response.get("data")
-	if not data is Dictionary:
-		return AuthResult.SERVER_UNAVAILABLE
-
-	var new_access_token := str(data.get("access_token", ""))
-	var new_refresh_token := str(data.get("refresh_token", ""))
-
-	if new_access_token.is_empty() or new_refresh_token.is_empty():
-		return AuthResult.SERVER_UNAVAILABLE
-
-	access_token = new_access_token
-	refresh_token = new_refresh_token
-	access_token_expires_at = (
-		Time.get_ticks_msec() / 1000.0
-		+ ACCESS_TOKEN_EXPIRATION_SECONDS 
-		- REFRESH_MARGIN_SECONDS
-	)
-	_save_refresh_token(refresh_token)
-	return AuthResult.SUCCEEDED
-
-
-func clear_session() -> void:
-	access_token = ""
-	refresh_token = ""
-	access_token_expires_at = 0.0
-	_save_refresh_token("")
-
-
 func _save_refresh_token(token: String) -> void:
-	# Debug only
-	var suffix := ""
-	if OS.has_feature("1"):
-		suffix = "1"
-	elif OS.has_feature("2"):
-		suffix = "2"
-	elif OS.has_feature("3"):
-		suffix = "3"
-	elif OS.has_feature("4"):
-		suffix = "4"
-	
 	var cfg := ConfigFile.new()
 	cfg.set_value("auth", "refresh_token", token)
-	cfg.save("user://session" + suffix + ".cfg")
+	var err := cfg.save(_get_session_file_path())
+	if err != OK:
+		push_error("Couldn't save session: %s" % error_string(err))
 
 
 func _load_refresh_token() -> String:
-	# Debug only
-	var suffix := ""
-	if OS.has_feature("1"):
-		suffix = "1"
-	elif OS.has_feature("2"):
-		suffix = "2"
-	elif OS.has_feature("3"):
-		suffix = "3"
-	elif OS.has_feature("4"):
-		suffix = "4"
-	
 	var cfg := ConfigFile.new()
-	var err := cfg.load("user://session" + suffix + ".cfg")
+	var err := cfg.load(_get_session_file_path())
 	if err != OK:
+		if err != ERR_FILE_NOT_FOUND:
+			push_error("Couldn't load session: %s" % error_string(err))
 		return ""
 	return str(cfg.get_value("auth", "refresh_token", ""))
 
 
-func _get_valid_access_token() -> String:
-	if not access_token.is_empty() and Time.get_ticks_msec() / 1000.0 < access_token_expires_at:
-		return access_token
-	if await _refresh_session() == AuthResult.SUCCEEDED:
-		return access_token
-	return ""
+func _get_session_file_path() -> String:
+	for suffix in ["1", "2", "3", "4"]:
+		if OS.has_feature(suffix):
+			return "user://session%s.cfg" % suffix
+	return "user://session.cfg"

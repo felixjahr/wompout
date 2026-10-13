@@ -10,7 +10,7 @@ import { ChestContent, Player, PlayerLoadout } from './players.types';
 import { RealtimeService } from '../realtime/realtime.service';
 import { ResourceName } from '../realtime/realtime.types';
 import { Subject } from 'rxjs';
-import { PlayerProgression } from '../../generated/prisma/client';
+import { PlayerProgression, Prisma } from '../../generated/prisma/client';
 import {
   CHEST_REWARDS,
   CHEST_ITEM_GROUPS,
@@ -35,6 +35,47 @@ export class PlayersService implements OnModuleInit {
       ResourceName.Player,
       (playerId) => this.getPlayer(playerId),
     );
+  }
+
+  async unlockItem(
+    playerId: string,
+    itemId: string,
+    price: { currency: 'coins' | 'gems'; amount: number },
+  ): Promise<void> {
+    try {
+      await this.prismaService.$transaction(async (tx) => {
+        const ownedItem = await tx.playerItem.findUnique({
+          where: { playerId_itemId: { playerId, itemId } },
+        });
+        if (ownedItem) {
+          throw new BadRequestException('Item already unlocked');
+        }
+
+        const payment = await tx.playerProgression.updateMany({
+          where: { playerId, [price.currency]: { gte: price.amount } },
+          data: { [price.currency]: { decrement: price.amount } },
+        });
+        if (payment.count === 0) {
+          throw new BadRequestException(`Not enough ${price.currency}`);
+        }
+
+        await tx.playerItem.create({ data: { playerId, itemId } });
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2002'
+      ) {
+        throw new BadRequestException('Item already unlocked');
+      }
+      throw error;
+    }
+
+    try {
+      await this.publishPlayer(playerId);
+    } catch (error) {
+      console.error('Failed to publish player after unlocking item', error);
+    }
   }
 
   async openChest(playerId: string): Promise<ChestContent> {

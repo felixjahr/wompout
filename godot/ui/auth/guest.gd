@@ -1,6 +1,6 @@
 extends CenterContainer
 
-signal create_guest_requested(displayName: String)
+signal create_guest_requested(display_name: String)
 signal back_pressed
 
 @onready var name_line_edit := %NameLineEdit

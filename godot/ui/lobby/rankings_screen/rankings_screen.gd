@@ -2,11 +2,14 @@ extends AnimatedPanel
 
 const PlayerEntry := preload("res://ui/shared/player_entry/player_entry.tscn")
 
+@onready var scroll_container := %ScrollContainer
 @onready var lobby := get_parent()
 @onready var player_entry_container := %PlayerEntryContainer
 
 
 func open() -> void:
+	scroll_container.scroll_horizontal = 0
+	scroll_container.scroll_vertical = 0
 	animate_panel(true)
 	lobby.resource_opened.emit("rankings")
 

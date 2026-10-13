@@ -8,6 +8,8 @@ const ATTACKING_FLAG := 2
 const ABILITY_FLAG := 4
 const DIRECTION_FLAGS_SHIFT := 3
 const DIRECTION_FLAGS_MASK := 3
+const MAX_INPUTS_PER_BATCH := 3
+const INPUT_BYTE_SIZE := 8
 
 var inputs: Array[ParticipantInput] = []
 
@@ -23,13 +25,23 @@ func to_packet() -> PackedByteArray:
 
 
 static func from_packet(packet: PackedByteArray) -> ParticipantInputBatch:
+	if packet.is_empty():
+		return null
+	var input_count := int(packet[0])
+	if input_count < 1 or input_count > MAX_INPUTS_PER_BATCH:
+		return null
+	if packet.size() != 1 + input_count * INPUT_BYTE_SIZE:
+		return null
 	var peer := StreamPeerBuffer.new()
 	peer.big_endian = false
 	peer.data_array = packet
+	peer.seek(1)
 	var batch := ParticipantInputBatch.new()
-	var input_count := int(peer.get_u8())
 	for i in input_count:
-		batch.inputs.append(_read_input(peer))
+		var input := _read_input(peer)
+		if input.current_weapon not in [0, 1]:
+			return null
+		batch.inputs.append(input)
 	return batch
 
 

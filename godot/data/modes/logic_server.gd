@@ -7,6 +7,7 @@ const SIMULATION_TICK_RATE := 30
 const SNAPSHOT_FREQUENCY := 2
 const INPUT_BUFFER_SIZE := 128
 const MAX_INPUT_LOOKBACK := 5
+const MAX_INPUT_LEAD := 15
 
 const ParticipantServer := preload("res://participant/participant_server.tscn")
 
@@ -288,7 +289,12 @@ func _on_net_input_batch_received(participant_id: String, input_batch: Participa
 	if not player_inputs.has(participant_id):
 		return
 	for input in input_batch.inputs:
-		var existing_input: ParticipantInput = player_inputs[participant_id][input.tick % INPUT_BUFFER_SIZE]
+		if input.tick < tick - MAX_INPUT_LOOKBACK + 1:
+			continue
+		if input.tick > tick + MAX_INPUT_LEAD:
+			continue
+		var index := input.tick % INPUT_BUFFER_SIZE
+		var existing_input: ParticipantInput = player_inputs[participant_id][index]
 		if existing_input != null and existing_input.tick == input.tick:
 			continue
-		player_inputs[participant_id][input.tick % INPUT_BUFFER_SIZE] = input
+		player_inputs[participant_id][index] = input

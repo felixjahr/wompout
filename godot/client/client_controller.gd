@@ -60,6 +60,7 @@ var lobby_update_ready_pending := false
 var lobby_update_loadout_pending := false
 var lobby_create_invite_pending := false
 var lobby_open_chest_pending := false
+var shop_buy_offer_pending := false
 
 @onready var backend_net := $Net/BackendNet
 @onready var game_net := $Net/GameNet
@@ -124,6 +125,7 @@ func _enter_state(data = null) -> void:
 			ui.update_loadout_requested.connect(_on_lobby_update_loadout_requested)
 			ui.create_invite_requested.connect(_on_lobby_create_invite_requested)
 			ui.open_chest_requested.connect(_on_lobby_open_chest_requested)
+			ui.buy_offer_requested.connect(_on_shop_buy_offer_requested)
 			ui.resource_opened.connect(_on_lobby_resource_opened)
 			ui.resource_closed.connect(_on_lobby_resource_closed)
 		ClientState.MATCHMAKING:
@@ -375,16 +377,20 @@ func _try_redeem_friend_invites() -> void:
 			push_error("Couldn't accept invite. Open the link again to retry.")
 
 
-func _on_auth_create_guest_requested(display_name: String) -> void:
+func _on_auth_create_guest_requested(display_name: String, on_completed: Callable) -> void:
 	if auth_create_guest_pending:
 		return
 	display_name = display_name.strip_edges()
 	if not _is_valid_display_name(display_name):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter a display name between 1 and 16 characters.")
 		return
 	auth_create_guest_pending = true
 	var response: Dictionary = await backend_net.auth_create_guest(display_name)
 	auth_create_guest_pending = false
+	if on_completed.is_valid():
+		on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't create your account. Please try again.")
 		return
@@ -396,33 +402,44 @@ func _on_auth_start_signup_requested(display_name: String, email: String, on_com
 		return
 	display_name = display_name.strip_edges()
 	if not _is_valid_display_name(display_name):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter a display name between 1 and 16 characters.")
 		return
 	email = email.strip_edges()
 	if not _is_valid_email(email):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter a valid email address.")
 		return
 	auth_start_signup_pending = true
 	var response: Dictionary = await backend_net.auth_start_signup(display_name, email)
 	auth_start_signup_pending = false
-	on_completed.call(response)
+	if on_completed.is_valid():
+		on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't send your verification code. Please try again.")
 
 
-func _on_auth_verify_signup_requested(email: String, code: String) -> void:
+func _on_auth_verify_signup_requested(email: String, code: String, on_completed: Callable) -> void:
 	if auth_verify_signup_pending:
 		return
 	email = email.strip_edges()
 	if not _is_valid_email(email):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter a valid email address.")
 		return
 	if not _is_valid_code(code):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter the 6-digit verification code.")
 		return
 	auth_verify_signup_pending = true
 	var response: Dictionary = await backend_net.auth_verify_signup(email, code)
 	auth_verify_signup_pending = false
+	if on_completed.is_valid():
+		on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't complete signup. Check your code or request a new one.")
 		return
@@ -434,42 +451,57 @@ func _on_auth_start_login_requested(email: String, on_completed: Callable) -> vo
 		return
 	email = email.strip_edges()
 	if not _is_valid_email(email):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter a valid email address.")
 		return
 	auth_start_login_pending = true
 	var response: Dictionary = await backend_net.auth_start_login(email)
 	auth_start_login_pending = false
-	on_completed.call(response)
+	if on_completed.is_valid():
+		on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't send your login code. Please try again.")
 		return
 
 
-func _on_auth_verify_login_requested(email: String, code: String) -> void:
+func _on_auth_verify_login_requested(email: String, code: String, on_completed: Callable) -> void:
 	if auth_verify_login_pending:
 		return
 	email = email.strip_edges()
 	if not _is_valid_email(email):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter a valid email address.")
 		return
 	if not _is_valid_code(code):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter the 6-digit verification code.")
 		return
 	auth_verify_login_pending = true
 	var response: Dictionary = await backend_net.auth_verify_login(email, code)
 	auth_verify_login_pending = false
+	if on_completed.is_valid():
+		on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't log in. Check your code or request a new one.")
 		return
 	_change_state(ClientState.LOADING)
 
 
-func _on_lobby_logout_requested() -> void:
+func _on_lobby_logout_requested(on_completed: Callable) -> void:
 	if lobby_logout_pending:
+		return
+	if lobby_open_chest_pending:
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		return
 	lobby_logout_pending = true
 	var response: Dictionary = await backend_net.sessions_logout()
 	lobby_logout_pending = false
+	if on_completed.is_valid():
+		on_completed.call(response)
 	if not response.get("ok", false):
 		show_error("Couldn't log out. Please try again.")
 		return
@@ -483,12 +515,15 @@ func _on_lobby_start_link_requested(email: String, on_completed: Callable) -> vo
 		return
 	email = email.strip_edges()
 	if not _is_valid_email(email):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter a valid email address.")
 		return
 	lobby_start_link_pending = true
 	var response: Dictionary = await backend_net.auth_start_link(email)
 	lobby_start_link_pending = false
-	on_completed.call(response)
+	if on_completed.is_valid():
+		on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't send your verification code. Please try again.")
 		return
@@ -499,15 +534,20 @@ func _on_lobby_verify_link_requested(email: String, code: String, on_completed: 
 		return
 	email = email.strip_edges()
 	if not _is_valid_email(email):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter a valid email address.")
 		return
 	if not _is_valid_code(code):
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
 		show_error("Enter the 6-digit verification code.")
 		return
 	lobby_verify_link_pending = true
 	var response: Dictionary = await backend_net.auth_verify_link(email, code)
 	lobby_verify_link_pending = false
-	on_completed.call(response)
+	if on_completed.is_valid():
+		on_completed.call(response)
 	if not response["ok"]:
 		show_error("Couldn't link your email. Check your code or request a new one.")
 		return
@@ -544,7 +584,7 @@ func _on_lobby_decline_invite_requested(invite_id: String) -> void:
 
 
 func _on_lobby_leave_lobby_requested() -> void:
-	if lobby_leave_lobby_pending:
+	if lobby_leave_lobby_pending or lobby_open_chest_pending:
 		return
 	lobby_leave_lobby_pending = true
 	var response: Dictionary = await backend_net.lobbies_leave_lobby()
@@ -568,7 +608,7 @@ func _on_lobby_update_mode_requested(mode_id: String) -> void:
 
 
 func _on_lobby_update_ready_requested(ready: bool) -> void:
-	if lobby_update_ready_pending:
+	if lobby_update_ready_pending or lobby_open_chest_pending:
 		return
 	lobby_update_ready_pending = true
 	var response: Dictionary = await backend_net.lobbies_update_ready(ready)
@@ -606,15 +646,32 @@ func _on_lobby_create_invite_requested() -> void:
 func _on_lobby_open_chest_requested(on_completed: Callable) -> void:
 	if lobby_open_chest_pending:
 		return
+	if lobby_update_ready_pending or lobby_leave_lobby_pending or lobby_logout_pending:
+		return
+	for lobby_player in lobby["players"]:
+		if lobby_player["id"] == player["id"] and lobby_player["ready"]:
+			show_error("Unready before opening a chest.")
+			return
 	if int(player["chestProgress"]["readyChests"]) == 0:
 		show_error("Win ranked games to open a chest.")
 		return
 	lobby_open_chest_pending = true
 	var response: Dictionary = await backend_net.players_open_chest()
 	lobby_open_chest_pending = false
-	on_completed.call(response)
+	if on_completed.is_valid():
+		on_completed.call(response)
 	if not response.get("ok", false):
 		show_error("Couldn't open chest. Please try again.")
+
+
+func _on_shop_buy_offer_requested(offer_id: String) -> void:
+	if shop_buy_offer_pending:
+		return
+	shop_buy_offer_pending = true
+	var response: Dictionary = await backend_net.shop_buy_offer(offer_id)
+	shop_buy_offer_pending = false
+	if not response.get("ok", false):
+		show_error("Couldn't buy shop offer. Please try again.")
 
 
 func _on_lobby_resource_opened(resource: String) -> void:

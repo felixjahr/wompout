@@ -5,7 +5,6 @@
 [ext_resource type="Script" uid="uid://db3luxn6g70v7" path="res://ui/shared/animated_panel/animated_panel.gd" id="3_yt16h"]
 [ext_resource type="PackedScene" uid="uid://kwm0g664i5pt" path="res://ui/shared/close_button/close_button.tscn" id="4_lr8ns"]
 [ext_resource type="PackedScene" uid="uid://d3iddcrv8cgpy" path="res://ui/shared/animated_button/animated_button.tscn" id="5_agi0w"]
-[ext_resource type="PackedScene" uid="uid://cuu0quwq1d46k" path="res://ui/lobby/armory_screen/item_entry.tscn" id="5_s4758"]
 [ext_resource type="PackedScene" uid="uid://5niwhgkdbm6m" path="res://ui/shared/platform/platform.tscn" id="7_f5oej"]
 [ext_resource type="Texture2D" uid="uid://oq7lcdr55iho" path="res://ui/shared/animated_button/blue_button.png" id="8_i86d6"]
 [ext_resource type="PackedScene" uid="uid://cnlqm0mhmwdm2" path="res://ui/shared/item_card/item_card.tscn" id="8_yt16h"]
@@ -304,6 +303,7 @@ mouse_filter = 1
 theme_override_styles/panel = SubResource("StyleBoxFlat_i86d6")
 
 [node name="ScrollContainer" type="ScrollContainer" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel" unique_id=1954439375]
+unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -330,42 +330,6 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/v_separation = 48
 columns = 4
-
-[node name="ItemCard" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=1052764764 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard2" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=645808068 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard3" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=659795063 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard5" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=336995331 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard6" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=1876115186 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard7" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=83092628 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard8" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=1827648541 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard9" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=16128491 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard10" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=926170024 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard11" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=1613982522 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard12" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=1732958235 instance=ExtResource("5_s4758")]
-layout_mode = 2
-
-[node name="ItemCard13" parent="ArmoryPanel/MarginContainer/VBoxContainer/VBoxContainer/Panel/ScrollContainer/MarginContainer/ItemCardContainer" unique_id=904648171 instance=ExtResource("5_s4758")]
-layout_mode = 2
 
 [node name="CloseButton" parent="ArmoryPanel" unique_id=150685673 instance=ExtResource("4_lr8ns")]
 custom_minimum_size = Vector2(224, 172)

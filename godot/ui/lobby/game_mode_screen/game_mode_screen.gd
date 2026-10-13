@@ -2,6 +2,7 @@ extends AnimatedPanel
 
 const GAME_MODE_ENTRY := preload("res://ui/lobby/game_mode_screen/game_mode_entry.tscn")
 
+@onready var scroll_container := %ScrollContainer
 @onready var lobby := get_parent()
 @onready var ranked_container := %RankedContainer
 @onready var unranked_container := %UnrankedContainer
@@ -19,6 +20,8 @@ func _ready() -> void:
 
 
 func open() -> void:
+	scroll_container.scroll_horizontal = 0
+	scroll_container.scroll_vertical = 0
 	animate_panel(true)
 
 
