@@ -129,6 +129,20 @@ export class SessionsService {
       throw new UnauthorizedException('Invalid access token');
     }
 
+    const session = await this.prismaService.session.findFirst({
+      where: {
+        id: payload.sid,
+        playerId: payload.sub,
+        revokedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+      select: { id: true },
+    });
+
+    if (!session) {
+      throw new UnauthorizedException('Invalid or expired session');
+    }
+
     return {
       playerId: payload.sub,
       sessionId: payload.sid,

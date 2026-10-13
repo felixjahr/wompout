@@ -12,6 +12,7 @@ signal update_ready_requested(ready: bool)
 signal update_loadout_requested(loadout: Dictionary)
 signal create_invite_requested
 signal open_chest_requested(on_completed: Callable)
+signal delete_requested(on_completed: Callable)
 signal buy_offer_requested(offer_id: String)
 
 signal resource_opened(resource: String)

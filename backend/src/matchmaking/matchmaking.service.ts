@@ -273,7 +273,7 @@ export class MatchmakingService {
       .filter((ticket): ticket is MatchmakingTicket => !!ticket);
   }
 
-  private cancelLobby(lobbyId: string): void {
+  cancelLobby(lobbyId: string): void {
     const ticketId = this.ticketIdByLobbyId.get(lobbyId);
     if (!ticketId) return;
 

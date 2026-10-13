@@ -42,6 +42,12 @@ export class FriendsService implements OnModuleInit {
     this.playersService.publicProfileChanged$.subscribe((playerId) => {
       void this.publishFriendsToFriendsOf(playerId).catch(console.error);
     });
+
+    this.playersService.accountDeleted$.subscribe(({ friendIds }) => {
+      for (const friendId of new Set(friendIds)) {
+        void this.publishFriends(friendId).catch(console.error);
+      }
+    });
   }
 
   async createInvite(

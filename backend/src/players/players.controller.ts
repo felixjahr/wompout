@@ -15,6 +15,12 @@ import type { ChestContent } from './players.types';
 export class PlayersController {
   constructor(private readonly playersService: PlayersService) {}
 
+  @Post('delete')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  deleteAccount(@PlayerId() playerId: string): Promise<void> {
+    return this.playersService.deleteAccount(playerId);
+  }
+
   @Post('open')
   @HttpCode(HttpStatus.OK)
   openChest(@PlayerId() playerId: string): Promise<ChestContent> {

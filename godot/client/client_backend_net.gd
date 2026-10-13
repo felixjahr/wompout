@@ -216,6 +216,12 @@ func players_open_chest() -> Dictionary:
 	)
 
 
+func players_delete() -> Dictionary:
+	return await _authenticated_request(
+		"/players/delete",
+	)
+
+
 func shop_buy_offer(offer_id: String) -> Dictionary:
 	return await _authenticated_request(
 		"/shop/buy",

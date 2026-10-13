@@ -21,6 +21,11 @@ import {
 
 @Injectable()
 export class PlayersService implements OnModuleInit {
+  private readonly accountDeletedSubject = new Subject<{
+    playerId: string;
+    friendIds: string[];
+  }>();
+  readonly accountDeleted$ = this.accountDeletedSubject.asObservable();
   private readonly publicProfileChangedSubject = new Subject<string>();
   readonly publicProfileChanged$ =
     this.publicProfileChangedSubject.asObservable();
@@ -35,6 +40,38 @@ export class PlayersService implements OnModuleInit {
       ResourceName.Player,
       (playerId) => this.getPlayer(playerId),
     );
+  }
+
+  async deleteAccount(playerId: string): Promise<void> {
+    const friendIds = await this.prismaService.$transaction(async (tx) => {
+      const player = await tx.player.findUnique({
+        where: { id: playerId },
+        select: { email: true },
+      });
+      if (!player) return [];
+
+      const friendships = await tx.friendship.findMany({
+        where: { OR: [{ playerAId: playerId }, { playerBId: playerId }] },
+        select: { playerAId: true, playerBId: true },
+      });
+
+      // Signup codes have no foreign key to Player and need explicit cleanup.
+      if (player.email) {
+        await tx.signupVerificationCode.deleteMany({
+          where: { email: player.email },
+        });
+      }
+      // All player-owned database records cascade from this deletion.
+      await tx.player.deleteMany({ where: { id: playerId } });
+      return friendships.map((friendship) =>
+        friendship.playerAId === playerId
+          ? friendship.playerBId
+          : friendship.playerAId,
+      );
+    });
+
+    this.realtimeService.disconnectPlayer(playerId);
+    this.accountDeletedSubject.next({ playerId, friendIds });
   }
 
   async unlockItem(
@@ -230,9 +267,12 @@ export class PlayersService implements OnModuleInit {
   ): Promise<number> {
     const actualChange = await this.prismaService.$transaction(
       async (tx) => {
-        const progression = await tx.playerProgression.findUniqueOrThrow({
+        const progression = await tx.playerProgression.findUnique({
           where: { playerId },
         });
+
+        // A player can delete their account while a match is running.
+        if (!progression) return null;
 
         const progressGained = 1;
 
@@ -251,6 +291,8 @@ export class PlayersService implements OnModuleInit {
       },
       { isolationLevel: 'Serializable' },
     );
+
+    if (actualChange === null) return 0;
 
     this.publicProfileChangedSubject.next(playerId);
     await this.publishPlayer(playerId);

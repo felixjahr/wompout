@@ -79,6 +79,17 @@ export class LobbiesService implements OnModuleInit {
       this.cleanupPlayer(playerId),
     );
 
+    this.playersService.accountDeleted$.subscribe(({ playerId }) => {
+      const lobby = this.getLobbyForPlayer(playerId);
+      if (lobby?.status === 'matchmaking') {
+        this.matchmakingService.cancelLobby(lobby.id);
+        lobby.status = 'open';
+        for (const member of lobby.players) member.ready = false;
+      }
+      // In-game lobbies are cleaned up when the game closes.
+      this.cleanupPlayer(playerId);
+    });
+
     this.matchmakingService.matchCreated$.subscribe({
       next: (lobbyIds) => {
         this.handleMatchCreated(lobbyIds);

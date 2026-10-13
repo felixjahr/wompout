@@ -102,5 +102,16 @@ func _on_log_out_button_pressed() -> void:
 	lobby.logout_requested.emit(_on_logout_completed)
 
 
-func _on_logout_completed(response: Dictionary) -> void:
+func _on_logout_completed(_response: Dictionary) -> void:
+	request_pending = false
+
+
+func _on_delete_button_pressed() -> void:
+	if request_pending:
+		return
+	request_pending = true
+	lobby.delete_requested.emit(_on_delete_completed)
+
+
+func _on_delete_completed(_response: Dictionary) -> void:
 	request_pending = false

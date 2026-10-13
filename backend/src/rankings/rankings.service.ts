@@ -1,5 +1,5 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
-import { auditTime } from 'rxjs';
+import { auditTime, merge } from 'rxjs';
 
 import { PrismaService } from '../prisma/prisma.service';
 import { PlayersService } from '../players/players.service';
@@ -22,7 +22,10 @@ export class RankingsService implements OnModuleInit {
       this.enqueue(() => this.getRankings()),
     );
 
-    this.playersService.publicProfileChanged$
+    merge(
+      this.playersService.publicProfileChanged$,
+      this.playersService.accountDeleted$,
+    )
       .pipe(auditTime(1000))
       .subscribe(() => {
         void this.enqueue(() => this.publishRankings()).catch(console.error);

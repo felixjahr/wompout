@@ -48,6 +48,14 @@ export class RealtimeService {
     });
   }
 
+  disconnectPlayer(playerId: string): void {
+    const client = this.socketByPlayerId.get(playerId);
+    if (!client) return;
+
+    this.unregisterConnection(client);
+    client.close(1008, 'Account deleted');
+  }
+
   unregisterConnection(client: WebSocket): void {
     const connection = this.connections.get(client);
     this.connections.delete(client);

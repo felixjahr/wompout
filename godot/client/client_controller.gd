@@ -60,7 +60,8 @@ var lobby_update_ready_pending := false
 var lobby_update_loadout_pending := false
 var lobby_create_invite_pending := false
 var lobby_open_chest_pending := false
-var shop_buy_offer_pending := false
+var lobby_buy_offer_pending := false
+var lobby_delete_pending := false
 
 @onready var backend_net := $Net/BackendNet
 @onready var game_net := $Net/GameNet
@@ -125,7 +126,8 @@ func _enter_state(data = null) -> void:
 			ui.update_loadout_requested.connect(_on_lobby_update_loadout_requested)
 			ui.create_invite_requested.connect(_on_lobby_create_invite_requested)
 			ui.open_chest_requested.connect(_on_lobby_open_chest_requested)
-			ui.buy_offer_requested.connect(_on_shop_buy_offer_requested)
+			ui.delete_requested.connect(_on_lobby_delete_requested)
+			ui.buy_offer_requested.connect(_on_lobby_buy_offer_requested)
 			ui.resource_opened.connect(_on_lobby_resource_opened)
 			ui.resource_closed.connect(_on_lobby_resource_closed)
 		ClientState.MATCHMAKING:
@@ -333,6 +335,10 @@ func _on_backend_net_shop_updated(snapshot: Dictionary) -> void:
 
 
 func _on_backend_net_websocket_disconnected() -> void:
+	# Account deletion closes the socket before its HTTP response may arrive.
+	# Let the pending request finish before deciding whether to reconnect.
+	if lobby_delete_pending:
+		return
 	_change_state(ClientState.LOADING)
 
 
@@ -664,12 +670,34 @@ func _on_lobby_open_chest_requested(on_completed: Callable) -> void:
 		show_error("Couldn't open chest. Please try again.")
 
 
-func _on_shop_buy_offer_requested(offer_id: String) -> void:
-	if shop_buy_offer_pending:
+func _on_lobby_delete_requested(on_completed: Callable) -> void:
+	if lobby_delete_pending:
 		return
-	shop_buy_offer_pending = true
+	if lobby_open_chest_pending:
+		if on_completed.is_valid():
+			on_completed.call({"ok": false, "status": 0, "data": null})
+		return
+	lobby_delete_pending = true
+	var response: Dictionary = await backend_net.players_delete()
+	lobby_delete_pending = false
+	if on_completed.is_valid():
+		on_completed.call(response)
+	if not response.get("ok", false):
+		show_error("Couldn't delete your account. Please try again.")
+		if not backend_net.websocket_authenticated:
+			_change_state(ClientState.LOADING)
+		return
+	backend_net.disconnect_websocket()
+	backend_net.clear_session()
+	_change_state(ClientState.AUTH)
+
+
+func _on_lobby_buy_offer_requested(offer_id: String) -> void:
+	if lobby_buy_offer_pending:
+		return
+	lobby_buy_offer_pending = true
 	var response: Dictionary = await backend_net.shop_buy_offer(offer_id)
-	shop_buy_offer_pending = false
+	lobby_buy_offer_pending = false
 	if not response.get("ok", false):
 		show_error("Couldn't buy shop offer. Please try again.")
 
