@@ -55,13 +55,11 @@ export class PlayersService implements OnModuleInit {
         select: { playerAId: true, playerBId: true },
       });
 
-      // Signup codes have no foreign key to Player and need explicit cleanup.
       if (player.email) {
         await tx.signupVerificationCode.deleteMany({
           where: { email: player.email },
         });
       }
-      // All player-owned database records cascade from this deletion.
       await tx.player.deleteMany({ where: { id: playerId } });
       return friendships.map((friendship) =>
         friendship.playerAId === playerId
