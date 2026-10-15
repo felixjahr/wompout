@@ -1,8 +1,6 @@
 # Wompout
 
-Wompout is a multiplayer platform fighter for iOS and Android, built with Godot and a TypeScript backend. Players combine weapons, armour, and abilities, then compete in ranked duels, team battles, free-for-all matches, or a draft mode where each pick also determines the opponent's equipment.
-
-The project implements a complete game stack: a mobile Godot client, authoritative dedicated game servers, and a NestJS backend for accounts, matchmaking, social features, and persistent progression. It brings together gameplay programming, custom network protocols, transactional database operations, and container orchestration.
+Wompout is an online multiplayer platform fighter for iOS and Android where players combine weapons, armour, and abilities to create their own loadouts and compete across a variety of game modes. Built with Godot and a TypeScript/NestJS backend, the game features authoritative dedicated servers, real-time matchmaking and social systems, and persistent player progression.
 
 <p>
   <a href="https://apps.apple.com/app/smash-dash/id6769724763">App Store</a>
@@ -14,14 +12,11 @@ The project implements a complete game stack: a mobile Godot client, authoritati
 
 ## Gameplay
 
-- **Platform fighter combat** with movement, jumping, aiming, melee and ranged attacks, knockback, and active abilities.
-- **Multiple game modes** including ranked Solo Womp (1v1), Duo Womp (2v2), Super Womp (four-player free-for-all), and unranked matches, with game-mode switching from the lobby.
-- **Draft phase** with automatic fallback picks after a time limit.
-- **Custom equipment** with saved loadouts combining melee weapons, ranged weapons, armour, and abilities such as dashing, double jumping, invisibility, and slam attacks.
-- **Arena maps** set in forest and mountain environments.
-- **Real-time multiplayer** with friend requests, lobby invitations, party management, and bots that fill remaining matchmaking slots after a timeout.
-- **Persistent progression** through ranked trophies, leaderboards, reward chests, equipment unlocks, character colors, an armory, and a shop using earned coins and gems.
-- **Mobile controls and feedback** with touch controls for movement and combat, haptic feedback, and match results screens.
+- **Platform fighter combat** built around movement, positioning, knockback, melee and ranged attacks, and active abilities.
+- **Multiple game modes** including ranked Solo Womp (1v1), Duo Womp (2v2), Super Womp (four-player free-for-all), Womp Draft (draft your loadout), and unranked matches.
+- **Custom loadouts** combining melee weapons, ranged weapons, armour, and abilities such as dashing, double jumping, invisibility, and slam attacks.
+- **Parties and social play** with friends, invitations, lobbies, party-based matchmaking, and bots filling remaining matchmaking slots when necessary.
+- **Persistent progression** through ranked trophies, leaderboards, equipment unlocks, reward chests, character customization, and an in-game economy.
 
 ## Technical Highlights
 
@@ -34,6 +29,19 @@ The project implements a complete game stack: a mobile Godot client, authoritati
 - **PostgreSQL persistence through Prisma** for accounts, friendships, inventory, loadouts, currencies, and chest progression. Shop purchases and chest rewards use transactions; loadout changes validate item ownership.
 - **Bot navigation and combat** using cached map geometry and traversal graphs to plan movement, select targets, switch weapons, and activate abilities through the same input structure as human players.
 - **Docker deployment setup** for the backend, PostgreSQL, headless Godot servers, and a Caddy HTTPS reverse proxy.
+
+## Tech Stack
+
+| Area | Technology |
+| --- | --- |
+| Game engine | Godot 4.7, GDScript |
+| Multiplayer gameplay | ENet, RPCs, authoritative simulation, binary packets |
+| Backend API | NestJS, TypeScript, Node.js |
+| Realtime coordination | WebSockets, RxJS |
+| Database | PostgreSQL |
+| ORM | Prisma |
+| Email delivery | Resend |
+| Deployment | Docker, Docker Compose, Caddy |
 
 ## Architecture
 
@@ -118,19 +126,6 @@ flowchart LR
 +-- docker-compose.yml    # Backend, database, game-server image, reverse proxy
 +-- Caddyfile             # HTTPS and invitation-domain routing
 ```
-
-## Tech Stack
-
-| Area | Technology |
-| --- | --- |
-| Game engine | Godot 4.7, GDScript |
-| Multiplayer gameplay | ENet, RPCs, authoritative simulation, binary packets |
-| Backend API | NestJS, TypeScript, Node.js |
-| Realtime coordination | WebSockets, RxJS |
-| Database | PostgreSQL |
-| ORM | Prisma |
-| Email delivery | Resend |
-| Deployment | Docker, Docker Compose, Caddy |
 
 ## Code References
 
